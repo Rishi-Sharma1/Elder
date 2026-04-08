@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "ElderConnect",
+    "slug": "elder-connect",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "scheme": "frontend",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyAFiq9_eEFGhLEnk8MQuz5ftYRK5pLLRZQ"
+      }
+    },
+    "android": {
+      "package": "com.rishi2004shorganization.elderconnect",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAFiq9_eEFGhLEnk8MQuz5ftYRK5pLLRZQ"
+        }
+      }
+    },
+    "web": {
+      "output": "single"
+    },
+    "plugins": [
+      "expo-router",
+      "@react-native-community/datetimepicker"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "87289c12-bab0-43cf-81f9-cb4452e2047c"
+      },
+      "mapsApiKey": "AIzaSyAFiq9_eEFGhLEnk8MQuz5ftYRK5pLLRZQ"
+    },
+    "owner": "rishi2004sh-organization"
+  }
+}
