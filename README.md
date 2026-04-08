@@ -228,4 +228,4 @@ All endpoints require a valid Firebase ID token sent as `Authorization: Bearer <
 
 ---
 
-> © 2024 ElderConnect. All rights reserved.
+> © 2026 ElderConnect. All rights reserved.
