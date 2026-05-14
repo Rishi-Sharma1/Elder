@@ -93,6 +93,7 @@ export default function HomeScreen({ navigation }) {
               <Text style={styles.heroSecondaryBtnText}>Sign In</Text>
             </TouchableOpacity>
           </View>
+        </View>  
 
         {/* ─── Features Section ─── */}
         <View style={styles.section}>
