@@ -94,22 +94,6 @@ export default function HomeScreen({ navigation }) {
             </TouchableOpacity>
           </View>
 
-          {/* Stats Row */}
-          <View style={[styles.statsRow, isMobile && { flexDirection: "column" }]}>
-            {[
-              { value: "10K+", label: "Active Users" },
-              { value: "500+", label: "Volunteers" },
-              { value: "50+", label: "NGO Partners" },
-              { value: "98%", label: "Satisfaction" },
-            ].map((stat) => (
-              <View key={stat.label} style={styles.statItem}>
-                <Text style={styles.statValue}>{stat.value}</Text>
-                <Text style={styles.statLabel}>{stat.label}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
-
         {/* ─── Features Section ─── */}
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>OUR SERVICES</Text>
