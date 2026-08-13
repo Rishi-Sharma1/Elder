@@ -3,15 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from "rea
 import useResponsive from "../hooks/useResponsive";
 import { AuthContext } from "../context/AuthContext";
 
-const colors = {
-  sidebar: "#0B1220",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#3B82F6",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-  bg: "#0F172A",
-};
+import { kineticColors as colors, kineticTypography } from "../theme/kineticTokens";
 
 const navItems = [
   { key: "NGODashboard", label: "Dashboard", shortLabel: "Home", icon: "📊" },
@@ -46,7 +38,7 @@ export default function NGOSidebar({ navigation, activeKey }) {
           {user?.profilePhoto ? (
             <Image 
               source={{ uri: user.profilePhoto }} 
-              style={{ width: "100%", height: "100%", borderRadius: 25 }} 
+              style={{ width: "100%", height: "100%", borderRadius: 0 }} 
             />
           ) : (
             <Text style={styles.avatarText}>
@@ -115,14 +107,14 @@ export function NGOMobileBottomBar({ navigation, activeKey }) {
 const styles = StyleSheet.create({
   /* ── Sidebar ── */
   sidebar: {
-    width: 260,
-    backgroundColor: colors.sidebar,
+    width: 340,
+    backgroundColor: colors.backgroundContainerLow,
     borderRightWidth: 1,
     borderRightColor: colors.border,
   },
   sidebarHeader: { padding: 24, borderBottomWidth: 1, borderBottomColor: colors.border },
-  logo: { fontSize: 22, fontWeight: "800", color: colors.primary, letterSpacing: 0.5 },
-  hub: { color: colors.muted, marginTop: 4, fontSize: 13 },
+  logo: { ...kineticTypography.subheading, fontSize: 32, color: colors.accent, letterSpacing: 0.5 },
+  hub: { color: colors.mutedForeground, marginTop: 4, ...kineticTypography.label },
   
   profileSection: {
     padding: 20,
@@ -135,32 +127,32 @@ const styles = StyleSheet.create({
   avatar: {
     width: 50,
     height: 50,
-    borderRadius: 25,
+    borderRadius: 0,
     backgroundColor: colors.border,
     justifyContent: "center",
     alignItems: "center",
   },
-  avatarText: { fontSize: 20, color: colors.text, fontWeight: "bold" },
+  avatarText: { fontSize: 20, color: colors.foreground, fontWeight: "bold" },
   profileInfo: { flex: 1 },
-  profileName: { color: colors.text, fontWeight: "bold", fontSize: 15, marginBottom: 2 },
-  profileRole: { color: colors.muted, fontSize: 12 },
+  profileName: { color: colors.foreground, fontWeight: "bold", ...kineticTypography.cardTitle, fontSize: 20 },
+  profileRole: { color: colors.mutedForeground, ...kineticTypography.label },
 
   sidebarNav: { padding: 12 },
   sidebarItem: {
     flexDirection: "row", alignItems: "center", padding: 14,
-    borderRadius: 10, marginBottom: 4, gap: 12,
+    borderRadius: 0, marginBottom: 4, gap: 12,
   },
   sidebarItemActive: {
-    backgroundColor: `${colors.primary}18`,
-    borderLeftWidth: 3, borderLeftColor: colors.primary,
+    backgroundColor: `${colors.accent}18`,
+    borderLeftWidth: 6, borderLeftColor: colors.accent,
   },
   sidebarIcon: { fontSize: 18 },
-  sidebarText: { color: colors.muted, fontSize: 14, fontWeight: "500" },
-  sidebarTextActive: { color: colors.primary, fontWeight: "600" },
+  sidebarText: { color: colors.mutedForeground, ...kineticTypography.body },
+  sidebarTextActive: { color: colors.accent, fontWeight: "700" },
 
   /* ── Bottom Bar ── */
   bottomBar: {
-    backgroundColor: colors.sidebar,
+    backgroundColor: colors.backgroundContainerLow,
     borderTopWidth: 1,
     borderTopColor: colors.border,
     paddingBottom: 4,
@@ -169,11 +161,11 @@ const styles = StyleSheet.create({
   bottomTab: {
     flex: 1, minWidth: 70, alignItems: "center",
     paddingVertical: 10, paddingHorizontal: 8,
-    borderRadius: 8, marginHorizontal: 2, marginTop: 4,
+    borderRadius: 0, marginHorizontal: 2, marginTop: 4,
   },
-  bottomTabActive: { backgroundColor: `${colors.primary}18` },
+  bottomTabActive: { backgroundColor: `${colors.accent}18` },
   bottomTabIcon: { fontSize: 20, marginBottom: 3 },
   bottomTabIconActive: { fontSize: 22 },
-  bottomTabLabel: { color: colors.muted, fontSize: 10, fontWeight: "600", textAlign: "center" },
-  bottomTabLabelActive: { color: colors.primary, fontWeight: "700" },
+  bottomTabLabel: { color: colors.mutedForeground, fontSize: 10, fontWeight: "700", textAlign: "center" },
+  bottomTabLabelActive: { color: colors.accent, fontWeight: "700" },
 });

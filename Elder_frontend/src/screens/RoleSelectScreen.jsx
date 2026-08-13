@@ -2,22 +2,13 @@ import React from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
   Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  border: "#334155",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-  blue: "#3B82F6",
-  green: "#16A34A",
-  yellow: "#F59E0B",
-};
+import { kineticColors, kineticTypography } from "../theme/kineticTokens";
+import KineticCard from "../components/KineticCard";
+import { BlurView } from "expo-blur";
 
 export default function RoleSelectScreen({ navigation }) {
   const selectRole = (role) => {
@@ -26,6 +17,11 @@ export default function RoleSelectScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Decorative Organic Shapes for MD3 Bold Factor */}
+      <View style={styles.shape1} />
+      <View style={styles.shape2} />
+      <BlurView intensity={80} style={StyleSheet.absoluteFill} tint="dark" />
+
       <View style={styles.content}>
         <Text style={styles.title}>Choose Your Role</Text>
         <Text style={styles.subtitle}>
@@ -33,43 +29,43 @@ export default function RoleSelectScreen({ navigation }) {
         </Text>
 
         {/* Elder */}
-        <TouchableOpacity
-          style={[styles.card, { borderColor: colors.blue }]}
+        <KineticCard
+          style={[styles.card, { borderTopColor: kineticColors.accent, borderTopWidth: 4 }]}
           onPress={() => selectRole("elder")}
-          activeOpacity={0.85}
+          variant="filled"
         >
           <Text style={styles.icon}>🧓</Text>
           <Text style={styles.cardTitle}>Elder</Text>
           <Text style={styles.cardText}>
             Request help, food, or medical assistance
           </Text>
-        </TouchableOpacity>
+        </KineticCard>
 
         {/* Volunteer */}
-        <TouchableOpacity
-          style={[styles.card, { borderColor: colors.green }]}
+        <KineticCard
+          style={[styles.card, { borderTopColor: kineticColors.accent, borderTopWidth: 4 }]}
           onPress={() => selectRole("volunteer")}
-          activeOpacity={0.85}
+          variant="filled"
         >
           <Text style={styles.icon}>🤝</Text>
           <Text style={styles.cardTitle}>Volunteer</Text>
           <Text style={styles.cardText}>
             Help elders and support your community
           </Text>
-        </TouchableOpacity>
+        </KineticCard>
 
         {/* NGO */}
-        <TouchableOpacity
-          style={[styles.card, { borderColor: colors.yellow }]}
+        <KineticCard
+          style={[styles.card, { borderTopColor: kineticColors.error, borderTopWidth: 4 }]}
           onPress={() => selectRole("ngo")}
-          activeOpacity={0.85}
+          variant="filled"
         >
           <Text style={styles.icon}>🏢</Text>
           <Text style={styles.cardTitle}>NGO</Text>
           <Text style={styles.cardText}>
             Manage requests and coordinate support
           </Text>
-        </TouchableOpacity>
+        </KineticCard>
       </View>
     </SafeAreaView>
   );
@@ -78,9 +74,8 @@ export default function RoleSelectScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
   },
-
   content: {
     flex: 1,
     justifyContent: "center",
@@ -89,51 +84,54 @@ const styles = StyleSheet.create({
     maxWidth: 500,
     alignSelf: "center",
   },
-
   title: {
-    fontSize: 32,
-    fontWeight: "bold",
+    ...kineticTypography.subheading,
     textAlign: "center",
     marginBottom: 10,
-    color: colors.text,
+    color: kineticColors.foreground,
   },
-
   subtitle: {
-    fontSize: 16,
+    ...kineticTypography.body,
     textAlign: "center",
     marginBottom: 40,
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
   },
-
   card: {
-    backgroundColor: colors.card,
-    padding: 25,
-    borderRadius: 20,
-    marginBottom: 25,
-    borderWidth: 1,
+    marginBottom: 20,
     alignItems: "center",
-
-    // subtle elevation
-    ...(Platform.OS === "web"
-      ? { cursor: "pointer" }
-      : {}),
   },
-
   icon: {
     fontSize: 40,
     marginBottom: 10,
   },
-
   cardTitle: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: colors.text,
+    ...kineticTypography.cardTitle,
+    color: kineticColors.foreground,
     marginBottom: 6,
   },
-
   cardText: {
-    fontSize: 15,
-    color: colors.muted,
+    ...kineticTypography.body,
+    color: kineticColors.mutedForeground,
     textAlign: "center",
+  },
+  shape1: {
+    position: 'absolute',
+    top: -100,
+    right: -100,
+    width: 300,
+    height: 300,
+    borderRadius: 150,
+    backgroundColor: kineticColors.accentContainer,
+    opacity: 0.6,
+  },
+  shape2: {
+    position: 'absolute',
+    bottom: -150,
+    left: -150,
+    width: 400,
+    height: 400,
+    borderRadius: 200,
+    backgroundColor: kineticColors.accentContainer,
+    opacity: 0.4,
   },
 });

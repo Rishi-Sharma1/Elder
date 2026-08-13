@@ -7,9 +7,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../api";
-import { auth } from "../config/firebase";
 
 export default function AssignVolunteer({ route, navigation }) {
   const requestId = route?.params?.requestId;
@@ -21,8 +19,6 @@ export default function AssignVolunteer({ route, navigation }) {
   useEffect(() => {
     const fetchVolunteers = async () => {
       try {
-        const token = await auth.currentUser.getIdToken();
-
         const res = await api.get(
           "/ngo/volunteers"
         );
@@ -41,8 +37,6 @@ export default function AssignVolunteer({ route, navigation }) {
   const assign = async (volunteerId) => {
     try {
       setProcessingId(volunteerId);
-
-      const token = await auth.currentUser.getIdToken();
 
       await api.post(
         "/ngo/assign",

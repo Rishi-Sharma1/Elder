@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import { useEffect, useState, useCallback } from "react";
 import {
   View,
@@ -15,17 +16,7 @@ import AdminSidebar, { MobileBottomBar } from "../components/AdminSidebar";
 import useResponsive from "../hooks/useResponsive";
 import api from "../api";
 
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#4799EB",
-  success: "#22C55E",
-  warning: "#F59E0B",
-  danger: "#EF4444",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-};
+
 
 export default function AdminNGOApprovals({ navigation }) {
   const responsive = useResponsive();
@@ -81,7 +72,7 @@ export default function AdminNGOApprovals({ navigation }) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <ActivityIndicator size="large" color={kineticColors.accent} />
           <Text style={styles.loadingText}>Loading NGOs...</Text>
         </View>
       </SafeAreaView>
@@ -97,7 +88,7 @@ export default function AdminNGOApprovals({ navigation }) {
           style={styles.content}
           contentContainerStyle={[styles.contentContainer, { padding: responsive.contentPadding }]}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={kineticColors.accent} />
           }
         >
           <Text style={styles.heading}>NGO Approvals</Text>
@@ -107,15 +98,15 @@ export default function AdminNGOApprovals({ navigation }) {
 
           {/* Stats Row */}
           <View style={[styles.statsRow, { flexDirection: responsive.isMobile ? "column" : "row" }]}>
-            <View style={[styles.statCard, { borderTopColor: colors.warning, borderTopWidth: 3 }]}>
+            <View style={[styles.statCard, { borderTopColor: kineticColors.mutedForeground, borderTopWidth: 3 }]}>
               <Text style={styles.statTitle}>Pending Approval</Text>
               <Text style={styles.statValue}>{pendingNGOs.length}</Text>
             </View>
-            <View style={[styles.statCard, { borderTopColor: colors.success, borderTopWidth: 3 }]}>
+            <View style={[styles.statCard, { borderTopColor: kineticColors.foreground, borderTopWidth: 3 }]}>
               <Text style={styles.statTitle}>Approved NGOs</Text>
               <Text style={styles.statValue}>{approvedNGOs.length}</Text>
             </View>
-            <View style={[styles.statCard, { borderTopColor: colors.primary, borderTopWidth: 3 }]}>
+            <View style={[styles.statCard, { borderTopColor: kineticColors.accent, borderTopWidth: 3 }]}>
               <Text style={styles.statTitle}>Total NGOs</Text>
               <Text style={styles.statValue}>{pendingNGOs.length + approvedNGOs.length}</Text>
             </View>
@@ -162,7 +153,7 @@ export default function AdminNGOApprovals({ navigation }) {
                       style={[styles.ngoBtn, styles.rejectBtn]}
                       onPress={() => handleToggleBlock(ngo._id)}
                     >
-                      <Text style={[styles.ngoBtnText, { color: colors.danger }]}>✗ Reject</Text>
+                      <Text style={[styles.ngoBtnText, { color: kineticColors.error }]}>✗ Reject</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -209,16 +200,16 @@ export default function AdminNGOApprovals({ navigation }) {
                     </View>
                     <View style={styles.cell}>
                       <View style={styles.statusBadge}>
-                        <View style={[styles.statusDot, { backgroundColor: colors.success }]} />
-                        <Text style={[styles.cellText, { color: colors.success }]}>Approved</Text>
+                        <View style={[styles.statusDot, { backgroundColor: kineticColors.foreground }]} />
+                        <Text style={[styles.cellText, { color: kineticColors.foreground }]}>Approved</Text>
                       </View>
                     </View>
                     <View style={styles.cell}>
                       <TouchableOpacity
-                        style={[styles.actionBtn, { backgroundColor: `${colors.danger}20` }]}
+                        style={[styles.actionBtn, { backgroundColor: `${kineticColors.error}20` }]}
                         onPress={() => handleToggleBlock(ngo._id)}
                       >
-                        <Text style={[styles.actionBtnText, { color: colors.danger }]}>Revoke</Text>
+                        <Text style={[styles.actionBtnText, { color: kineticColors.error }]}>Revoke</Text>
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -242,14 +233,14 @@ export default function AdminNGOApprovals({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
+  container: { flex: 1, backgroundColor: kineticColors.background },
   loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center", gap: 16 },
-  loadingText: { color: colors.muted, fontSize: 16 },
+  loadingText: { color: kineticColors.mutedForeground, fontSize: 16 },
   layout: { flex: 1 },
   content: { flex: 1 },
   contentContainer: {},
-  heading: { fontSize: 28, fontWeight: "800", color: colors.text, letterSpacing: -0.5 },
-  subheading: { color: colors.muted, marginBottom: 24, marginTop: 6, fontSize: 15 },
+  heading: { fontSize: 28, fontWeight: "800", color: kineticColors.foreground, letterSpacing: -0.5 },
+  subheading: { color: kineticColors.mutedForeground, marginBottom: 24, marginTop: 6, fontSize: 15 },
 
   // Stats
   statsRow: {
@@ -258,24 +249,24 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     padding: 20,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
   },
-  statTitle: { color: colors.muted, fontSize: 13, fontWeight: "500", marginBottom: 8 },
-  statValue: { fontSize: 32, fontWeight: "800", color: colors.text },
+  statTitle: { color: kineticColors.mutedForeground, fontSize: 13, fontWeight: "500", marginBottom: 8 },
+  statValue: { fontSize: 32, fontWeight: "800", color: kineticColors.foreground },
 
   // Section
   sectionHeader: { flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 14, marginTop: 8 },
   sectionIcon: { fontSize: 22 },
-  sectionTitle: { fontSize: 20, fontWeight: "700", color: colors.text },
+  sectionTitle: { fontSize: 20, fontWeight: "700", color: kineticColors.foreground },
   sectionCard: {
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
     padding: 4,
     marginBottom: 24,
     overflow: "hidden",
@@ -289,39 +280,39 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 16,
   },
-  ngoRowBorder: { borderBottomWidth: 1, borderColor: `${colors.border}60` },
+  ngoRowBorder: { borderBottomWidth: 1, borderColor: `${kineticColors.border}60` },
   ngoAvatar: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: `${colors.primary}25`,
+    backgroundColor: `${kineticColors.accent}25`,
     justifyContent: "center",
     alignItems: "center",
   },
-  ngoAvatarText: { color: colors.primary, fontSize: 20, fontWeight: "700" },
+  ngoAvatarText: { color: kineticColors.accent, fontSize: 20, fontWeight: "700" },
   ngoInfo: { flex: 1, gap: 2 },
-  ngoName: { color: colors.text, fontWeight: "700", fontSize: 16 },
-  ngoEmail: { color: colors.muted, fontSize: 13 },
-  ngoDate: { color: colors.muted, fontSize: 12, marginTop: 2 },
+  ngoName: { color: kineticColors.foreground, fontWeight: "700", fontSize: 16 },
+  ngoEmail: { color: kineticColors.mutedForeground, fontSize: 13 },
+  ngoDate: { color: kineticColors.mutedForeground, fontSize: 12, marginTop: 2 },
   ngoActions: { flexDirection: "row", gap: 8 },
   ngoBtn: { paddingHorizontal: 18, paddingVertical: 10, borderRadius: 8 },
-  approveBtn: { backgroundColor: colors.success },
-  rejectBtn: { backgroundColor: `${colors.danger}15`, borderWidth: 1, borderColor: `${colors.danger}40` },
+  approveBtn: { backgroundColor: kineticColors.foreground },
+  rejectBtn: { backgroundColor: `${kineticColors.error}15`, borderWidth: 1, borderColor: `${kineticColors.error}40` },
   ngoBtnText: { color: "#fff", fontWeight: "700", fontSize: 14 },
 
   // Table
   table: { borderRadius: 10, overflow: "hidden" },
   tableHeader: {
     flexDirection: "row",
-    backgroundColor: `${colors.primary}15`,
+    backgroundColor: `${kineticColors.accent}15`,
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
   },
   tableHeaderText: {
     flex: 1,
-    color: colors.primary,
+    color: kineticColors.accent,
     fontWeight: "700",
     fontSize: 12,
     textTransform: "uppercase",
@@ -332,13 +323,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderColor: `${colors.border}60`,
+    borderColor: `${kineticColors.border}60`,
     alignItems: "center",
   },
-  tableRowAlt: { backgroundColor: `${colors.bg}40` },
+  tableRowAlt: { backgroundColor: `${kineticColors.background}40` },
   cell: { flex: 1, justifyContent: "center" },
-  cellName: { color: colors.text, fontSize: 14, fontWeight: "600" },
-  cellText: { color: colors.text, fontSize: 13 },
+  cellName: { color: kineticColors.foreground, fontSize: 14, fontWeight: "600" },
+  cellText: { color: kineticColors.foreground, fontSize: 13 },
   statusBadge: { flexDirection: "row", alignItems: "center", gap: 6 },
   statusDot: { width: 8, height: 8, borderRadius: 4 },
   actionBtn: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 6, alignSelf: "flex-start" },
@@ -347,6 +338,6 @@ const styles = StyleSheet.create({
   // Empty
   emptyState: { alignItems: "center", paddingVertical: 40, gap: 8 },
   emptyIcon: { fontSize: 36 },
-  emptyText: { color: colors.muted, fontSize: 15 },
-  emptySubtext: { color: colors.muted, fontSize: 13 },
+  emptyText: { color: kineticColors.mutedForeground, fontSize: 15 },
+  emptySubtext: { color: kineticColors.mutedForeground, fontSize: 13 },
 });

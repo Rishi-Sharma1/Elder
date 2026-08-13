@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import { useState, useCallback } from "react";
 import {
   View,
@@ -9,17 +10,9 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../api";
-import { auth } from "../config/firebase";
 import { useFocusEffect } from "@react-navigation/native";
 
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#3B82F6",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-};
+
 
 export default function NGORequests({ navigation }) {
   const [requests, setRequests] = useState([]);
@@ -27,8 +20,6 @@ export default function NGORequests({ navigation }) {
 
   const fetchRequests = async () => {
     try {
-      const token = await auth.currentUser.getIdToken();
-
       const res = await api.get(
         "/ngo/requests"
       );
@@ -50,7 +41,7 @@ export default function NGORequests({ navigation }) {
   if (loading) {
     return (
       <SafeAreaView style={styles.center}>
-        <ActivityIndicator size="large" color={colors.primary} />
+        <ActivityIndicator size="large" color={kineticColors.accent} />
       </SafeAreaView>
     );
   }
@@ -113,11 +104,11 @@ export default function NGORequests({ navigation }) {
 const StatusBadge = ({ status }) => {
   const lower = status?.toLowerCase();
 
-  let backgroundColor = colors.card;
+  let backgroundColor = kineticColors.background;
 
   if (lower === "completed") backgroundColor = "#16A34A";
   else if (lower === "assigned") backgroundColor = "#F59E0B";
-  else if (lower === "pending") backgroundColor = colors.primary;
+  else if (lower === "pending") backgroundColor = kineticColors.accent;
 
   return (
     <View style={[styles.statusBadge, { backgroundColor }]}>
@@ -131,15 +122,15 @@ const StatusBadge = ({ status }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
   },
 
   card: {
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     padding: 20,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
     marginBottom: 16,
   },
 
@@ -147,19 +138,19 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 6,
-    color: colors.text,
+    color: kineticColors.foreground,
   },
 
   description: {
     fontSize: 15,
     marginBottom: 10,
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
   },
 
   info: {
     fontSize: 14,
     marginBottom: 10,
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
   },
 
   statusRow: {
@@ -182,7 +173,7 @@ const styles = StyleSheet.create({
   },
 
   assignButton: {
-    backgroundColor: colors.primary,
+    backgroundColor: kineticColors.accent,
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 10,
@@ -198,11 +189,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
   },
 
   emptyText: {
     fontSize: 18,
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
   },
 });

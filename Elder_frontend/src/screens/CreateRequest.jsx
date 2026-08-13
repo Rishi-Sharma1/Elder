@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import React, { useState } from "react";
 import {
   View,
@@ -11,19 +12,10 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { auth } from "../config/firebase";
 import api from "../api";
 import { Picker } from "@react-native-picker/picker";
 
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#3B82F6",
-  danger: "#DC2626",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-};
+
 
 export default function CreateRequest({ navigation }) {
   const [type, setType] = useState("");
@@ -40,7 +32,6 @@ export default function CreateRequest({ navigation }) {
 
     try {
       setLoading(true);
-      const token = await auth.currentUser.getIdToken();
 
       await api.post(
         "/elder/request",
@@ -81,7 +72,7 @@ export default function CreateRequest({ navigation }) {
             <Picker
               selectedValue={type}
               onValueChange={(value) => setType(value)}
-              dropdownIconColor={colors.text}
+              dropdownIconColor={kineticColors.foreground}
               style={styles.picker}
             >
               <Picker.Item label="Select Type" value="" />
@@ -97,7 +88,7 @@ export default function CreateRequest({ navigation }) {
 
           <TextInput
             placeholder="Explain what you need..."
-            placeholderTextColor={colors.muted}
+            placeholderTextColor={kineticColors.mutedForeground}
             value={description}
             onChangeText={setDescription}
             style={styles.textArea}
@@ -131,7 +122,7 @@ export default function CreateRequest({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
   },
 
   content: {
@@ -139,71 +130,70 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 600,
     alignSelf: "center",
+    flexGrow: 1,
+    justifyContent: "center",
   },
 
   header: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: colors.text,
+    ...kineticTypography.subheading,
+    color: kineticColors.foreground,
     marginBottom: 25,
   },
 
   card: {
-    backgroundColor: colors.card,
-    padding: 22,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: colors.border,
+    backgroundColor: kineticColors.background,
+    padding: 30,
+    borderWidth: 2,
+    borderColor: kineticColors.border,
     marginBottom: 30,
   },
 
   label: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: colors.text,
+    ...kineticTypography.body,
+    color: kineticColors.foreground,
     marginBottom: 10,
   },
 
   pickerContainer: {
-    backgroundColor: "#0F172A",
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
+    backgroundColor: kineticColors.background,
+    borderWidth: 2,
+    borderColor: kineticColors.border,
     marginBottom: 20,
   },
 
   picker: {
-    color: colors.text,
+    color: kineticColors.foreground,
+    backgroundColor: kineticColors.background,
+    ...kineticTypography.body,
     height: 55,
     width: "100%",
   },
 
   textArea: {
-    backgroundColor: "#0F172A",
-    borderRadius: 14,
+    backgroundColor: kineticColors.background,
     padding: 16,
-    fontSize: 16,
-    color: "#020000",
-    borderWidth: 1,
-    borderColor: colors.border,
+    ...kineticTypography.body,
+    color: kineticColors.foreground,
+    borderWidth: 2,
+    borderColor: kineticColors.border,
     minHeight: 120,
     textAlignVertical: "top",
   },
 
   submitButton: {
-    backgroundColor: colors.primary,
+    backgroundColor: kineticColors.accent,
     paddingVertical: 18,
-    borderRadius: 16,
     alignItems: "center",
+    borderWidth: 2,
+    borderColor: kineticColors.foreground,
   },
 
   emergencyButton: {
-    backgroundColor: colors.danger,
+    backgroundColor: kineticColors.error,
   },
 
   submitText: {
-    color: "#FFF",
-    fontSize: 18,
-    fontWeight: "600",
+    color: kineticColors.accentForeground,
+    ...kineticTypography.label,
   },
 });

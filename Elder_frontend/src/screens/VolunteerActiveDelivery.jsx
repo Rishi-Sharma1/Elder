@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   View,
@@ -23,19 +24,7 @@ import { MapView, Marker } from "../components/MapModule";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
-const colors = {
-  bg: "#0F172A", // Dark theme background
-  card: "#1E293B",
-  cardOverlay: "rgba(30, 41, 59, 0.95)",
-  border: "#334155",
-  primary: "#60B246", // Swiggy Green
-  primaryDark: "#4a8f35",
-  accent: "#FC8019", // Swiggy Orange
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-  pulse: "rgba(96, 178, 70, 0.4)",
-  danger: "#EF4444",
-};
+
 
 const STATUS_FLOW = [
   { key: "accepted", label: "Accepted", nextLabel: "Mark Picked Up (I have the items)", icon: "✓" },
@@ -255,7 +244,7 @@ export default function VolunteerActiveDelivery({ route, navigation }) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.centered}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <ActivityIndicator size="large" color={kineticColors.accent} />
           <Text style={styles.loadingText}>Loading delivery dashboard...</Text>
         </View>
       </SafeAreaView>
@@ -497,11 +486,11 @@ export default function VolunteerActiveDelivery({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
+  container: { flex: 1, backgroundColor: kineticColors.background },
   centered: { flex: 1, justifyContent: "center", alignItems: "center", gap: 16 },
-  loadingText: { color: colors.muted, fontSize: 16 },
-  backBtn: { marginTop: 12, padding: 12, backgroundColor: colors.card, borderRadius: 8 },
-  backBtnText: { color: colors.text, fontWeight: "600" },
+  loadingText: { color: kineticColors.mutedForeground, fontSize: 16 },
+  backBtn: { marginTop: 12, padding: 12, backgroundColor: kineticColors.background, borderRadius: 8 },
+  backBtnText: { color: kineticColors.foreground, fontWeight: "600" },
 
   // Map Section
   mapSection: {
@@ -517,7 +506,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#111",
   },
-  mapPlaceholderText: { color: colors.muted },
+  mapPlaceholderText: { color: kineticColors.mutedForeground },
   topBackBtn: {
     position: "absolute",
     top: Platform.OS === "ios" ? 50 : 20,
@@ -546,7 +535,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: colors.primary,
+    backgroundColor: kineticColors.accent,
   },
   liveTextLabel: {
     color: "#FFF",
@@ -560,7 +549,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,0.3)",
   },
   etaText: {
-    color: colors.primary,
+    color: kineticColors.accent,
     fontSize: 10,
     fontWeight: "900",
   },
@@ -569,7 +558,7 @@ const styles = StyleSheet.create({
   sheetContainer: {
     flex: 1,
     marginTop: -20,
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     shadowColor: "#000",
@@ -591,29 +580,29 @@ const styles = StyleSheet.create({
   tagline: {
     fontSize: 11,
     fontWeight: "800",
-    color: colors.primaryDark,
+    color: kineticColors.accentDark,
     letterSpacing: 1.5,
   },
   orderId: {
     fontSize: 13,
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
   },
   heading: { 
     fontSize: 26, 
     fontWeight: "800", 
-    color: colors.text, 
+    color: kineticColors.foreground, 
     letterSpacing: -0.5,
     marginTop: -10,
   },
 
   // Main Action Button (Swiggy Style)
   mainActionBtn: {
-    backgroundColor: colors.primary,
+    backgroundColor: kineticColors.accent,
     paddingVertical: 18,
     borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: colors.primary,
+    shadowColor: kineticColors.accent,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -653,16 +642,16 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: colors.border,
+    backgroundColor: kineticColors.border,
     justifyContent: "center",
     alignItems: "center",
     zIndex: 2,
   },
   stepCircleCompleted: {
-    backgroundColor: colors.primaryDark,
+    backgroundColor: kineticColors.accentDark,
   },
   stepCircleCurrent: {
-    backgroundColor: colors.primary,
+    backgroundColor: kineticColors.accent,
     width: 32,
     height: 32,
     borderRadius: 16,
@@ -672,7 +661,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: colors.pulse,
+    backgroundColor: kineticColors.accent,
     zIndex: 1,
   },
   stepIcon: {
@@ -685,14 +674,14 @@ const styles = StyleSheet.create({
   },
   stepLabelText: {
     fontSize: 10,
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
     marginTop: 8,
     textAlign: "center",
     fontWeight: "600",
     width: 70,
   },
   stepLabelTextActive: {
-    color: colors.text,
+    color: kineticColors.foreground,
     fontWeight: "700",
   },
   stepLine: {
@@ -701,30 +690,30 @@ const styles = StyleSheet.create({
     left: "50%",
     right: "-50%",
     height: 2,
-    backgroundColor: colors.border,
+    backgroundColor: kineticColors.border,
     zIndex: 1,
   },
   stepLineActive: {
-    backgroundColor: colors.primary,
+    backgroundColor: kineticColors.accent,
   },
 
   // Cards
   card: {
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
     padding: 20,
     gap: 16,
   },
-  cardTitle: { fontSize: 16, fontWeight: "700", color: colors.text },
-  cardSubtitle: { fontSize: 13, color: colors.muted, marginTop: -12 },
+  cardTitle: { fontSize: 16, fontWeight: "700", color: kineticColors.foreground },
+  cardSubtitle: { fontSize: 13, color: kineticColors.mutedForeground, marginTop: -12 },
 
   // Elder Info
   recipientLabel: {
     fontSize: 11,
     fontWeight: "800",
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
     letterSpacing: 1,
   },
   recipientRow: {
@@ -742,23 +731,23 @@ const styles = StyleSheet.create({
   },
   recipientAvatarText: { fontSize: 20, fontWeight: "700", color: "#FFF" },
   recipientInfo: { flex: 1 },
-  recipientName: { fontSize: 18, fontWeight: "700", color: colors.text },
-  recipientAddress: { fontSize: 13, color: colors.muted, marginTop: 4, lineHeight: 18 },
+  recipientName: { fontSize: 18, fontWeight: "700", color: kineticColors.foreground },
+  recipientAddress: { fontSize: 13, color: kineticColors.mutedForeground, marginTop: 4, lineHeight: 18 },
   detailsNavBtn: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
     alignSelf: "flex-start",
     marginTop: 10,
   },
   detailsNavIcon: { fontSize: 12 },
-  detailsNavText: { color: colors.primary, fontWeight: "700", fontSize: 13 },
+  detailsNavText: { color: kineticColors.accent, fontWeight: "700", fontSize: 13 },
   contactActionsRow: {
     flexDirection: "row",
     gap: 12,
@@ -770,31 +759,31 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
     paddingVertical: 12,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
   },
   contactBtnIcon: { fontSize: 16 },
-  contactBtnText: { color: colors.text, fontWeight: "600", fontSize: 14 },
+  contactBtnText: { color: kineticColors.foreground, fontWeight: "600", fontSize: 14 },
 
   instructionContainer: {
-    backgroundColor: colors.accent + "15",
+    backgroundColor: kineticColors.accent + "15",
     padding: 14,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: colors.accent + "40",
+    borderColor: kineticColors.accent + "40",
     marginTop: 8,
   },
   instructionLabel: {
     fontSize: 11,
     fontWeight: "800",
-    color: colors.accent,
+    color: kineticColors.accent,
     letterSpacing: 1,
     marginBottom: 6,
   },
-  instructionText: { fontSize: 14, color: colors.text, lineHeight: 20 },
+  instructionText: { fontSize: 14, color: kineticColors.foreground, lineHeight: 20 },
 
   // Checklist
   checklistGroup: { gap: 10 },
@@ -803,43 +792,43 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 16,
     borderRadius: 12,
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
     gap: 12,
   },
   checklistItemChecked: { 
     opacity: 0.6, 
-    borderColor: colors.primary + "60",
-    backgroundColor: colors.primary + "05",
+    borderColor: kineticColors.accent + "60",
+    backgroundColor: kineticColors.accent + "05",
   },
   checkbox: {
     width: 24,
     height: 24,
     borderRadius: 6,
     borderWidth: 2,
-    borderColor: colors.muted,
+    borderColor: kineticColors.mutedForeground,
     justifyContent: "center",
     alignItems: "center",
   },
   checkboxChecked: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
+    backgroundColor: kineticColors.accent,
+    borderColor: kineticColors.accent,
   },
   checkMark: { color: "#FFF", fontSize: 14, fontWeight: "800" },
   checklistInfo: { flex: 1 },
-  checklistName: { fontSize: 15, fontWeight: "600", color: colors.text },
-  checklistNameChecked: { textDecorationLine: "line-through", color: colors.muted },
-  checklistNote: { fontSize: 13, color: colors.muted, marginTop: 4 },
+  checklistName: { fontSize: 15, fontWeight: "600", color: kineticColors.foreground },
+  checklistNameChecked: { textDecorationLine: "line-through", color: kineticColors.mutedForeground },
+  checklistNote: { fontSize: 13, color: kineticColors.mutedForeground, marginTop: 4 },
   checklistRight: { alignItems: "flex-end", gap: 6 },
-  checklistQty: { fontSize: 15, fontWeight: "700", color: colors.text },
+  checklistQty: { fontSize: 15, fontWeight: "700", color: kineticColors.foreground },
   urgentBadge: {
-    backgroundColor: colors.danger + "20",
+    backgroundColor: kineticColors.error + "20",
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: colors.danger,
+    borderColor: kineticColors.error,
   },
-  urgentText: { fontSize: 9, fontWeight: "800", color: colors.danger },
+  urgentText: { fontSize: 9, fontWeight: "800", color: kineticColors.error },
 });

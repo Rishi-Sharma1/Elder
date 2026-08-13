@@ -49,13 +49,21 @@ app.use((req, res, next) => {
   next();
 });
 
-const allowedOrigins = ["https://elder-connect.netlify.app"];
+const allowedOrigins = [
+  "https://elder-connect.netlify.app",
+  "http://localhost:8081",
+  "http://localhost:19006",
+  "http://localhost:8082",
+  "http://localhost:3000"
+];
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
 
-  if (allowedOrigins.includes(origin)) {
-    res.header("Access-Control-Allow-Origin", origin);
+  if (origin) {
+    if (allowedOrigins.includes(origin) || origin.startsWith("http://localhost:") || origin.startsWith("http://127.0.0.1:") || origin.startsWith("http://192.168.") || origin.startsWith("http://172.")) {
+      res.header("Access-Control-Allow-Origin", origin);
+    }
   }
 
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -89,9 +97,6 @@ app.use("/admin", adminRoutes);
 app.use("/profile", profileRoutes);
 app.use("/delivery", deliveryRoutes);
 app.use("/events", eventRoutes);
-
-console.log("ENV:", process.env.FIREBASE_SERVICE_ACCOUNT ? "FOUND" : "MISSING");
-
 
 const PORT = process.env.PORT || 5000;
 httpServer.listen(PORT, "0.0.0.0", () => console.log(`Server running on port ${PORT}`));

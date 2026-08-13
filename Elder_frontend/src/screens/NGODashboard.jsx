@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import { useContext, useEffect, useState, useCallback } from "react";
 import {
   View,
@@ -13,19 +14,10 @@ import { useFocusEffect } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthContext } from "../context/AuthContext";
 import api from "../api";
-import { auth } from "../config/firebase";
 import useResponsive from "../hooks/useResponsive";
 import NGOSidebar, { NGOMobileBottomBar } from "../components/NGOSidebar";
 
-const colors = {
-  bg: "#0F172A",
-  sidebar: "#0B1220",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#3B82F6",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-};
+
 
 export default function NGODashboard({ navigation }) {
   const { user } = useContext(AuthContext);
@@ -41,21 +33,16 @@ export default function NGODashboard({ navigation }) {
     useCallback(() => {
       const fetchDashboard = async () => {
         try {
-          const token = await auth.currentUser.getIdToken();
-
           const statsRes = await api.get(
-            "/ngo/stats",
-            { headers: { Authorization: `Bearer ${token}` } }
+            "/ngo/stats"
           );
 
           setVolunteerCount(statsRes.data.volunteers);
           setOpenRequests(statsRes.data.openRequests);
           setCompletedCount(statsRes.data.completedTasks);
 
-
           const completedRes = await api.get(
-            "/ngo/completed",
-            { headers: { Authorization: `Bearer ${token}` } },
+            "/ngo/completed"
           );
 
           setVolunteerCount(statsRes.data.volunteers);
@@ -147,7 +134,7 @@ export default function NGODashboard({ navigation }) {
 const SidebarItem = ({ label, active, onPress }) => (
   <TouchableOpacity
     onPress={onPress}
-    style={[styles.sidebarItem, active && { backgroundColor: colors.card }]}
+    style={[styles.sidebarItem, active && { backgroundColor: kineticColors.background }]}
   >
     <Text style={styles.sidebarText}>{label}</Text>
   </TouchableOpacity>
@@ -183,29 +170,29 @@ const Table = ({ headers, rows }) => (
 );
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
+  container: { flex: 1, backgroundColor: kineticColors.background },
   layout: {
     flex: 1,
   },
   sidebar: {
     width: 250,
-    backgroundColor: colors.sidebar,
+    backgroundColor: kineticColors.background,
     padding: 20,
   },
   sidebarHeader: {
     marginBottom: 20,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: kineticColors.border,
     paddingBottom: 20,
   },
-  logo: { fontSize: 20, fontWeight: "bold", color: colors.text },
-  hub: { color: colors.muted },
+  logo: { fontSize: 20, fontWeight: "bold", color: kineticColors.foreground },
+  hub: { color: kineticColors.mutedForeground },
 
   profileSection: {
     paddingBottom: 20,
     marginBottom: 20,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: kineticColors.border,
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
@@ -214,24 +201,24 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: colors.border,
+    backgroundColor: kineticColors.border,
     justifyContent: "center",
     alignItems: "center",
   },
-  avatarText: { fontSize: 20, color: colors.text, fontWeight: "bold" },
+  avatarText: { fontSize: 20, color: kineticColors.foreground, fontWeight: "bold" },
   profileInfo: { flex: 1 },
-  profileName: { color: colors.text, fontWeight: "bold", fontSize: 15, marginBottom: 2 },
-  profileRole: { color: colors.muted, fontSize: 12 },
+  profileName: { color: kineticColors.foreground, fontWeight: "bold", fontSize: 15, marginBottom: 2 },
+  profileRole: { color: kineticColors.mutedForeground, fontSize: 12 },
 
   sidebarItem: { padding: 12, borderRadius: 10, marginBottom: 8 },
-  sidebarText: { color: colors.text },
+  sidebarText: { color: kineticColors.foreground },
   content: { flex: 1, padding: 24 },
-  heading: { fontSize: 28, fontWeight: "bold", color: colors.text },
-  subheading: { color: colors.muted, marginBottom: 25 },
+  heading: { fontSize: 28, fontWeight: "bold", color: kineticColors.foreground },
+  subheading: { color: kineticColors.mutedForeground, marginBottom: 25 },
   sectionTitle: {
     fontSize: 20,
     fontWeight: "600",
-    color: colors.text,
+    color: kineticColors.foreground,
     marginBottom: 15,
     marginTop: 20,
   },
@@ -241,40 +228,40 @@ const styles = StyleSheet.create({
   },
   metricCard: {
     flex: 1,
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     padding: 20,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
   },
-  metricTitle: { color: colors.muted, marginBottom: 10 },
+  metricTitle: { color: kineticColors.mutedForeground, marginBottom: 10 },
   metricValue: {
     fontSize: 26,
     fontWeight: "bold",
-    color: colors.text,
+    color: kineticColors.foreground,
   },
   table: {
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
     borderRadius: 10,
     overflow: "hidden",
   },
   tableHeader: {
     flexDirection: "row",
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     padding: 12,
   },
   tableHeaderText: {
     flex: 1,
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
     fontWeight: "600",
   },
   tableRow: {
     flexDirection: "row",
     padding: 12,
     borderTopWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
   },
   cell: { flex: 1 },
-  cellText: { color: colors.text },
+  cellText: { color: kineticColors.foreground },
 });

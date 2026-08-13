@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import { useEffect, useState } from "react";
 import {
   View,
@@ -10,16 +11,8 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../api";
-import { auth } from "../config/firebase";
 
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#3B82F6",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-};
+
 
 export default function AvailableRequests() {
   const [requests, setRequests] = useState([]);
@@ -29,8 +22,6 @@ export default function AvailableRequests() {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const token = await auth.currentUser.getIdToken();
-
         const res = await api.get(
           "/volunteer/requests"
         );
@@ -49,7 +40,6 @@ export default function AvailableRequests() {
   const acceptRequest = async (id) => {
     try {
       setProcessingId(id);
-      const token = await auth.currentUser.getIdToken();
 
       await api.post(
         `/volunteer/accept/${id}`,
@@ -69,7 +59,7 @@ export default function AvailableRequests() {
   if (loading) {
     return (
       <SafeAreaView style={styles.center}>
-        <ActivityIndicator size="large" color={colors.primary} />
+        <ActivityIndicator size="large" color={kineticColors.accent} />
       </SafeAreaView>
     );
   }
@@ -135,60 +125,58 @@ export default function AvailableRequests() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
   },
 
   card: {
-    backgroundColor: colors.card,
-    padding: 20,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
-    marginBottom: 16,
+    backgroundColor: kineticColors.background,
+    padding: 30,
+    borderWidth: 2,
+    borderColor: kineticColors.border,
+    marginBottom: 24,
   },
 
   type: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 8,
-    color: colors.text,
+    ...kineticTypography.subheading,
+    marginBottom: 16,
+    color: kineticColors.foreground,
   },
 
   description: {
-    fontSize: 15,
-    marginBottom: 12,
-    color: colors.muted,
+    ...kineticTypography.body,
+    marginBottom: 20,
+    color: kineticColors.foreground,
   },
 
   info: {
-    fontSize: 14,
-    marginBottom: 6,
-    color: colors.muted,
+    ...kineticTypography.body,
+    marginBottom: 10,
+    color: kineticColors.mutedForeground,
   },
 
   acceptButton: {
-    backgroundColor: colors.primary,
-    paddingVertical: 14,
-    borderRadius: 12,
+    backgroundColor: kineticColors.accent,
+    paddingVertical: 18,
+    borderWidth: 2,
+    borderColor: kineticColors.foreground,
     alignItems: "center",
-    marginTop: 14,
+    marginTop: 20,
   },
 
   acceptText: {
-    color: "#FFF",
-    fontSize: 15,
-    fontWeight: "600",
+    color: kineticColors.accentForeground,
+    ...kineticTypography.label,
   },
 
   center: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
   },
 
   emptyText: {
-    fontSize: 18,
-    color: colors.muted,
+    ...kineticTypography.subheading,
+    color: kineticColors.mutedForeground,
   },
 });

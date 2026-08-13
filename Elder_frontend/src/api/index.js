@@ -1,6 +1,6 @@
 import axios from "axios";
-import { auth } from "../config/firebase";
 import { BASE_URL } from "../config/network";
+import { getToken } from "../utils/storage";
 
 const api = axios.create({
   baseURL: BASE_URL
@@ -8,7 +8,7 @@ const api = axios.create({
 
 api.interceptors.request.use(async (config) => {
   try {
-    const token = await auth.currentUser?.getIdToken();
+    const token = await getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

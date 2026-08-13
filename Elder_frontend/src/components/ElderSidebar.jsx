@@ -1,17 +1,8 @@
-import { useContext } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from "react-native";
+import { useContext, useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, Pressable } from "react-native";
 import useResponsive from "../hooks/useResponsive";
 import { AuthContext } from "../context/AuthContext";
-
-const colors = {
-  sidebar: "#0B1220",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#4799EB",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-  bg: "#0F172A",
-};
+import { kineticColors, kineticTypography } from "../theme/kineticTokens";
 
 const navItems = [
   { key: "ElderDashboard", label: "Dashboard", shortLabel: "Home", icon: "🏠" },
@@ -38,6 +29,7 @@ function navigateTo(navigation, key, activeKey) {
 export default function ElderSidebar({ navigation, activeKey }) {
   const { showSidebar } = useResponsive();
   const { user } = useContext(AuthContext);
+  const [hoveredKey, setHoveredKey] = useState(null);
 
   if (!showSidebar) return null;
 
@@ -68,18 +60,29 @@ export default function ElderSidebar({ navigation, activeKey }) {
       </View>
 
       <View style={styles.sidebarNav}>
-        {navItems.map((item) => (
-          <TouchableOpacity
-            key={item.key}
-            onPress={() => navigateTo(navigation, item.key, activeKey)}
-            style={[styles.sidebarItem, activeKey === item.key && styles.sidebarItemActive]}
-          >
-            <Text style={styles.sidebarIcon}>{item.icon}</Text>
-            <Text style={[styles.sidebarText, activeKey === item.key && styles.sidebarTextActive]}>
-              {item.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
+        {navItems.map((item) => {
+          const isActive = activeKey === item.key;
+          const isHovered = hoveredKey === item.key;
+          
+          return (
+            <Pressable
+              key={item.key}
+              onPress={() => navigateTo(navigation, item.key, activeKey)}
+              onHoverIn={() => setHoveredKey(item.key)}
+              onHoverOut={() => setHoveredKey(null)}
+              style={[
+                styles.sidebarItem, 
+                isActive && styles.sidebarItemActive,
+                !isActive && isHovered && styles.sidebarItemHover,
+              ]}
+            >
+              <Text style={styles.sidebarIcon}>{item.icon}</Text>
+              <Text style={[styles.sidebarText, isActive && styles.sidebarTextActive]}>
+                {item.label}
+              </Text>
+            </Pressable>
+          );
+        })}
       </View>
     </View>
   );
@@ -106,9 +109,11 @@ export function ElderMobileBottomBar({ navigation, activeKey }) {
               onPress={() => navigateTo(navigation, item.key, activeKey)}
               style={[styles.bottomTab, isActive && styles.bottomTabActive]}
             >
-              <Text style={[styles.bottomTabIcon, isActive && styles.bottomTabIconActive]}>
-                {item.icon}
-              </Text>
+              <View style={[styles.bottomTabIconContainer, isActive && styles.bottomTabIconContainerActive]}>
+                <Text style={[styles.bottomTabIcon, isActive && styles.bottomTabIconActive]}>
+                  {item.icon}
+                </Text>
+              </View>
               <Text style={[styles.bottomTabLabel, isActive && styles.bottomTabLabelActive]}>
                 {item.shortLabel}
               </Text>
@@ -122,33 +127,26 @@ export function ElderMobileBottomBar({ navigation, activeKey }) {
           style={[
             styles.bottomTab, 
             { 
-              backgroundColor: '#F97316', 
-              borderRadius: 14, 
               marginVertical: 4, 
-              paddingHorizontal: 16,
+              paddingHorizontal: 8,
               minWidth: 80,
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
-              elevation: 5
-            },
-            activeKey === "DeliveryOrderScreen" && { borderWidth: 2, borderColor: '#FFF' }
+            }
           ]}
         >
-          <Text style={[styles.bottomTabIcon, { fontSize: 24 }]}>🚚</Text>
-          <Text style={[styles.bottomTabLabel, { color: '#FFF', fontWeight: '800' }]}>Deliver</Text>
+          <View style={[styles.bottomTabIconContainer, { backgroundColor: md3Colors.tertiary, borderRadius: md3Radii.extraLarge, width: 64, height: 32, alignItems: 'center', justifyContent: 'center' }]}>
+            <Text style={[styles.bottomTabIcon, { fontSize: 20, color: md3Colors.onTertiary }]}>🚚</Text>
+          </View>
+          <Text style={[styles.bottomTabLabel, { color: md3Colors.tertiary, fontWeight: '800' }]}>Deliver</Text>
         </TouchableOpacity>
 
         {/* Primary Action: Track (History) */}
         <TouchableOpacity
           onPress={() => navigation.navigate("DeliveryHistoryScreen")}
-          style={[
-            styles.bottomTab,
-            activeKey === "DeliveryHistoryScreen" && styles.bottomTabActive
-          ]}
+          style={[styles.bottomTab]}
         >
-          <Text style={[styles.bottomTabIcon, activeKey === "DeliveryHistoryScreen" && styles.bottomTabIconActive]}>📍</Text>
+          <View style={[styles.bottomTabIconContainer, activeKey === "DeliveryHistoryScreen" && styles.bottomTabIconContainerActive]}>
+            <Text style={[styles.bottomTabIcon, activeKey === "DeliveryHistoryScreen" && styles.bottomTabIconActive]}>📍</Text>
+          </View>
           <Text style={[styles.bottomTabLabel, activeKey === "DeliveryHistoryScreen" && styles.bottomTabLabelActive]}>Track</Text>
         </TouchableOpacity>
 
@@ -159,11 +157,13 @@ export function ElderMobileBottomBar({ navigation, activeKey }) {
             <TouchableOpacity
               key={item.key}
               onPress={() => navigateTo(navigation, item.key, activeKey)}
-              style={[styles.bottomTab, isActive && styles.bottomTabActive]}
+              style={[styles.bottomTab]}
             >
-              <Text style={[styles.bottomTabIcon, isActive && styles.bottomTabIconActive]}>
-                {item.icon}
-              </Text>
+              <View style={[styles.bottomTabIconContainer, isActive && styles.bottomTabIconContainerActive]}>
+                <Text style={[styles.bottomTabIcon, isActive && styles.bottomTabIconActive]}>
+                  {item.icon}
+                </Text>
+              </View>
               <Text style={[styles.bottomTabLabel, isActive && styles.bottomTabLabelActive]}>
                 {item.shortLabel}
               </Text>
@@ -178,65 +178,80 @@ export function ElderMobileBottomBar({ navigation, activeKey }) {
 const styles = StyleSheet.create({
   /* ── Sidebar ── */
   sidebar: {
-    width: 260,
-    backgroundColor: colors.sidebar,
+    width: 340,
+    backgroundColor: kineticColors.backgroundContainerLow,
     borderRightWidth: 1,
-    borderRightColor: colors.border,
+    borderRightColor: kineticColors.border,
   },
-  sidebarHeader: { padding: 24, borderBottomWidth: 1, borderBottomColor: colors.border },
-  logo: { fontSize: 22, fontWeight: "800", color: colors.primary, letterSpacing: 0.5 },
-  hub: { color: colors.muted, marginTop: 4, fontSize: 13 },
+  sidebarHeader: { padding: 24, borderBottomWidth: 1, borderBottomColor: kineticColors.border },
+  logo: { ...kineticTypography.subheading, fontSize: 32, color: kineticColors.accent },
+  hub: { color: kineticColors.mutedForeground, marginTop: 4, ...kineticTypography.label },
   
   profileSection: {
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: kineticColors.border,
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
   },
   avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: colors.border,
+    width: 48,
+    height: 48,
+    borderRadius: 0,
+    backgroundColor: kineticColors.accentContainer,
     justifyContent: "center",
     alignItems: "center",
   },
-  avatarText: { fontSize: 20, color: colors.text, fontWeight: "bold" },
+  avatarText: { ...kineticTypography.cardTitle, fontSize: 20, color: kineticColors.accentForeground },
   profileInfo: { flex: 1 },
-  profileName: { color: colors.text, fontWeight: "bold", fontSize: 15, marginBottom: 2 },
-  profileRole: { color: colors.muted, fontSize: 12 },
+  profileName: { color: kineticColors.foreground, ...kineticTypography.cardTitle, fontSize: 20, marginBottom: 2 },
+  profileRole: { color: kineticColors.mutedForeground, ...kineticTypography.label },
 
   sidebarNav: { padding: 12 },
   sidebarItem: {
-    flexDirection: "row", alignItems: "center", padding: 14,
-    borderRadius: 10, marginBottom: 4, gap: 12,
+    flexDirection: "row", alignItems: "center", paddingHorizontal: 16, paddingVertical: 14,
+    borderRadius: 0, marginBottom: 4, gap: 12,
   },
   sidebarItemActive: {
-    backgroundColor: `${colors.primary}18`,
-    borderLeftWidth: 3, borderLeftColor: colors.primary,
+    backgroundColor: (kineticColors.accent + "20"),
+    borderLeftWidth: 6, borderLeftColor: kineticColors.accent,
   },
-  sidebarIcon: { fontSize: 18 },
-  sidebarText: { color: colors.muted, fontSize: 14, fontWeight: "500" },
-  sidebarTextActive: { color: colors.primary, fontWeight: "600" },
+  sidebarItemHover: {
+    backgroundColor: kineticColors.backgroundContainer,
+  },
+  sidebarIcon: { fontSize: 20 },
+  sidebarText: { color: kineticColors.mutedForeground, ...kineticTypography.body },
+  sidebarTextActive: { color: kineticColors.accent, ...kineticTypography.body, fontWeight: "700" },
 
   /* ── Bottom Bar ── */
   bottomBar: {
-    backgroundColor: colors.sidebar,
+    backgroundColor: kineticColors.background,
     borderTopWidth: 1,
-    borderTopColor: colors.border,
-    paddingBottom: 4,
+    borderTopColor: kineticColors.border,
+    paddingBottom: 8,
+    paddingTop: 8,
   },
-  bottomBarContent: { flexDirection: "row", paddingHorizontal: 4 },
+  bottomBarContent: { flexDirection: "row", paddingHorizontal: 4, alignItems: "center" },
   bottomTab: {
     flex: 1, minWidth: 70, alignItems: "center",
-    paddingVertical: 10, paddingHorizontal: 8,
-    borderRadius: 8, marginHorizontal: 2, marginTop: 4,
+    paddingVertical: 4, paddingHorizontal: 4,
+    borderRadius: 0, marginHorizontal: 2,
   },
-  bottomTabActive: { backgroundColor: `${colors.primary}18` },
-  bottomTabIcon: { fontSize: 20, marginBottom: 3 },
+  bottomTabIconContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 4,
+    borderRadius: 0,
+    marginBottom: 4,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  bottomTabIconContainerActive: {
+    backgroundColor: (kineticColors.accent + "20"),
+    borderLeftWidth: 6, borderLeftColor: kineticColors.accent,
+  },
+  bottomTabIcon: { fontSize: 20 },
   bottomTabIconActive: { fontSize: 22 },
-  bottomTabLabel: { color: colors.muted, fontSize: 10, fontWeight: "600", textAlign: "center" },
-  bottomTabLabelActive: { color: colors.primary, fontWeight: "700" },
+  bottomTabLabel: { color: kineticColors.mutedForeground, ...kineticTypography.label, textAlign: "center" },
+  bottomTabLabelActive: { color: kineticColors.foreground, ...kineticTypography.label, fontWeight: "700" },
 });

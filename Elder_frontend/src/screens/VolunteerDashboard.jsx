@@ -14,21 +14,10 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthContext } from "../context/AuthContext";
 import api from "../api";
-import { auth } from "../config/firebase";
 import { useFocusEffect } from "@react-navigation/native";
 import useResponsive from "../hooks/useResponsive";
 import VolunteerSidebar, { VolunteerMobileBottomBar } from "../components/VolunteerSidebar";
-
-const colors = {
-  bg: "#0F172A",
-  sidebar: "#0B1220",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#3B82F6",
-  green: "#16A34A",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-};
+import { kineticColors, kineticTypography } from "../theme/kineticTokens";
 
 export default function VolunteerDashboard({ navigation }) {
   const { user } = useContext(AuthContext);
@@ -117,7 +106,6 @@ export default function VolunteerDashboard({ navigation }) {
 
   const acceptDelivery = async (deliveryId) => {
     try {
-      const token = await auth.currentUser.getIdToken();
       await api.post(
         `/delivery/accept/${deliveryId}`,
         {}
@@ -153,7 +141,7 @@ export default function VolunteerDashboard({ navigation }) {
           </Text>
 
           {loading ? (
-            <ActivityIndicator size="large" color={colors.primary} />
+            <ActivityIndicator size="large" color={kineticColors.accent} />
           ) : (
             <>
               {/* Stats */}
@@ -170,14 +158,14 @@ export default function VolunteerDashboard({ navigation }) {
                 <StatCard
                   title="Available Tasks"
                   value={available.length}
-                  color={colors.primary}
+                  color={kineticColors.accent}
                   onPress={() => navigation.navigate("AvailableRequests")}
                   width={responsive.isMobile ? "100%" : "48%"}
                 />
                 <StatCard
                   title="Completed Tasks"
                   value={completed.length}
-                  color={colors.green}
+                  color={kineticColors.foreground}
                   onPress={() => navigation.navigate("MyTasks")}
                   width={responsive.isMobile ? "100%" : "48%"}
                 />
@@ -299,7 +287,7 @@ export default function VolunteerDashboard({ navigation }) {
               ))}
 
               {available.length === 0 && (
-                <Text style={{ color: colors.muted }}>
+                <Text style={{ color: kineticColors.mutedForeground, ...kineticTypography.body }}>
                   No available requests.
                 </Text>
               )}
@@ -320,7 +308,7 @@ export default function VolunteerDashboard({ navigation }) {
               ))}
 
               {completed.length === 0 && (
-                <Text style={{ color: colors.muted }}>
+                <Text style={{ color: kineticColors.mutedForeground, ...kineticTypography.body }}>
                   No completed tasks yet.
                 </Text>
               )}
@@ -339,7 +327,7 @@ export default function VolunteerDashboard({ navigation }) {
 
 const SidebarItem = ({ label, active, onPress }) => (
   <TouchableOpacity
-    style={[styles.sidebarItem, active && { backgroundColor: colors.card }]}
+    style={[styles.sidebarItem, active && { backgroundColor: kineticColors.border }]}
     onPress={onPress}
   >
     <Text style={styles.sidebarText}>{label}</Text>
@@ -362,7 +350,7 @@ const SectionTitle = ({ title }) => (
 );
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
+  container: { flex: 1, backgroundColor: kineticColors.background },
 
   layout: {
     flexDirection: "row", // Overridden dynamically below but keeping base as row for styling purposes
@@ -371,8 +359,10 @@ const styles = StyleSheet.create({
 
   sidebar: {
     width: 250,
-    backgroundColor: colors.sidebar,
+    backgroundColor: kineticColors.background,
     padding: 20,
+    borderRightWidth: 1,
+    borderRightColor: kineticColors.border,
   },
 
   profileSection: {
@@ -384,18 +374,19 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: colors.border,
+    backgroundColor: kineticColors.border,
     marginBottom: 10,
   },
 
   profileName: {
-    color: colors.text,
-    fontWeight: "bold",
+    color: kineticColors.foreground,
+    ...kineticTypography.subheading,
+    fontSize: 20,
   },
 
   profileRole: {
-    color: colors.muted,
-    fontSize: 13,
+    color: kineticColors.mutedForeground,
+    ...kineticTypography.label,
   },
 
   sidebarItem: {
@@ -405,7 +396,8 @@ const styles = StyleSheet.create({
   },
 
   sidebarText: {
-    color: colors.text,
+    color: kineticColors.foreground,
+    ...kineticTypography.label,
   },
 
   content: {
@@ -414,13 +406,13 @@ const styles = StyleSheet.create({
   },
 
   heading: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: colors.text,
+    ...kineticTypography.heading,
+    color: kineticColors.foreground,
   },
 
   subheading: {
-    color: colors.muted,
+    ...kineticTypography.body,
+    color: kineticColors.mutedForeground,
     marginBottom: 30,
   },
 
@@ -433,73 +425,74 @@ const styles = StyleSheet.create({
 
   statCard: {
     flex: 1,
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     padding: 30,
-    borderRadius: 16,
-    borderWidth: 1,
+    borderWidth: 2,
     alignItems: "center",
   },
 
   statNumber: {
+    ...kineticTypography.hero,
     fontSize: 48,
-    fontWeight: "bold",
-    color: colors.text,
+    color: kineticColors.foreground,
   },
 
   statTitle: {
+    ...kineticTypography.label,
     marginTop: 8,
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
   },
 
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: colors.text,
+    ...kineticTypography.cardTitle,
+    color: kineticColors.foreground,
     marginBottom: 15,
   },
 
   quickCard: {
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     padding: 18,
-    borderRadius: 12,
     marginBottom: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderWidth: 2,
+    borderColor: kineticColors.border,
   },
 
   quickTitle: {
-    color: colors.primary,
-    fontWeight: "bold",
+    color: kineticColors.accent,
+    ...kineticTypography.subheading,
+    fontSize: 20,
     marginBottom: 5,
   },
 
   quickDesc: {
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
+    ...kineticTypography.body,
   },
 
   activityCard: {
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     padding: 18,
-    borderRadius: 12,
     marginBottom: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderWidth: 2,
+    borderColor: kineticColors.border,
   },
 
   activityTitle: {
-    color: colors.green,
-    fontWeight: "bold",
+    color: kineticColors.foreground,
+    ...kineticTypography.subheading,
+    fontSize: 18,
     marginBottom: 5,
   },
 
   activityDesc: {
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
+    ...kineticTypography.body,
   },
 
   activityStatus: {
     marginTop: 6,
-    color: colors.green,
-    fontSize: 12,
+    color: kineticColors.foreground,
+    ...kineticTypography.label,
   },
 
   // Delivery styles
@@ -507,26 +500,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: colors.primary + "15",
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: colors.primary,
+    backgroundColor: kineticColors.accent,
+    borderWidth: 2,
+    borderColor: kineticColors.foreground,
     padding: 16,
     marginBottom: 20,
   },
   activeBannerLeft: { flexDirection: "row", alignItems: "center", gap: 12, flex: 1 },
   activeBannerIcon: { fontSize: 28 },
-  activeBannerTitle: { fontSize: 16, fontWeight: "700", color: colors.text },
-  activeBannerDesc: { fontSize: 13, color: colors.muted, marginTop: 2 },
-  activeBannerArrow: { fontSize: 20, color: colors.primary, fontWeight: "700" },
+  activeBannerTitle: { ...kineticTypography.subheading, fontSize: 20, color: kineticColors.accentForeground },
+  activeBannerDesc: { ...kineticTypography.body, fontSize: 13, color: kineticColors.accentForeground, marginTop: 2 },
+  activeBannerArrow: { fontSize: 24, color: kineticColors.accentForeground, fontWeight: "700" },
 
   deliveryCard: {
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     padding: 18,
-    borderRadius: 12,
     marginBottom: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderWidth: 2,
+    borderColor: kineticColors.border,
   },
   deliveryCardHeader: {
     flexDirection: "row",
@@ -534,57 +525,55 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 8,
   },
-  deliveryCategory: { color: colors.primary, fontWeight: "bold", fontSize: 14 },
-  deliveryItemCount: { color: colors.muted, fontSize: 12 },
-  deliveryAddress: { color: colors.muted, fontSize: 13, marginBottom: 6 },
-  deliveryElder: { color: colors.text, fontSize: 13, marginBottom: 10 },
+  deliveryCategory: { color: kineticColors.foreground, ...kineticTypography.label },
+  deliveryItemCount: { color: kineticColors.mutedForeground, ...kineticTypography.label, fontSize: 12 },
+  deliveryAddress: { color: kineticColors.mutedForeground, ...kineticTypography.body, fontSize: 14, marginBottom: 6 },
+  deliveryElder: { color: kineticColors.foreground, ...kineticTypography.body, fontSize: 14, marginBottom: 10 },
   acceptDeliveryBtn: {
-    backgroundColor: colors.primary,
-    paddingVertical: 10,
-    borderRadius: 8,
+    backgroundColor: kineticColors.accent,
+    paddingVertical: 12,
     alignItems: "center",
+    borderWidth: 2,
+    borderColor: kineticColors.foreground,
   },
-  acceptDeliveryText: { color: "#FFF", fontWeight: "600", fontSize: 14 },
+  acceptDeliveryText: { color: kineticColors.accentForeground, ...kineticTypography.label },
   
   ngoList: { gap: 12, marginBottom: 20 },
   ngoCard: {
     flexDirection: "row",
-    backgroundColor: colors.card,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
+    backgroundColor: kineticColors.background,
+    borderWidth: 2,
+    borderColor: kineticColors.border,
     padding: 16,
     alignItems: "center",
   },
   ngoAvatar: {
     width: 50,
     height: 50,
-    borderRadius: 25,
-    backgroundColor: colors.primary + "25",
+    borderRadius: 0,
+    backgroundColor: kineticColors.border,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 16,
     overflow: "hidden",
   },
   ngoImage: { width: "100%", height: "100%" },
-  ngoAvatarText: { color: colors.primary, fontSize: 20, fontWeight: "bold" },
+  ngoAvatarText: { color: kineticColors.foreground, ...kineticTypography.subheading, fontSize: 24 },
   ngoInfo: { flex: 1, gap: 4 },
-  ngoName: { color: colors.text, fontSize: 16, fontWeight: "700" },
-  ngoAddress: { color: colors.muted, fontSize: 13 },
+  ngoName: { color: kineticColors.foreground, ...kineticTypography.subheading, fontSize: 18 },
+  ngoAddress: { color: kineticColors.mutedForeground, ...kineticTypography.body, fontSize: 14 },
   joinBadge: {
-    backgroundColor: colors.primary + "15",
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderRadius: 6,
+    backgroundColor: kineticColors.border,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
   },
-  joinBadgeText: { color: colors.primary, fontSize: 12, fontWeight: "600" },
+  joinBadgeText: { color: kineticColors.foreground, ...kineticTypography.label },
   emptyCard: {
     padding: 20,
-    backgroundColor: colors.card,
-    borderRadius: 12,
+    backgroundColor: kineticColors.background,
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderWidth: 2,
+    borderColor: kineticColors.border,
   },
-  emptyText: { color: colors.muted },
+  emptyText: { color: kineticColors.mutedForeground, ...kineticTypography.body },
 });

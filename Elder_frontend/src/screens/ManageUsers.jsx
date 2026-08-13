@@ -1,7 +1,6 @@
 import { View, Text, FlatList, Button } from "react-native";
 import { useEffect, useState } from "react";
 import api from "../api";
-import { auth } from "../config/firebase";
 
 export default function ManageUsers() {
   const [users, setUsers] = useState([]);

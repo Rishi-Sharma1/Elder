@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import { useContext, useEffect, useState, useCallback } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert, TextInput, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -6,15 +7,7 @@ import * as Location from "expo-location";
 import { AuthContext } from "../context/AuthContext";
 import api from "../api";
 
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#4799EB",
-  success: "#22C55E",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-};
+
 
 const SUGGESTIONS = {
   cities: ["Bhopal", "Indore", "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Pune", "Jaipur", "Lucknow", "Nagpur", "Noida", "Gurgaon", "Chandigarh"],
@@ -128,7 +121,7 @@ export default function EventsScreen({ navigation }) {
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator size="large" color={colors.primary} style={{ marginTop: 50 }} />
+        <ActivityIndicator size="large" color={kineticColors.accent} style={{ marginTop: 50 }} />
       </SafeAreaView>
     );
   }
@@ -142,8 +135,8 @@ export default function EventsScreen({ navigation }) {
         {user.role === "ngo" && (
           <View style={styles.createCard}>
             <Text style={styles.createTitle}>Post a New Event</Text>
-            <TextInput style={styles.input} placeholder="Event Title" placeholderTextColor={colors.muted} value={title} onChangeText={setTitle} />
-            <TextInput style={styles.input} placeholder="Description" placeholderTextColor={colors.muted} value={description} onChangeText={setDescription} multiline />
+            <TextInput style={styles.input} placeholder="Event Title" placeholderTextColor={kineticColors.mutedForeground} value={title} onChangeText={setTitle} />
+            <TextInput style={styles.input} placeholder="Description" placeholderTextColor={kineticColors.mutedForeground} value={description} onChangeText={setDescription} multiline />
             
             {Platform.OS === 'web' ? (
               <TextInput
@@ -155,7 +148,7 @@ export default function EventsScreen({ navigation }) {
             ) : (
               <>
                 <TouchableOpacity style={styles.input} onPress={() => setShowDatePicker(true)}>
-                  <Text style={{ color: date ? colors.text : colors.muted }}>
+                  <Text style={{ color: date ? kineticColors.foreground : kineticColors.mutedForeground }}>
                     📅 {date ? date.toDateString() : "Select Date"}
                   </Text>
                 </TouchableOpacity>
@@ -176,7 +169,7 @@ export default function EventsScreen({ navigation }) {
               <TextInput 
                 style={styles.input} 
                 placeholder="Locality / Area" 
-                placeholderTextColor={colors.muted} 
+                placeholderTextColor={kineticColors.mutedForeground} 
                 value={locality} 
                 onChangeText={setLocality} 
               />
@@ -185,7 +178,7 @@ export default function EventsScreen({ navigation }) {
                 <TextInput 
                   style={styles.input} 
                   placeholder="City / District" 
-                  placeholderTextColor={colors.muted} 
+                  placeholderTextColor={kineticColors.mutedForeground} 
                   value={city} 
                   onChangeText={handleCityChange} 
                 />
@@ -204,7 +197,7 @@ export default function EventsScreen({ navigation }) {
                 <TextInput 
                   style={styles.input} 
                   placeholder="State" 
-                  placeholderTextColor={colors.muted} 
+                  placeholderTextColor={kineticColors.mutedForeground} 
                   value={state} 
                   onChangeText={handleStateChange} 
                 />
@@ -257,7 +250,7 @@ export default function EventsScreen({ navigation }) {
               )
             })
           ) : (
-            <Text style={{ color: colors.muted, textAlign: "center", marginTop: 20 }}>No events found.</Text>
+            <Text style={{ color: kineticColors.mutedForeground, textAlign: "center", marginTop: 20 }}>No events found.</Text>
           )}
         </View>
       </ScrollView>
@@ -266,35 +259,35 @@ export default function EventsScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
+  container: { flex: 1, backgroundColor: kineticColors.background },
   content: { padding: 20 },
-  heading: { fontSize: 28, fontWeight: "800", color: colors.text, marginBottom: 5 },
-  subheading: { fontSize: 15, color: colors.muted, marginBottom: 20 },
-  createCard: { backgroundColor: colors.card, padding: 16, borderRadius: 12, borderWidth: 1, borderColor: colors.border, marginBottom: 20 },
-  createTitle: { fontSize: 18, fontWeight: "bold", color: colors.text, marginBottom: 15 },
-  input: { backgroundColor: colors.bg, color: colors.text, padding: 12, borderRadius: 8, borderWidth: 1, borderColor: colors.border, marginBottom: 10, justifyContent: 'center' },
+  heading: { fontSize: 28, fontWeight: "800", color: kineticColors.foreground, marginBottom: 5 },
+  subheading: { fontSize: 15, color: kineticColors.mutedForeground, marginBottom: 20 },
+  createCard: { backgroundColor: kineticColors.background, padding: 16, borderRadius: 12, borderWidth: 1, borderColor: kineticColors.border, marginBottom: 20 },
+  createTitle: { fontSize: 18, fontWeight: "bold", color: kineticColors.foreground, marginBottom: 15 },
+  input: { backgroundColor: kineticColors.background, color: kineticColors.foreground, padding: 12, borderRadius: 8, borderWidth: 1, borderColor: kineticColors.border, marginBottom: 10, justifyContent: 'center' },
   locationGroup: { gap: 2, marginBottom: 10 },
   inputRow: { flexDirection: 'row', gap: 10, marginBottom: 10 },
-  locationBtnSmall: { backgroundColor: colors.primary, width: 45, borderRadius: 8, justifyContent: 'center', alignItems: 'center' },
+  locationBtnSmall: { backgroundColor: kineticColors.accent, width: 45, borderRadius: 8, justifyContent: 'center', alignItems: 'center' },
   suggestions: { 
     position: 'absolute', top: 52, left: 0, right: 0, 
-    backgroundColor: colors.card, borderRadius: 8, borderWidth: 1, borderColor: colors.border,
+    backgroundColor: kineticColors.background, borderRadius: 8, borderWidth: 1, borderColor: kineticColors.border,
     maxHeight: 150, overflow: 'hidden', shadowColor: "#000", shadowOpacity: 0.5, shadowRadius: 5, elevation: 5
   },
-  suggestionItem: { padding: 12, borderBottomWidth: 1, borderBottomColor: colors.border },
-  suggestionText: { color: colors.text },
-  submitBtn: { backgroundColor: colors.success, padding: 14, borderRadius: 8, alignItems: "center", marginTop: 5 },
+  suggestionItem: { padding: 12, borderBottomWidth: 1, borderBottomColor: kineticColors.border },
+  suggestionText: { color: kineticColors.foreground },
+  submitBtn: { backgroundColor: kineticColors.foreground, padding: 14, borderRadius: 8, alignItems: "center", marginTop: 5 },
   submitText: { color: "#FFF", fontWeight: "bold", fontSize: 16 },
   list: { gap: 15 },
-  card: { backgroundColor: colors.card, padding: 16, borderRadius: 12, borderWidth: 1, borderColor: colors.border },
+  card: { backgroundColor: kineticColors.background, padding: 16, borderRadius: 12, borderWidth: 1, borderColor: kineticColors.border },
   info: { gap: 6, marginBottom: 12 },
-  title: { fontSize: 18, fontWeight: "bold", color: colors.text },
-  desc: { fontSize: 14, color: colors.muted },
-  meta: { fontSize: 13, color: colors.success, marginTop: 4 },
+  title: { fontSize: 18, fontWeight: "bold", color: kineticColors.foreground },
+  desc: { fontSize: 14, color: kineticColors.mutedForeground },
+  meta: { fontSize: 13, color: kineticColors.foreground, marginTop: 4 },
   ngoName: { fontSize: 13, color: "#94A3B8", fontStyle: "italic" },
-  joinBtn: { backgroundColor: colors.primary, paddingVertical: 10, borderRadius: 8, alignItems: "center" },
-  joinedBtn: { backgroundColor: colors.success, opacity: 0.8 },
+  joinBtn: { backgroundColor: kineticColors.accent, paddingVertical: 10, borderRadius: 8, alignItems: "center" },
+  joinedBtn: { backgroundColor: kineticColors.foreground, opacity: 0.8 },
   joinText: { color: "#FFF", fontWeight: "bold" },
-  elderBadge: { backgroundColor: `${colors.primary}20`, padding: 8, borderRadius: 6, alignSelf: "flex-start" },
-  elderBadgeText: { color: colors.primary, fontWeight: "bold", fontSize: 12 }
+  elderBadge: { backgroundColor: `${kineticColors.accent}20`, padding: 8, borderRadius: 6, alignSelf: "flex-start" },
+  elderBadgeText: { color: kineticColors.accent, fontWeight: "bold", fontSize: 12 }
 });

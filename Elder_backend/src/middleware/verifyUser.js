@@ -1,4 +1,4 @@
-import admin from "../config/firebaseAdmin.js";
+import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
 const verifyUser = async (req, res, next) => {
@@ -10,16 +10,16 @@ const verifyUser = async (req, res, next) => {
     }
 
     const token = authHeader.split(" ")[1];
-    const decoded = await admin.auth().verifyIdToken(token);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "elder_connect_jwt_secret_key_2026_safe");
 
-    const user = await User.findOne({ uid: decoded.uid });
+    const user = await User.findById(decoded.id || decoded.userId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found in database" });
     }
 
     req.user = user;   // 🔥 MONGO USER DOC
-    console.log("VERIFY USER HIT");
+    req.userId = user._id.toString();
 
     next();
   } catch (err) {

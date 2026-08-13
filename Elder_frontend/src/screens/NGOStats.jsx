@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../api";
-import { auth } from "../config/firebase";
 
 export default function NGOStats() {
   const [stats, setStats] = useState(null);
@@ -17,8 +16,6 @@ export default function NGOStats() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const token = await auth.currentUser.getIdToken();
-
         const res = await api.get(
           "/ngo/stats"
         );

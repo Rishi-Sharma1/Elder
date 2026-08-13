@@ -1,29 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
-  TextInput,
-  TouchableOpacity,
   StyleSheet,
   Alert,
   ScrollView,
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../config/firebase";
-import api from "../api";
-
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#3B82F6",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-};
+import { AuthContext } from "../context/AuthContext";
+import { kineticColors, kineticTypography } from "../theme/kineticTokens";
+import KineticCard from "../components/KineticCard";
+import KineticButton from "../components/KineticButton";
+import KineticInput from "../components/KineticInput";
+import { BlurView } from "expo-blur";
 
 export default function SignupScreen({ route, navigation }) {
   const { role } = route.params;
@@ -33,6 +24,7 @@ export default function SignupScreen({ route, navigation }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { register } = useContext(AuthContext);
 
   const signup = async () => {
     if (!name || !email || !password || !confirmPassword) {
@@ -48,33 +40,22 @@ export default function SignupScreen({ route, navigation }) {
     try {
       setLoading(true);
 
-      const res = await createUserWithEmailAndPassword(
-        auth,
+      await register({
+        name,
         email,
-        password
-      );
-
-      const token = await res.user.getIdToken(true);
-
-      await api.post(
-        "/auth/register",
-        { token, role, name }
-      );
+        password,
+        role,
+      });
 
       Alert.alert(
         "Registration Successful 🎉",
-        "Your account has been created successfully. Please login to continue.",
+        "Your account has been created successfully.",
         [
           {
             text: "OK",
             onPress: () => {
               if (Platform.OS === "web") {
                 window.location.reload();
-              } else {
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: "Login" }],
-                });
               }
             },
           },
@@ -82,7 +63,10 @@ export default function SignupScreen({ route, navigation }) {
       );
     } catch (err) {
       console.log("FULL BACKEND ERROR:", err.response?.data || err);
-      Alert.alert("Signup Failed", "Something went wrong. Try again.");
+      Alert.alert(
+        "Signup Failed",
+        err.response?.data?.message || err.message || "Something went wrong. Try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -90,6 +74,11 @@ export default function SignupScreen({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Decorative Organic Shapes for MD3 Bold Factor */}
+      <View style={styles.shape1} />
+      <View style={styles.shape2} />
+      <BlurView intensity={80} style={StyleSheet.absoluteFill} tint="dark" />
+
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
@@ -107,67 +96,48 @@ export default function SignupScreen({ route, navigation }) {
               : "Join Elder Connect today"}
           </Text>
 
-          <View style={styles.card}>
-            <TextInput
-              placeholder={
-                role === "ngo"
-                  ? "Organization Name"
-                  : "Full Name"
-              }
+          <KineticCard variant="filled" style={styles.card}>
+            <KineticInput
+              label={role === "ngo" ? "Organization Name" : "Full Name"}
               value={name}
               onChangeText={setName}
               style={styles.input}
-              placeholderTextColor={colors.muted}
             />
 
-            <TextInput
-              placeholder="Email Address"
+            <KineticInput
+              label="Email Address"
               value={email}
               onChangeText={setEmail}
               autoCapitalize="none"
               keyboardType="email-address"
               style={styles.input}
-              placeholderTextColor={colors.muted}
             />
 
-            <TextInput
-              placeholder="Password"
+            <KineticInput
+              label="Password"
               secureTextEntry
               value={password}
               onChangeText={setPassword}
-              style={[
-                styles.input,
-                password && confirmPassword ? { borderColor: password === confirmPassword ? "#22C55E" : "#EF4444" } : null
-              ]}
-              placeholderTextColor={colors.muted}
+              style={styles.input}
+              error={password && confirmPassword && password !== confirmPassword}
             />
 
-            <TextInput
-              placeholder="Confirm Password"
+            <KineticInput
+              label="Confirm Password"
               secureTextEntry
               value={confirmPassword}
               onChangeText={setConfirmPassword}
-              style={[
-                styles.input,
-                password && confirmPassword ? { borderColor: password === confirmPassword ? "#22C55E" : "#EF4444" } : null
-              ]}
-              placeholderTextColor={colors.muted}
+              style={styles.input}
+              error={password && confirmPassword && password !== confirmPassword}
             />
-          </View>
+          </KineticCard>
 
-          <TouchableOpacity
-            style={styles.signupButton}
+          <KineticButton
+            title={loading ? "Creating Account..." : "Create Account"}
             onPress={signup}
             disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color="#FFF" />
-            ) : (
-              <Text style={styles.signupText}>
-                Create Account
-              </Text>
-            )}
-          </TouchableOpacity>
+            style={styles.signupButton}
+          />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -177,9 +147,8 @@ export default function SignupScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
   },
-
   content: {
     padding: 30,
     justifyContent: "center",
@@ -187,52 +156,46 @@ const styles = StyleSheet.create({
     maxWidth: 500,
     alignSelf: "center",
   },
-
   title: {
-    fontSize: 32,
-    fontWeight: "bold",
+    ...kineticTypography.subheading,
     textAlign: "center",
     marginBottom: 8,
-    color: colors.text,
+    color: kineticColors.foreground,
   },
-
   subtitle: {
-    fontSize: 15,
+    ...kineticTypography.body,
     textAlign: "center",
     marginBottom: 30,
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
   },
-
   card: {
-    backgroundColor: colors.card,
-    padding: 25,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: colors.border,
     marginBottom: 30,
+    padding: 24,
   },
-
   input: {
-    backgroundColor: "#0F172A",
-    borderRadius: 14,
-    padding: 16,
-    fontSize: 16,
-    marginBottom: 18,
-    color: colors.text,
-    borderWidth: 1,
-    borderColor: colors.border,
+    marginBottom: 16,
   },
-
   signupButton: {
-    backgroundColor: colors.primary,
-    paddingVertical: 18,
-    borderRadius: 16,
-    alignItems: "center",
+    marginTop: 8,
   },
-
-  signupText: {
-    color: "#FFF",
-    fontSize: 18,
-    fontWeight: "600",
+  shape1: {
+    position: 'absolute',
+    top: -100,
+    right: -100,
+    width: 300,
+    height: 300,
+    borderRadius: 150,
+    backgroundColor: kineticColors.accentContainer,
+    opacity: 0.6,
+  },
+  shape2: {
+    position: 'absolute',
+    bottom: -150,
+    left: -150,
+    width: 400,
+    height: 400,
+    borderRadius: 200,
+    backgroundColor: kineticColors.accentContainer,
+    opacity: 0.4,
   },
 });

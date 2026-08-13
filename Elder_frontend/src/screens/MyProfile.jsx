@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  TextInput,
   Image,
   TouchableOpacity,
   ScrollView,
@@ -14,20 +13,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthContext } from "../context/AuthContext";
 import api from "../api";
 import * as ImagePicker from "expo-image-picker";
-import { auth } from "../config/firebase";
 import { useNavigation } from "@react-navigation/native";
-
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#3B82F6",
-  success: "#16A34A",
-  danger: "#DC2626",
-  warning: "#F59E0B",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-};
+import { kineticColors, kineticTypography } from "../theme/kineticTokens";
+import KineticCard from "../components/KineticCard";
+import KineticButton from "../components/KineticButton";
+import KineticInput from "../components/KineticInput";
+import { BlurView } from "expo-blur";
 
 const SUGGESTIONS = {
   cities: ["Bhopal", "Indore", "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Pune", "Jaipur", "Lucknow", "Nagpur", "Noida", "Gurgaon", "Chandigarh"],
@@ -204,14 +195,12 @@ export default function MyProfile() {
   const saveProfile = async () => {
     try {
       setUploading(true);
-      const token = await auth.currentUser.getIdToken(true);
 
       let imageUrl = user.verification?.idFrontUrl || null;
       let finalProfilePhoto = user.profilePhoto;
 
       if (idImage) imageUrl = await uploadImage();
       
-      // Upload profile photo if changed and not a url
       if (profilePhoto && !profilePhoto.startsWith("http")) {
         finalProfilePhoto = await uploadProfileImage();
       } else if (profilePhoto) {
@@ -245,13 +234,18 @@ export default function MyProfile() {
   const status = user?.verification?.status || "not_verified";
 
   const getStatusColor = () => {
-    if (status === "approved") return colors.success;
-    if (status === "rejected") return colors.danger;
-    return colors.warning;
+    if (status === "approved") return kineticColors.accent;
+    if (status === "rejected") return kineticColors.error;
+    return kineticColors.accent; // Warning alternative
   };
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Decorative Organic Shapes for MD3 Bold Factor */}
+      <View style={styles.shape1} />
+      <View style={styles.shape2} />
+      <BlurView intensity={80} style={StyleSheet.absoluteFill} tint="dark" />
+
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.header}>My Profile</Text>
 
@@ -280,7 +274,7 @@ export default function MyProfile() {
         </View>
 
         {/* Basic Info */}
-        <View style={styles.card}>
+        <KineticCard variant="filled" style={styles.card}>
           <Text style={styles.label}>Name</Text>
           <Text style={styles.value}>{user?.name}</Text>
 
@@ -289,19 +283,18 @@ export default function MyProfile() {
 
           <Text style={styles.label}>Role</Text>
           <Text style={styles.value}>{user?.role}</Text>
-        </View>
+        </KineticCard>
 
         {/* Editable Section */}
-        <View style={styles.card}>
+        <KineticCard variant="filled" style={styles.card}>
           <Text style={styles.sectionTitle}>Personal Details</Text>
 
           {isEditing ? (
-            <TextInput
-              placeholder="Phone"
+            <KineticInput
+              label="Phone"
               value={phone}
               onChangeText={setPhone}
               style={styles.input}
-              placeholderTextColor={colors.muted}
             />
           ) : (
             <View style={styles.detailRow}>
@@ -311,20 +304,16 @@ export default function MyProfile() {
           )}
 
           {isEditing ? (
-            <View style={{ gap: 10 }}>
-              <TextInput
-                placeholder="Locality / Area Name"
+            <View style={{ gap: 10, marginBottom: 16 }}>
+              <KineticInput
+                label="Locality / Area Name"
                 value={locality}
                 onChangeText={setLocality}
-                style={styles.input}
-                placeholderTextColor={colors.muted}
               />
-              <TextInput
-                placeholder="City / District"
+              <KineticInput
+                label="City / District"
                 value={city}
                 onChangeText={handleCityChange}
-                style={styles.input}
-                placeholderTextColor={colors.muted}
               />
               {citySuggestions.length > 0 && (
                 <View style={styles.suggestions}>
@@ -336,12 +325,10 @@ export default function MyProfile() {
                 </View>
               )}
 
-              <TextInput
-                placeholder="State"
+              <KineticInput
+                label="State"
                 value={state}
                 onChangeText={handleStateChange}
-                style={styles.input}
-                placeholderTextColor={colors.muted}
               />
               {stateSuggestions.length > 0 && (
                 <View style={styles.suggestions}>
@@ -364,12 +351,11 @@ export default function MyProfile() {
 
           {user?.role !== "ngo" && (
             isEditing ? (
-              <TextInput
-                placeholder="Gender"
+              <KineticInput
+                label="Gender"
                 value={gender}
                 onChangeText={setGender}
                 style={styles.input}
-                placeholderTextColor={colors.muted}
               />
             ) : (
               <View style={styles.detailRow}>
@@ -381,12 +367,11 @@ export default function MyProfile() {
 
           {user?.role === "elder" && (
             isEditing ? (
-              <TextInput
-                placeholder="Emergency Contact"
+              <KineticInput
+                label="Emergency Contact"
                 value={emergencyContact}
                 onChangeText={setEmergencyContact}
                 style={styles.input}
-                placeholderTextColor={colors.muted}
               />
             ) : (
               <View style={styles.detailRow}>
@@ -395,16 +380,18 @@ export default function MyProfile() {
               </View>
             )
           )}
-        </View>
+        </KineticCard>
 
         {/* Upload ID */}
-        <View style={styles.card}>
+        <KineticCard variant="filled" style={styles.card}>
           <Text style={styles.sectionTitle}>Government ID</Text>
 
           {isEditing && (
-            <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
-              <Text style={styles.uploadText}>{idImage || user?.verification?.idFrontUrl ? "Change ID" : "Upload ID"}</Text>
-            </TouchableOpacity>
+            <KineticButton 
+              title={idImage || user?.verification?.idFrontUrl ? "Change ID" : "Upload ID"}
+              onPress={pickImage}
+              variant="tonal"
+            />
           )}
 
           {idImage ? (
@@ -412,15 +399,16 @@ export default function MyProfile() {
           ) : user?.verification?.idFrontUrl ? (
             <Image source={{ uri: user.verification.idFrontUrl }} style={styles.imagePreview} />
           ) : (
-            !isEditing && <Text style={styles.value}>No ID uploaded</Text>
+            !isEditing && <Text style={[styles.value, { marginTop: 10 }]}>No ID uploaded</Text>
           )}
-        </View>
+        </KineticCard>
 
         {/* Action Buttons */}
         {isEditing ? (
           <View style={styles.actionRow}>
-            <TouchableOpacity
-              style={[styles.saveButton, styles.cancelButton]}
+            <KineticButton
+              title="Cancel"
+              variant="tonal"
               onPress={() => {
                 setIsEditing(false);
                 setPhone(user.phone || "");
@@ -431,41 +419,31 @@ export default function MyProfile() {
                 setIdImage(null);
               }}
               disabled={uploading}
-            >
-              <Text style={styles.saveText}>Cancel</Text>
-            </TouchableOpacity>
+              style={{ flex: 1 }}
+            />
 
-            <TouchableOpacity
-              style={[styles.saveButton, styles.submitButton]}
+            <KineticButton
+              title={uploading ? "Saving..." : "Save Profile"}
+              variant="filled"
               onPress={saveProfile}
               disabled={uploading}
-            >
-              {uploading ? (
-                <ActivityIndicator color="#FFF" />
-              ) : (
-                <Text style={styles.saveText}>Save Profile</Text>
-              )}
-            </TouchableOpacity>
+              style={{ flex: 2 }}
+            />
           </View>
         ) : (
-          <TouchableOpacity
-            style={styles.editProfileBtn}
+          <KineticButton
+            title="Edit Profile"
+            variant="filled"
             onPress={() => setIsEditing(true)}
-          >
-            <Text style={styles.saveText}>Edit Profile</Text>
-          </TouchableOpacity>
+            style={{ marginBottom: 20 }}
+          />
         )}
 
         {/* Verification Status */}
-        <View style={styles.card}>
+        <KineticCard variant="outlined" style={styles.card}>
           <Text style={styles.sectionTitle}>Verification Status</Text>
 
-          <View
-            style={[
-              styles.statusBadge,
-              { backgroundColor: getStatusColor() },
-            ]}
-          >
+          <View style={[styles.statusBadge, { backgroundColor: getStatusColor() }]}>
             <Text style={styles.statusText}>
               {status.replace("_", " ").toUpperCase()}
             </Text>
@@ -476,7 +454,7 @@ export default function MyProfile() {
               {user?.verification?.rejectionReason}
             </Text>
           )}
-        </View>
+        </KineticCard>
       </ScrollView>
     </SafeAreaView>
   );
@@ -485,206 +463,150 @@ export default function MyProfile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
   },
-
   content: {
     padding: 24,
   },
-
   header: {
-    fontSize: 26,
-    fontWeight: "bold",
-    color: colors.text,
+    ...kineticTypography.heading,
+    color: kineticColors.foreground,
     marginBottom: 20,
   },
-
   card: {
-    backgroundColor: colors.card,
-    padding: 20,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
     marginBottom: 20,
   },
-
   avatarSection: {
     alignItems: "center",
     marginBottom: 24,
   },
-
   avatarContainer: {
     width: 100,
     height: 100,
-    borderRadius: 50,
+    borderRadius: 999,
     borderWidth: 3,
-    borderColor: colors.primary,
+    borderColor: kineticColors.accent,
     position: "relative",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.border,
+    backgroundColor: kineticColors.backgroundVariant,
   },
-
   avatarImage: {
     width: "100%",
     height: "100%",
-    borderRadius: 50,
+    borderRadius: 999,
   },
-
   avatarPlaceholder: {
     width: "100%",
     height: "100%",
-    borderRadius: 50,
+    borderRadius: 999,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.border,
+    backgroundColor: kineticColors.backgroundVariant,
   },
-
   avatarPlaceholderText: {
-    fontSize: 40,
-    color: colors.text,
-    fontWeight: "bold",
+    ...kineticTypography.heading,
+    color: kineticColors.mutedForeground,
   },
-
   editAvatarBadge: {
     position: "absolute",
     bottom: 0,
     right: -5,
-    backgroundColor: colors.card,
-    borderRadius: 15,
-    width: 30,
-    height: 30,
+    backgroundColor: kineticColors.accentContainer,
+    borderRadius: 999,
+    width: 32,
+    height: 32,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 2,
-    borderColor: colors.bg,
+    borderColor: kineticColors.background,
   },
-
   editAvatarIcon: {
     fontSize: 14,
   },
-
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: "600",
+    ...kineticTypography.cardTitle,
     marginBottom: 14,
-    color: colors.text,
+    color: kineticColors.foreground,
   },
-
   label: {
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
+    ...kineticTypography.label,
     marginTop: 8,
   },
-
   value: {
-    color: colors.text,
-    fontWeight: "600",
+    color: kineticColors.foreground,
+    ...kineticTypography.body,
     marginBottom: 10,
   },
-
   input: {
-    backgroundColor: "#0B1220",
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: 14,
-    borderRadius: 12,
-    fontSize: 15,
-    marginBottom: 12,
-    color: colors.text,
+    marginBottom: 16,
   },
-
-  uploadButton: {
-    backgroundColor: colors.primary,
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: "center",
-  },
-
-  uploadText: {
-    color: "#FFF",
-    fontWeight: "600",
-  },
-
   imagePreview: {
     width: "100%",
     height: 200,
     borderRadius: 12,
     marginTop: 14,
   },
-
-  saveButton: {
-    paddingVertical: 16,
-    borderRadius: 14,
-    alignItems: "center",
-  },
-
   actionRow: {
     flexDirection: "row",
     gap: 12,
     marginBottom: 20,
   },
-
-  cancelButton: {
-    flex: 1,
-    backgroundColor: colors.border,
-  },
-
-  submitButton: {
-    flex: 2,
-    backgroundColor: colors.success,
-  },
-
-  editProfileBtn: {
-    backgroundColor: colors.primary,
-    paddingVertical: 16,
-    borderRadius: 14,
-    alignItems: "center",
-    marginBottom: 20,
-  },
-
-  saveText: {
-    color: "#FFF",
-    fontWeight: "600",
-    fontSize: 16,
-  },
-  
   detailRow: {
     marginBottom: 10,
   },
-
   statusBadge: {
     paddingVertical: 8,
     paddingHorizontal: 16,
-    borderRadius: 20,
+    borderRadius: 999,
     alignSelf: "flex-start",
   },
-
   statusText: {
     color: "#FFF",
-    fontWeight: "600",
+    ...kineticTypography.label,
   },
-
   rejectionText: {
-    color: colors.danger,
+    color: kineticColors.error,
+    ...kineticTypography.body,
     marginTop: 10,
   },
-
-  // Suggestions styles
   suggestions: {
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.backgroundContainerHigh,
     borderRadius: 12,
     marginTop: -8,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.borderVariant,
     maxHeight: 150,
   },
   suggestionItem: {
     padding: 12,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: kineticColors.borderVariant,
   },
   suggestionText: {
-    color: colors.text,
+    color: kineticColors.foreground,
+    ...kineticTypography.body,
+  },
+  shape1: {
+    position: 'absolute',
+    top: -100,
+    left: -100,
+    width: 300,
+    height: 300,
+    borderRadius: 150,
+    backgroundColor: kineticColors.accentContainer,
+    opacity: 0.6,
+  },
+  shape2: {
+    position: 'absolute',
+    bottom: -150,
+    right: -150,
+    width: 400,
+    height: 400,
+    borderRadius: 200,
+    backgroundColor: kineticColors.accentContainer,
+    opacity: 0.4,
   },
 });

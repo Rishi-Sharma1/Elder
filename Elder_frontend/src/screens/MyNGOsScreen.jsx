@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import { useContext, useEffect, useState, useCallback } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -7,15 +8,7 @@ import useResponsive from "../hooks/useResponsive";
 import VolunteerSidebar, { VolunteerMobileBottomBar } from "../components/VolunteerSidebar";
 import ElderSidebar, { ElderMobileBottomBar } from "../components/ElderSidebar";
 
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#4799EB",
-  success: "#22C55E",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-};
+
 
 export default function MyNGOsScreen({ navigation }) {
   const { user } = useContext(AuthContext);
@@ -43,7 +36,7 @@ export default function MyNGOsScreen({ navigation }) {
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator size="large" color={colors.primary} style={{ marginTop: 50 }} />
+        <ActivityIndicator size="large" color={kineticColors.accent} style={{ marginTop: 50 }} />
       </SafeAreaView>
     );
   }
@@ -110,30 +103,30 @@ export default function MyNGOsScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
+  container: { flex: 1, backgroundColor: kineticColors.background },
   layout: { flex: 1 },
   content: { paddingBottom: 100 },
-  heading: { fontSize: 28, fontWeight: "800", color: colors.text, marginBottom: 5 },
-  subheading: { fontSize: 15, color: colors.muted, marginBottom: 25 },
+  heading: { fontSize: 28, fontWeight: "800", color: kineticColors.foreground, marginBottom: 5 },
+  subheading: { fontSize: 15, color: kineticColors.mutedForeground, marginBottom: 25 },
   list: { gap: 16 },
   card: {
-    flexDirection: "row", backgroundColor: colors.card, padding: 16,
-    borderRadius: 12, borderWidth: 1, borderColor: colors.border, alignItems: "center"
+    flexDirection: "row", backgroundColor: kineticColors.background, padding: 16,
+    borderRadius: 12, borderWidth: 1, borderColor: kineticColors.border, alignItems: "center"
   },
   avatar: {
     width: 60, height: 60, borderRadius: 30, backgroundColor: "#334155", 
     justifyContent: "center", alignItems: "center", marginRight: 15, overflow: "hidden"
   },
   image: { width: "100%", height: "100%" },
-  avatarText: { fontSize: 24, color: colors.text, fontWeight: "bold" },
+  avatarText: { fontSize: 24, color: kineticColors.foreground, fontWeight: "bold" },
   info: { flex: 1, gap: 4 },
-  name: { fontSize: 18, fontWeight: "bold", color: colors.text },
-  address: { fontSize: 13, color: colors.muted },
-  phone: { fontSize: 13, color: colors.success },
-  viewMore: { color: colors.primary, fontSize: 12, fontWeight: "600" },
+  name: { fontSize: 18, fontWeight: "bold", color: kineticColors.foreground },
+  address: { fontSize: 13, color: kineticColors.mutedForeground },
+  phone: { fontSize: 13, color: kineticColors.foreground },
+  viewMore: { color: kineticColors.accent, fontSize: 12, fontWeight: "600" },
   emptyState: { alignItems: 'center', marginTop: 60, gap: 12 },
   emptyIcon: { fontSize: 64 },
-  emptyText: { color: colors.muted, fontSize: 16, textAlign: 'center' },
-  browseBtn: { backgroundColor: colors.primary, paddingVertical: 12, paddingHorizontal: 24, borderRadius: 10, marginTop: 10 },
+  emptyText: { color: kineticColors.mutedForeground, fontSize: 16, textAlign: 'center' },
+  browseBtn: { backgroundColor: kineticColors.accent, paddingVertical: 12, paddingHorizontal: 24, borderRadius: 10, marginTop: 10 },
   browseBtnText: { color: "#FFF", fontWeight: "bold" }
 });

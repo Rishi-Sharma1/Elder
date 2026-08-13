@@ -1,45 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
-  TextInput,
-  TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Alert,
+  Dimensions,
 } from "react-native";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../config/firebase";
+import { AuthContext } from "../context/AuthContext";
+import { kineticColors, kineticTypography } from "../theme/kineticTokens";
+import KineticCard from "../components/KineticCard";
+import KineticInput from "../components/KineticInput";
+import KineticButton from "../components/KineticButton";
+import { BlurView } from 'expo-blur';
+import RoleSelectModal from "../components/RoleSelectModal";
 
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#3B82F6",
-  green: "#16A34A",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-};
+const { width, height } = Dimensions.get('window');
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isRoleModalVisible, setRoleModalVisible] = useState(false);
+  const { login } = useContext(AuthContext);
 
-  const login = async () => {
+  const handleLogin = async () => {
     if (!email || !password) {
-      alert("Please enter email and password");
+      Alert.alert("Error", "Please enter email and password");
       return;
     }
 
     try {
       setLoading(true);
-      await signInWithEmailAndPassword(auth, email, password);
+      await login(email, password);
     } catch (error) {
-      alert("Wrong email or password");
+      Alert.alert("Login Failed", error.response?.data?.message || error.message || "Wrong email or password");
     } finally {
       setLoading(false);
     }
@@ -47,6 +46,11 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Decorative Organic Shapes for MD3 Bold Factor */}
+      <View style={styles.shape1} />
+      <View style={styles.shape2} />
+      <BlurView intensity={80} style={StyleSheet.absoluteFill} tint="dark" />
+      
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
@@ -55,53 +59,55 @@ export default function LoginScreen({ navigation }) {
           contentContainerStyle={styles.wrapper}
           keyboardShouldPersistTaps="handled"
         >
-          <View style={styles.card}>
+          <KineticCard style={styles.card}>
             <Text style={styles.title}>Elder Connect</Text>
             <Text style={styles.subtitle}>
               Volunteer & Support Platform
             </Text>
 
-            <TextInput
-              style={styles.input}
-              placeholder="Email Address"
-              placeholderTextColor={colors.muted}
+            <KineticInput
+              label="Email Address"
+              placeholder="Enter your email"
               autoCapitalize="none"
               value={email}
               onChangeText={setEmail}
+              keyboardType="email-address"
             />
 
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              placeholderTextColor={colors.muted}
+            <KineticInput
+              label="Password"
+              placeholder="Enter your password"
               secureTextEntry
               value={password}
               onChangeText={setPassword}
             />
 
-            <TouchableOpacity
-              style={styles.loginButton}
-              onPress={login}
-              disabled={loading}
-            >
+            <View style={styles.buttonContainer}>
               {loading ? (
-                <ActivityIndicator color="#FFF" />
+                <ActivityIndicator color={kineticColors.accent} size="large" />
               ) : (
-                <Text style={styles.loginText}>Login</Text>
+                <KineticButton
+                  title="Login"
+                  onPress={handleLogin}
+                  variant="filled"
+                  style={styles.loginButton}
+                />
               )}
-            </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity
-              style={styles.signupButton}
-              onPress={() => navigation.navigate("RoleSelect")}
-            >
-              <Text style={styles.signupText}>
-                Create New Account
-              </Text>
-            </TouchableOpacity>
-          </View>
+            <KineticButton
+              title="Create New Account"
+              onPress={() => setRoleModalVisible(true)}
+              variant="text"
+            />
+          </KineticCard>
         </ScrollView>
       </KeyboardAvoidingView>
+      
+      <RoleSelectModal 
+        visible={isRoleModalVisible} 
+        onClose={() => setRoleModalVisible(false)} 
+      />
     </SafeAreaView>
   );
 }
@@ -109,9 +115,29 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000000",
+    backgroundColor: kineticColors.background,
+    position: 'relative',
   },
-
+  shape1: {
+    position: 'absolute',
+    top: -height * 0.1,
+    right: -width * 0.2,
+    width: width * 0.8,
+    height: width * 0.8,
+    borderRadius: width * 0.4,
+    backgroundColor: kineticColors.accentContainer,
+    opacity: 0.8,
+  },
+  shape2: {
+    position: 'absolute',
+    bottom: -height * 0.05,
+    left: -width * 0.3,
+    width: width,
+    height: width,
+    borderRadius: width * 0.5,
+    backgroundColor: kineticColors.accentContainer,
+    opacity: 0.6,
+  },
   wrapper: {
     flexGrow: 1,
     justifyContent: "center",
@@ -119,69 +145,30 @@ const styles = StyleSheet.create({
     padding: 24,
     width: "100%",
   },
-
   card: {
     width: "100%",
     maxWidth: 420,
-    backgroundColor: colors.card,
-    padding: 30,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: colors.border,
+    backgroundColor: kineticColors.backgroundContainer,
   },
-
   title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: colors.text,
+    ...kineticTypography.subheading,
+    color: kineticColors.foreground,
     textAlign: "center",
-    marginBottom: 6,
+    marginBottom: 8,
   },
-
   subtitle: {
-    fontSize: 14,
-    color: colors.muted,
+    ...kineticTypography.body,
+    color: kineticColors.mutedForeground,
     textAlign: "center",
-    marginBottom: 30,
+    marginBottom: 32,
   },
-
-  input: {
-    backgroundColor: "#0B1220",
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: 16,
-    borderRadius: 12,
-    fontSize: 16,
-    color: colors.text,
-    marginBottom: 18,
+  buttonContainer: {
+    marginTop: 8,
+    marginBottom: 16,
+    height: 48, // slightly taller to give space for loading indicator
+    justifyContent: 'center',
   },
-
   loginButton: {
-    backgroundColor: colors.primary,
-    paddingVertical: 16,
-    borderRadius: 14,
-    alignItems: "center",
-    marginBottom: 12,
-  },
-
-  loginText: {
-    color: "#FFF",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-
-  signupButton: {
-    backgroundColor: "#111827",
-    paddingVertical: 16,
-    borderRadius: 14,
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-
-  signupText: {
-    color: colors.text,
-    fontSize: 15,
-    fontWeight: "500",
-  },
+    height: 48,
+  }
 });

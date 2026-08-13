@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import { useContext, useEffect, useState, useCallback } from "react";
 import {
   View,
@@ -19,20 +20,7 @@ import api from "../api";
 import AdminSidebar, { MobileBottomBar } from "../components/AdminSidebar";
 import useResponsive from "../hooks/useResponsive";
 
-const colors = {
-  bg: "#0F172A",
-  sidebar: "#0B1220",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#4799EB",
-  primaryDark: "#2563EB",
-  success: "#22C55E",
-  warning: "#F59E0B",
-  danger: "#EF4444",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-  cardHover: "#273548",
-};
+
 
 export default function AdminDashboard({ navigation }) {
   const { user } = useContext(AuthContext);
@@ -98,7 +86,7 @@ export default function AdminDashboard({ navigation }) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <ActivityIndicator size="large" color={kineticColors.accent} />
           <Text style={styles.loadingText}>Loading Dashboard...</Text>
         </View>
       </SafeAreaView>
@@ -137,7 +125,7 @@ export default function AdminDashboard({ navigation }) {
           style={styles.content}
           contentContainerStyle={[styles.contentContainer, { padding: responsive.contentPadding }]}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={kineticColors.accent} />
           }
         >
           {/* Header */}
@@ -162,7 +150,7 @@ export default function AdminDashboard({ navigation }) {
               value={stats?.totalUsers || 0}
               change="+10%"
               positive
-              color={colors.primary}
+              color={kineticColors.accent}
               width={responsive.isMobile ? "100%" : "48%"}
             />
             <StatCard
@@ -170,7 +158,7 @@ export default function AdminDashboard({ navigation }) {
               value={stats?.activeNGOs || 0}
               change="+5%"
               positive
-              color={colors.success}
+              color={kineticColors.foreground}
               width={responsive.isMobile ? "100%" : "48%"}
             />
             <StatCard
@@ -178,7 +166,7 @@ export default function AdminDashboard({ navigation }) {
               value={stats?.dailyActivities || 0}
               change="+8%"
               positive
-              color={colors.warning}
+              color={kineticColors.mutedForeground}
               width={responsive.isMobile ? "100%" : "48%"}
             />
             <StatCard
@@ -186,7 +174,7 @@ export default function AdminDashboard({ navigation }) {
               value={stats?.reportsPending || 0}
               change={stats?.reportsPending > 0 ? "Needs attention" : "All clear"}
               positive={stats?.reportsPending === 0}
-              color={colors.danger}
+              color={kineticColors.error}
               width={responsive.isMobile ? "100%" : "48%"}
             />
           </View>
@@ -205,9 +193,9 @@ export default function AdminDashboard({ navigation }) {
                         u.role?.charAt(0).toUpperCase() + u.role?.slice(1) || "—",
                         u.approved ? "Active" : "Blocked",
                       ],
-                      statusColor: u.approved ? colors.success : colors.danger,
+                      statusColor: u.approved ? kineticColors.foreground : kineticColors.error,
                     }))
-                  : [{ cells: ["No users found", "", "", ""], statusColor: colors.muted }]
+                  : [{ cells: ["No users found", "", "", ""], statusColor: kineticColors.mutedForeground }]
               }
             />
             <TouchableOpacity
@@ -266,7 +254,7 @@ export default function AdminDashboard({ navigation }) {
                           {
                             height: heights[i],
                             backgroundColor:
-                              i === 4 ? colors.primary : `${colors.primary}80`,
+                              i === 4 ? kineticColors.accent : `${kineticColors.accent}80`,
                           },
                         ]}
                       />
@@ -284,9 +272,9 @@ export default function AdminDashboard({ navigation }) {
               <Text style={styles.activitySubtext}>Total Requests</Text>
               <View style={styles.typeBreakdown}>
                 {[
-                  { label: "Medicine", type: "medicine", color: colors.primary },
-                  { label: "Food", type: "food", color: colors.success },
-                  { label: "Emergency", type: "emergency", color: colors.danger },
+                  { label: "Medicine", type: "medicine", color: kineticColors.accent },
+                  { label: "Food", type: "food", color: kineticColors.foreground },
+                  { label: "Emergency", type: "emergency", color: kineticColors.error },
                 ].map((item) => {
                   const count = getRequestTypeCount(item.type);
                   const pct = totalRequestsAll > 0 ? (count / totalRequestsAll) * 100 : 0;
@@ -318,9 +306,9 @@ export default function AdminDashboard({ navigation }) {
                 <Text style={styles.statusSummaryTitle}>By Status</Text>
                 <View style={styles.statusRow}>
                   {[
-                    { label: "Pending", status: "pending", color: colors.warning },
-                    { label: "Assigned", status: "assigned", color: colors.primary },
-                    { label: "Completed", status: "completed", color: colors.success },
+                    { label: "Pending", status: "pending", color: kineticColors.mutedForeground },
+                    { label: "Assigned", status: "assigned", color: kineticColors.accent },
+                    { label: "Completed", status: "completed", color: kineticColors.foreground },
                   ].map((item) => (
                     <View key={item.status} style={styles.statusBadge}>
                       <View style={[styles.statusDot, { backgroundColor: item.color }]} />
@@ -445,7 +433,7 @@ const StatCard = ({ title, value, change, positive, color, width }) => (
   <View style={[styles.statCard, { borderTopColor: color, borderTopWidth: 3, width: width || "100%" }]}>
     <Text style={styles.statTitle}>{title}</Text>
     <Text style={styles.statValue}>{typeof value === "number" ? value.toLocaleString() : value}</Text>
-    <Text style={[styles.statChange, { color: positive ? colors.success : colors.danger }]}>
+    <Text style={[styles.statChange, { color: positive ? kineticColors.foreground : kineticColors.error }]}>
       {change}
     </Text>
   </View>
@@ -482,14 +470,14 @@ const Table = ({ headers, rows }) => (
 /* ── Styles ── */
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
+  container: { flex: 1, backgroundColor: kineticColors.background },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     gap: 16,
   },
-  loadingText: { color: colors.muted, fontSize: 16 },
+  loadingText: { color: kineticColors.mutedForeground, fontSize: 16 },
 
   layout: {
     flex: 1,
@@ -498,22 +486,22 @@ const styles = StyleSheet.create({
   // Sidebar
   sidebar: {
     width: 260,
-    backgroundColor: colors.sidebar,
+    backgroundColor: kineticColors.background,
     borderRightWidth: 1,
-    borderRightColor: colors.border,
+    borderRightColor: kineticColors.border,
   },
   sidebarHeader: {
     padding: 24,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: kineticColors.border,
   },
   logo: {
     fontSize: 22,
     fontWeight: "800",
-    color: colors.primary,
+    color: kineticColors.accent,
     letterSpacing: 0.5,
   },
-  hub: { color: colors.muted, marginTop: 4, fontSize: 13 },
+  hub: { color: kineticColors.mutedForeground, marginTop: 4, fontSize: 13 },
   sidebarNav: { padding: 12 },
   sidebarItem: {
     flexDirection: "row",
@@ -524,13 +512,13 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   sidebarItemActive: {
-    backgroundColor: `${colors.primary}18`,
+    backgroundColor: `${kineticColors.accent}18`,
     borderLeftWidth: 3,
-    borderLeftColor: colors.primary,
+    borderLeftColor: kineticColors.accent,
   },
   sidebarIcon: { fontSize: 18 },
-  sidebarText: { color: colors.muted, fontSize: 14, fontWeight: "500" },
-  sidebarTextActive: { color: colors.primary, fontWeight: "600" },
+  sidebarText: { color: kineticColors.mutedForeground, fontSize: 14, fontWeight: "500" },
+  sidebarTextActive: { color: kineticColors.accent, fontWeight: "600" },
 
   // Content
   content: { flex: 1 },
@@ -538,10 +526,10 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 28,
     fontWeight: "800",
-    color: colors.text,
+    color: kineticColors.foreground,
     letterSpacing: -0.5,
   },
-  subheading: { color: colors.muted, marginBottom: 28, marginTop: 6, fontSize: 15 },
+  subheading: { color: kineticColors.mutedForeground, marginBottom: 28, marginTop: 6, fontSize: 15 },
 
   // Stat cards
   statsRow: {
@@ -551,17 +539,17 @@ const styles = StyleSheet.create({
   statCard: {
     flex: 1,
     minWidth: 140,
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     padding: 22,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
   },
-  statTitle: { color: colors.muted, fontSize: 13, fontWeight: "500", marginBottom: 10 },
+  statTitle: { color: kineticColors.mutedForeground, fontSize: 13, fontWeight: "500", marginBottom: 10 },
   statValue: {
     fontSize: 32,
     fontWeight: "800",
-    color: colors.text,
+    color: kineticColors.foreground,
     marginBottom: 6,
   },
   statChange: { fontSize: 13, fontWeight: "600" },
@@ -578,15 +566,15 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: "700",
-    color: colors.text,
+    color: kineticColors.foreground,
   },
 
   // Section card
   sectionCard: {
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
     padding: 20,
     marginBottom: 24,
     overflow: "hidden",
@@ -599,15 +587,15 @@ const styles = StyleSheet.create({
   },
   tableHeader: {
     flexDirection: "row",
-    backgroundColor: `${colors.primary}15`,
+    backgroundColor: `${kineticColors.accent}15`,
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
   },
   tableHeaderText: {
     flex: 1,
-    color: colors.primary,
+    color: kineticColors.accent,
     fontWeight: "700",
     fontSize: 13,
     textTransform: "uppercase",
@@ -618,11 +606,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderColor: `${colors.border}60`,
+    borderColor: `${kineticColors.border}60`,
   },
-  tableRowAlt: { backgroundColor: `${colors.bg}40` },
+  tableRowAlt: { backgroundColor: `${kineticColors.background}40` },
   cell: { flex: 1, justifyContent: "center" },
-  cellText: { color: colors.text, fontSize: 14 },
+  cellText: { color: kineticColors.foreground, fontSize: 14 },
   statusCellContainer: { flexDirection: "row", alignItems: "center", gap: 6 },
   statusIndicator: { width: 8, height: 8, borderRadius: 4 },
 
@@ -631,10 +619,10 @@ const styles = StyleSheet.create({
     marginTop: 16,
     alignItems: "center",
     paddingVertical: 12,
-    backgroundColor: `${colors.primary}12`,
+    backgroundColor: `${kineticColors.accent}12`,
     borderRadius: 8,
   },
-  viewAllText: { color: colors.primary, fontWeight: "600", fontSize: 14 },
+  viewAllText: { color: kineticColors.accent, fontWeight: "600", fontSize: 14 },
 
   // NGO Approvals
   approvalRow: {
@@ -643,14 +631,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderColor: `${colors.border}60`,
+    borderColor: `${kineticColors.border}60`,
   },
   approvalInfo: { flex: 1 },
-  approvalName: { color: colors.text, fontWeight: "600", fontSize: 16 },
-  approvalEmail: { color: colors.muted, fontSize: 13, marginTop: 2 },
-  approvalDate: { color: colors.muted, fontSize: 12, marginTop: 4 },
+  approvalName: { color: kineticColors.foreground, fontWeight: "600", fontSize: 16 },
+  approvalEmail: { color: kineticColors.mutedForeground, fontSize: 13, marginTop: 2 },
+  approvalDate: { color: kineticColors.mutedForeground, fontSize: 12, marginTop: 4 },
   approveButton: {
-    backgroundColor: colors.success,
+    backgroundColor: kineticColors.foreground,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
@@ -664,7 +652,7 @@ const styles = StyleSheet.create({
   },
   activityCard: { flex: 1 },
   activityCardTitle: {
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
     fontSize: 14,
     fontWeight: "600",
     marginBottom: 8,
@@ -672,9 +660,9 @@ const styles = StyleSheet.create({
   activityBigNumber: {
     fontSize: 36,
     fontWeight: "800",
-    color: colors.text,
+    color: kineticColors.foreground,
   },
-  activitySubtext: { color: colors.muted, fontSize: 13, marginBottom: 20 },
+  activitySubtext: { color: kineticColors.mutedForeground, fontSize: 13, marginBottom: 20 },
 
   // Chart bars
   chartContainer: {
@@ -687,38 +675,38 @@ const styles = StyleSheet.create({
   },
   chartBarWrapper: { alignItems: "center", flex: 1, gap: 6 },
   chartBar: { width: "100%", borderRadius: 4, minWidth: 20 },
-  chartLabel: { color: colors.muted, fontSize: 11 },
+  chartLabel: { color: kineticColors.mutedForeground, fontSize: 11 },
 
   // Type breakdown
   typeBreakdown: { marginTop: 16, gap: 14 },
   typeRow: { gap: 6 },
   typeLabelRow: { flexDirection: "row", alignItems: "center", gap: 8 },
   typeDot: { width: 10, height: 10, borderRadius: 5 },
-  typeLabel: { color: colors.text, fontSize: 14, flex: 1 },
-  typeCount: { color: colors.muted, fontSize: 14, fontWeight: "600" },
+  typeLabel: { color: kineticColors.foreground, fontSize: 14, flex: 1 },
+  typeCount: { color: kineticColors.mutedForeground, fontSize: 14, fontWeight: "600" },
   typeBarBg: {
     height: 8,
-    backgroundColor: `${colors.border}60`,
+    backgroundColor: `${kineticColors.border}60`,
     borderRadius: 4,
     overflow: "hidden",
   },
   typeBarFill: { height: "100%", borderRadius: 4 },
 
   // Status summary
-  statusSummary: { marginTop: 20, paddingTop: 16, borderTopWidth: 1, borderColor: colors.border },
-  statusSummaryTitle: { color: colors.muted, fontSize: 13, fontWeight: "600", marginBottom: 12 },
+  statusSummary: { marginTop: 20, paddingTop: 16, borderTopWidth: 1, borderColor: kineticColors.border },
+  statusSummaryTitle: { color: kineticColors.mutedForeground, fontSize: 13, fontWeight: "600", marginBottom: 12 },
   statusRow: { flexDirection: "row", gap: 12 },
   statusBadge: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    backgroundColor: `${colors.bg}60`,
+    backgroundColor: `${kineticColors.background}60`,
     padding: 10,
     borderRadius: 8,
   },
   statusDot: { width: 8, height: 8, borderRadius: 4 },
-  statusLabel: { color: colors.muted, fontSize: 12, flex: 1 },
+  statusLabel: { color: kineticColors.mutedForeground, fontSize: 12, flex: 1 },
   statusValue: { fontSize: 16, fontWeight: "700" },
 
   // Flagged reports
@@ -729,21 +717,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderColor: `${colors.border}60`,
+    borderColor: `${kineticColors.border}60`,
     gap: 12,
   },
   reportInfo: { flex: 1 },
-  reportName: { color: colors.text, fontWeight: "600", fontSize: 16 },
-  reportEmail: { color: colors.muted, fontSize: 13, marginTop: 2 },
-  reportMeta: { color: colors.muted, fontSize: 12, marginTop: 4 },
+  reportName: { color: kineticColors.foreground, fontWeight: "600", fontSize: 16 },
+  reportEmail: { color: kineticColors.mutedForeground, fontSize: 13, marginTop: 2 },
+  reportMeta: { color: kineticColors.mutedForeground, fontSize: 12, marginTop: 4 },
   reportActions: { flexDirection: "row", gap: 8 },
   actionButton: {
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,
   },
-  verifyButton: { backgroundColor: colors.success },
-  rejectButton: { backgroundColor: colors.danger },
+  verifyButton: { backgroundColor: kineticColors.foreground },
+  rejectButton: { backgroundColor: kineticColors.error },
   actionButtonText: { color: "#fff", fontWeight: "700", fontSize: 13 },
 
   // Empty state
@@ -753,7 +741,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   emptyIcon: { fontSize: 36 },
-  emptyText: { color: colors.muted, fontSize: 15 },
+  emptyText: { color: kineticColors.mutedForeground, fontSize: 15 },
   
   // Modal styles
   modalOverlay: {
@@ -764,7 +752,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   modalContent: {
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     borderRadius: 16,
     width: "100%",
     maxWidth: 600,
@@ -777,30 +765,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
     borderBottomWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.sidebar,
+    borderColor: kineticColors.border,
+    backgroundColor: kineticColors.background,
   },
-  modalTitle: { color: colors.text, fontSize: 18, fontWeight: "700" },
+  modalTitle: { color: kineticColors.foreground, fontSize: 18, fontWeight: "700" },
   modalCloseBtn: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: colors.border,
+    backgroundColor: kineticColors.border,
     justifyContent: "center",
     alignItems: "center",
   },
-  modalCloseText: { color: colors.text, fontSize: 16, fontWeight: "bold" },
+  modalCloseText: { color: kineticColors.foreground, fontSize: 16, fontWeight: "bold" },
   modalScroll: { padding: 20 },
   docImageContainer: { marginBottom: 24 },
-  docLabel: { color: colors.muted, fontSize: 14, fontWeight: "600", marginBottom: 12 },
+  docLabel: { color: kineticColors.mutedForeground, fontSize: 14, fontWeight: "600", marginBottom: 12 },
   docImage: {
     width: "100%",
     height: 250,
-    backgroundColor: colors.sidebar,
+    backgroundColor: kineticColors.background,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
   },
-  noDocsText: { color: colors.muted, textAlign: "center", marginVertical: 40 },
-  viewDocsButton: { backgroundColor: colors.warning },
+  noDocsText: { color: kineticColors.mutedForeground, textAlign: "center", marginVertical: 40 },
+  viewDocsButton: { backgroundColor: kineticColors.mutedForeground },
 });

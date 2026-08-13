@@ -1,15 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import useResponsive from "../hooks/useResponsive";
 
-const colors = {
-  sidebar: "#0B1220",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#4799EB",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-  bg: "#0F172A",
-};
+import { kineticColors as colors, kineticTypography } from "../theme/kineticTokens";
 
 const navItems = [
   { key: "AdminDashboard", label: "Dashboard", shortLabel: "Home", icon: "📊" },
@@ -95,30 +87,30 @@ export function MobileBottomBar({ navigation, activeKey }) {
 const styles = StyleSheet.create({
   /* ── Sidebar ── */
   sidebar: {
-    width: 260,
-    backgroundColor: colors.sidebar,
+    width: 340,
+    backgroundColor: colors.backgroundContainerLow,
     borderRightWidth: 1,
     borderRightColor: colors.border,
   },
   sidebarHeader: { padding: 24, borderBottomWidth: 1, borderBottomColor: colors.border },
-  logo: { fontSize: 22, fontWeight: "800", color: colors.primary, letterSpacing: 0.5 },
-  hub: { color: colors.muted, marginTop: 4, fontSize: 13 },
+  logo: { ...kineticTypography.subheading, fontSize: 32, color: colors.accent, letterSpacing: 0.5 },
+  hub: { color: colors.mutedForeground, marginTop: 4, ...kineticTypography.label },
   sidebarNav: { padding: 12 },
   sidebarItem: {
     flexDirection: "row", alignItems: "center", padding: 14,
-    borderRadius: 10, marginBottom: 4, gap: 12,
+    borderRadius: 0, marginBottom: 4, gap: 12,
   },
   sidebarItemActive: {
-    backgroundColor: `${colors.primary}18`,
-    borderLeftWidth: 3, borderLeftColor: colors.primary,
+    backgroundColor: `${colors.accent}18`,
+    borderLeftWidth: 6, borderLeftColor: colors.accent,
   },
   sidebarIcon: { fontSize: 18 },
-  sidebarText: { color: colors.muted, fontSize: 14, fontWeight: "500" },
-  sidebarTextActive: { color: colors.primary, fontWeight: "600" },
+  sidebarText: { color: colors.mutedForeground, ...kineticTypography.body },
+  sidebarTextActive: { color: colors.accent, fontWeight: "700" },
 
   /* ── Bottom Bar ── */
   bottomBar: {
-    backgroundColor: colors.sidebar,
+    backgroundColor: colors.backgroundContainerLow,
     borderTopWidth: 1,
     borderTopColor: colors.border,
     paddingBottom: 4,
@@ -127,11 +119,11 @@ const styles = StyleSheet.create({
   bottomTab: {
     flex: 1, minWidth: 70, alignItems: "center",
     paddingVertical: 10, paddingHorizontal: 8,
-    borderRadius: 8, marginHorizontal: 2, marginTop: 4,
+    borderRadius: 0, marginHorizontal: 2, marginTop: 4,
   },
-  bottomTabActive: { backgroundColor: `${colors.primary}18` },
+  bottomTabActive: { backgroundColor: `${colors.accent}18` },
   bottomTabIcon: { fontSize: 20, marginBottom: 3 },
   bottomTabIconActive: { fontSize: 22 },
-  bottomTabLabel: { color: colors.muted, fontSize: 10, fontWeight: "600", textAlign: "center" },
-  bottomTabLabelActive: { color: colors.primary, fontWeight: "700" },
+  bottomTabLabel: { color: colors.mutedForeground, fontSize: 10, fontWeight: "700", textAlign: "center" },
+  bottomTabLabelActive: { color: colors.accent, fontWeight: "700" },
 });

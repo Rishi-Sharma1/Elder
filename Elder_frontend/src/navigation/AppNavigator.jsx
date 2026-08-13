@@ -4,11 +4,11 @@ import { useContext, useEffect } from "react";
 import { ActivityIndicator, View, Alert } from "react-native";
 
 import { AuthContext } from "../context/AuthContext";
+import { md3Colors, md3Typography } from "../theme/md3Tokens";
 
 import HomeScreen from "../screens/HomeScreen";
 import LoginScreen from "../screens/LoginScreen";
 import SignupScreen from "../screens/SignupScreen";
-import RoleSelectScreen from "../screens/RoleSelectScreen";
 
 import ElderDashboard from "../screens/ElderDashboard";
 import CompanionScreen from "../screens/CompanionScreen";
@@ -59,7 +59,7 @@ export default function AppNavigator() {
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: "center" }}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color={md3Colors.primary} />
       </View>
     );
   }
@@ -69,9 +69,9 @@ export default function AppNavigator() {
       <Stack.Navigator
         screenOptions={{
           headerShown: true,
-          headerStyle: { backgroundColor: "#0F172A" },
-          headerTintColor: "#F1F5F9",
-          headerTitleStyle: { color: "#F1F5F9", fontWeight: "700" },
+          headerStyle: { backgroundColor: md3Colors.surfaceContainerLow },
+          headerTintColor: md3Colors.onSurface,
+          headerTitleStyle: { color: md3Colors.onSurface, fontWeight: "700" },
           headerShadowVisible: false,
           headerRight: () => (user ? <ProfileMenu /> : null),
         }}
@@ -81,7 +81,6 @@ export default function AppNavigator() {
             <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Signup" component={SignupScreen} />
-            <Stack.Screen name="RoleSelect" component={RoleSelectScreen} />
           </>
         ) : user.role === "elder" ? (
           <>

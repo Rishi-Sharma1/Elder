@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -8,18 +9,8 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../api";
-import { auth } from "../config/firebase";
 
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  border: "#334155",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-  green: "#16A34A",
-  red: "#DC2626",
-  yellow: "#F59E0B",
-};
+
 
 export default function MyRequests() {
   const [requests, setRequests] = useState([]);
@@ -28,8 +19,6 @@ export default function MyRequests() {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const token = await auth.currentUser.getIdToken();
-
         const res = await api.get(
           "/elder/requests"
         );
@@ -111,28 +100,28 @@ export default function MyRequests() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
   },
 
   card: {
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     padding: 20,
     borderRadius: 18,
     marginBottom: 18,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
   },
 
   type: {
     fontSize: 18,
     fontWeight: "bold",
-    color: colors.text,
+    color: kineticColors.foreground,
     marginBottom: 8,
   },
 
   description: {
     fontSize: 15,
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
     marginBottom: 15,
   },
 
@@ -143,7 +132,7 @@ const styles = StyleSheet.create({
   },
 
   statusLabel: {
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
     fontSize: 14,
   },
 
@@ -160,31 +149,31 @@ const styles = StyleSheet.create({
   },
 
   approved: {
-    backgroundColor: colors.green,
+    backgroundColor: kineticColors.foreground,
   },
 
   rejected: {
-    backgroundColor: colors.red,
+    backgroundColor: kineticColors.error,
   },
 
   pending: {
-    backgroundColor: colors.yellow,
+    backgroundColor: kineticColors.mutedForeground,
   },
 
   center: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
   },
 
   emptyTitle: {
     fontSize: 20,
-    color: colors.text,
+    color: kineticColors.foreground,
     marginBottom: 8,
   },
 
   emptySub: {
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
   },
 });

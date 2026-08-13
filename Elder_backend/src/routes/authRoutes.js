@@ -1,41 +1,85 @@
 import express from "express";
-import admin from "../config/firebaseAdmin.js";
+import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import verifyUser from "../middleware/verifyUser.js";
 
 const router = express.Router();
 
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: "30d",
+  });
+};
+
+// REGISTER
 router.post("/register", async (req, res) => {
   try {
-    const { token, role, name } = req.body;
+    const { name, email, password, role } = req.body;
 
-    if (!token || !role || !name) {
+    if (!name || !email || !password || !role) {
       return res
         .status(400)
-        .json({ message: "Token, role, and name required" });
+        .json({ message: "Name, email, password, and role are required" });
     }
 
-    const decoded = await admin.auth().verifyIdToken(token);
-
-    let user = await User.findOne({ uid: decoded.uid });
-
-    if (!user) {
-      user = await User.create({
-        uid: decoded.uid,
-        email: decoded.email,
-        name, // 🔥 FIXED
-        role,
-        profileCompleted: false,
-        approved: role === "ngo" ? false : true,
-      });
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists with this email" });
     }
 
-    return res.status(200).json(user.toObject());
+    const user = await User.create({
+      name,
+      email: email.toLowerCase(),
+      password,
+      role,
+      profileCompleted: false,
+      approved: role === "ngo" ? false : true,
+    });
 
+    const token = generateToken(user._id);
+    const userObj = user.toObject();
+    delete userObj.password;
+
+    return res.status(201).json({ token, user: userObj });
   } catch (error) {
     console.error("REGISTER ERROR:", error);
     return res.status(500).json({
       message: "Register failed",
+      error: error.message,
+    });
+  }
+});
+
+// LOGIN
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Email and password are required" });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() }).select("+password");
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    const isMatch = await user.matchPassword(password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    const token = generateToken(user._id);
+    const userObj = user.toObject();
+    delete userObj.password;
+
+    return res.status(200).json({ token, user: userObj });
+  } catch (error) {
+    console.error("LOGIN ERROR:", error);
+    return res.status(500).json({
+      message: "Login failed",
       error: error.message,
     });
   }
@@ -64,13 +108,10 @@ router.put("/update-profile", verifyUser, async (req, res) => {
     const { phone, address, gender, emergencyContact, idFrontUrl, profilePhoto } = req.body;
 
     const user = await User.findById(req.user._id);
-    
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    
-    
-    
 
     user.phone = phone;
     user.address = address;

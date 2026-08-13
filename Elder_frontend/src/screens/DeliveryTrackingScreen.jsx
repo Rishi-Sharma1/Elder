@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import React, { useState, useEffect, useRef } from "react";
 import {
   View,
@@ -30,18 +31,7 @@ import { MapView, Marker } from "../components/MapModule";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
-const colors = {
-  bg: "#0F172A", // Dark theme background
-  card: "#1E293B",
-  cardOverlay: "rgba(30, 41, 59, 0.95)", // Slightly transparent for overlap
-  border: "#334155",
-  primary: "#60B246", // Swiggy Green
-  primaryDark: "#4a8f35",
-  accent: "#FC8019", // Swiggy Orange
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-  pulse: "rgba(96, 178, 70, 0.4)",
-};
+
 
 const STATUS_STEPS = [
   { key: "accepted", label: "Accepted", icon: "✓" },
@@ -142,7 +132,7 @@ export default function DeliveryTrackingScreen({ route, navigation }) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.centered}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <ActivityIndicator size="large" color={kineticColors.accent} />
           <Text style={styles.loadingText}>Fetching your order details...</Text>
         </View>
       </SafeAreaView>
@@ -390,11 +380,11 @@ export default function DeliveryTrackingScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
+  container: { flex: 1, backgroundColor: kineticColors.background },
   layout: { flex: 1 },
   mainContent: { flex: 1, position: "relative" },
   centered: { flex: 1, justifyContent: "center", alignItems: "center", gap: 16 },
-  loadingText: { color: colors.muted, fontSize: 16 },
+  loadingText: { color: kineticColors.mutedForeground, fontSize: 16 },
 
   // Map Area
   mapSection: {
@@ -410,7 +400,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#111",
   },
-  mapPlaceholderText: { color: colors.muted },
+  mapPlaceholderText: { color: kineticColors.mutedForeground },
   liveBadgeOverlay: {
     position: "absolute",
     top: 20,
@@ -427,7 +417,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: colors.primary,
+    backgroundColor: kineticColors.accent,
   },
   liveTextLabel: {
     color: "#FFF",
@@ -441,7 +431,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,0.3)",
   },
   etaBadgeText: {
-    color: colors.primary,
+    color: kineticColors.accent,
     fontSize: 10,
     fontWeight: "900",
   },
@@ -450,7 +440,7 @@ const styles = StyleSheet.create({
   sheetContainer: {
     flex: 1,
     marginTop: -20, // Overlays map slightly
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     shadowColor: "#000",
@@ -474,25 +464,25 @@ const styles = StyleSheet.create({
   etaText: {
     fontSize: 26,
     fontWeight: "800",
-    color: colors.text,
+    color: kineticColors.foreground,
     letterSpacing: -0.5,
   },
   etaSubText: {
     fontSize: 14,
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
     marginTop: 4,
   },
   animatedProgressContainer: {
     width: 60,
     height: 6,
-    backgroundColor: colors.border,
+    backgroundColor: kineticColors.border,
     borderRadius: 3,
     overflow: "hidden",
   },
   animatedProgressBar: {
     width: "60%",
     height: "100%",
-    backgroundColor: colors.accent,
+    backgroundColor: kineticColors.accent,
     borderRadius: 3,
   },
 
@@ -521,16 +511,16 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: colors.border,
+    backgroundColor: kineticColors.border,
     justifyContent: "center",
     alignItems: "center",
     zIndex: 2,
   },
   stepCircleCompleted: {
-    backgroundColor: colors.primary,
+    backgroundColor: kineticColors.accent,
   },
   stepCircleCurrent: {
-    backgroundColor: colors.primary,
+    backgroundColor: kineticColors.accent,
     width: 32,
     height: 32,
     borderRadius: 16,
@@ -540,7 +530,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: colors.pulse,
+    backgroundColor: kineticColors.accent,
     zIndex: 1,
   },
   stepIcon: {
@@ -553,14 +543,14 @@ const styles = StyleSheet.create({
   },
   stepLabelText: {
     fontSize: 11,
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
     marginTop: 8,
     textAlign: "center",
     fontWeight: "500",
     width: 70,
   },
   stepLabelTextActive: {
-    color: colors.text,
+    color: kineticColors.foreground,
     fontWeight: "700",
   },
   stepLine: {
@@ -569,11 +559,11 @@ const styles = StyleSheet.create({
     left: "50%",
     right: "-50%",
     height: 2,
-    backgroundColor: colors.border,
+    backgroundColor: kineticColors.border,
     zIndex: 1,
   },
   stepLineActive: {
-    backgroundColor: colors.primary,
+    backgroundColor: kineticColors.accent,
   },
 
   // Partner Card
@@ -581,11 +571,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
   },
   partnerInfo: {
     flexDirection: "row",
@@ -613,17 +603,17 @@ const styles = StyleSheet.create({
     width: 14,
     height: 14,
     borderRadius: 7,
-    backgroundColor: colors.primary,
+    backgroundColor: kineticColors.accent,
     borderWidth: 2,
-    borderColor: colors.card,
+    borderColor: kineticColors.background,
   },
   partnerName: {
-    color: colors.text,
+    color: kineticColors.foreground,
     fontSize: 16,
     fontWeight: "700",
   },
   partnerRole: {
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
     fontSize: 13,
     marginTop: 2,
   },
@@ -645,11 +635,11 @@ const styles = StyleSheet.create({
 
   // Details Card
   detailsCard: {
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     borderRadius: 16,
     padding: 20,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
   },
   detailsHeader: {
     flexDirection: "row",
@@ -658,17 +648,17 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   detailsTitle: {
-    color: colors.text,
+    color: kineticColors.foreground,
     fontSize: 15,
     fontWeight: "700",
   },
   detailsOrderId: {
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
     fontSize: 13,
   },
   divider: {
     height: 1,
-    backgroundColor: colors.border,
+    backgroundColor: kineticColors.border,
     marginVertical: 16,
   },
   itemRow: {
@@ -680,7 +670,7 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderWidth: 2,
-    borderColor: colors.primary,
+    borderColor: kineticColors.accent,
     borderRadius: 2,
     marginTop: 4,
     marginRight: 12,
@@ -689,17 +679,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   itemName: {
-    color: colors.text,
+    color: kineticColors.foreground,
     fontSize: 15,
     fontWeight: "500",
   },
   itemNotes: {
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
     fontSize: 13,
     marginTop: 4,
   },
   itemQty: {
-    color: colors.text,
+    color: kineticColors.foreground,
     fontSize: 14,
     fontWeight: "700",
     marginLeft: 12,
@@ -714,7 +704,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   addressLabel: {
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
     fontSize: 12,
     textTransform: "uppercase",
     letterSpacing: 0.5,
@@ -722,7 +712,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   addressText: {
-    color: colors.text,
+    color: kineticColors.foreground,
     fontSize: 14,
     lineHeight: 20,
   },

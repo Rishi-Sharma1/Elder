@@ -1,13 +1,11 @@
 import { View, Text, TouchableOpacity, Modal, Pressable, Image } from "react-native";
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { signOut } from "firebase/auth";
-import { auth } from "../config/firebase";
 import { useNavigation } from "@react-navigation/native";
 
 export default function ProfileMenu() {
   const [visible, setVisible] = useState(false);
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const navigation = useNavigation();
 
   const getInitials = (name) => {
@@ -18,7 +16,7 @@ export default function ProfileMenu() {
   };
 
   const handleLogout = async () => {
-    await signOut(auth);
+    await logout();
     setVisible(false);
   };
 

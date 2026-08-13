@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import { useContext, useEffect, useState, useCallback } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Image, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -5,16 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 import api from "../api";
 import useResponsive from "../hooks/useResponsive";
 
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#4799EB",
-  success: "#22C55E",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-  danger: "#EF4444",
-};
+
 
 export default function NGODetailScreen({ route, navigation }) {
   const { ngoId, ngoName } = route.params;
@@ -68,7 +60,7 @@ export default function NGODetailScreen({ route, navigation }) {
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator size="large" color={colors.primary} style={{ marginTop: 50 }} />
+        <ActivityIndicator size="large" color={kineticColors.accent} style={{ marginTop: 50 }} />
       </SafeAreaView>
     );
   }
@@ -115,7 +107,7 @@ export default function NGODetailScreen({ route, navigation }) {
           contentContainerStyle={styles.listContainer}
           ListEmptyComponent={
             <View style={styles.emptyState}>
-              <Text style={[styles.emptyText, errorMsg && { color: colors.danger, fontWeight: 'bold' }]}>
+              <Text style={[styles.emptyText, errorMsg && { color: kineticColors.error, fontWeight: 'bold' }]}>
                 {errorMsg || `No ${activeTab} linked to this NGO yet.`}
               </Text>
               {errorMsg && (
@@ -135,46 +127,46 @@ export default function NGODetailScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
+  container: { flex: 1, backgroundColor: kineticColors.background },
   header: { 
     flexDirection: "row", alignItems: "center", padding: 16, 
-    borderBottomWidth: 1, borderBottomColor: colors.border, backgroundColor: colors.bg 
+    borderBottomWidth: 1, borderBottomColor: kineticColors.border, backgroundColor: kineticColors.background 
   },
   backBtn: { width: 40, height: 40, justifyContent: "center" },
-  backBtnText: { color: colors.text, fontSize: 24 },
-  headerTitle: { flex: 1, color: colors.text, fontSize: 18, fontWeight: "bold", textAlign: "center" },
+  backBtnText: { color: kineticColors.foreground, fontSize: 24 },
+  headerTitle: { flex: 1, color: kineticColors.foreground, fontSize: 18, fontWeight: "bold", textAlign: "center" },
   content: { flex: 1 },
   tabs: { 
     flexDirection: "row", padding: 16, gap: 12, 
-    borderBottomWidth: 1, borderBottomColor: colors.border
+    borderBottomWidth: 1, borderBottomColor: kineticColors.border
   },
   tab: { 
     flex: 1, paddingVertical: 10, borderRadius: 8, 
-    backgroundColor: colors.card, alignItems: "center",
-    borderWidth: 1, borderColor: colors.border
+    backgroundColor: kineticColors.background, alignItems: "center",
+    borderWidth: 1, borderColor: kineticColors.border
   },
-  activeTab: { backgroundColor: colors.primary, borderColor: colors.primary },
-  tabText: { color: colors.muted, fontWeight: "600" },
+  activeTab: { backgroundColor: kineticColors.accent, borderColor: kineticColors.accent },
+  tabText: { color: kineticColors.mutedForeground, fontWeight: "600" },
   activeTabText: { color: "#FFF" },
   listContainer: { padding: 16, gap: 12 },
   memberCard: { 
-    flexDirection: "row", backgroundColor: colors.card, padding: 12, 
-    borderRadius: 12, alignItems: "center", borderWidth: 1, borderColor: colors.border
+    flexDirection: "row", backgroundColor: kineticColors.background, padding: 12, 
+    borderRadius: 12, alignItems: "center", borderWidth: 1, borderColor: kineticColors.border
   },
   memberAvatar: { 
     width: 44, height: 44, borderRadius: 22, backgroundColor: "#334155", 
     justifyContent: "center", alignItems: "center", marginRight: 12, overflow: "hidden"
   },
   memberImage: { width: "100%", height: "100%" },
-  memberAvatarText: { color: colors.text, fontSize: 18, fontWeight: "bold" },
+  memberAvatarText: { color: kineticColors.foreground, fontSize: 18, fontWeight: "bold" },
   memberInfo: { flex: 1, gap: 2 },
-  memberName: { color: colors.text, fontSize: 16, fontWeight: "600" },
-  memberEmail: { color: colors.muted, fontSize: 12 },
-  memberPhone: { color: colors.success, fontSize: 12 },
+  memberName: { color: kineticColors.foreground, fontSize: 16, fontWeight: "600" },
+  memberEmail: { color: kineticColors.mutedForeground, fontSize: 12 },
+  memberPhone: { color: kineticColors.foreground, fontSize: 12 },
   emptyState: { paddingVertical: 40, alignItems: "center" },
-  emptyText: { color: colors.muted, fontSize: 14, textAlign: 'center', marginBottom: 12 },
+  emptyText: { color: kineticColors.mutedForeground, fontSize: 14, textAlign: 'center', marginBottom: 12 },
   retryBtn: { 
-    backgroundColor: colors.primary, paddingVertical: 10, paddingHorizontal: 20, borderRadius: 8 
+    backgroundColor: kineticColors.accent, paddingVertical: 10, paddingHorizontal: 20, borderRadius: 8 
   },
   retryBtnText: { color: "#FFF", fontWeight: "bold" },
 });

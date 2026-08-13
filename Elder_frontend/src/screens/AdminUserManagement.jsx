@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import { useEffect, useState, useCallback } from "react";
 import {
   View,
@@ -17,17 +18,7 @@ import AdminSidebar, { MobileBottomBar } from "../components/AdminSidebar";
 import useResponsive from "../hooks/useResponsive";
 import api from "../api";
 
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#4799EB",
-  success: "#22C55E",
-  warning: "#F59E0B",
-  danger: "#EF4444",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-};
+
 
 export default function AdminUserManagement({ navigation }) {
   const responsive = useResponsive();
@@ -112,7 +103,7 @@ export default function AdminUserManagement({ navigation }) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <ActivityIndicator size="large" color={kineticColors.accent} />
           <Text style={styles.loadingText}>Loading Users...</Text>
         </View>
       </SafeAreaView>
@@ -128,7 +119,7 @@ export default function AdminUserManagement({ navigation }) {
           style={styles.content}
           contentContainerStyle={[styles.contentContainer, { padding: responsive.contentPadding }]}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={kineticColors.accent} />
           }
         >
           <Text style={styles.heading}>User Management</Text>
@@ -143,7 +134,7 @@ export default function AdminUserManagement({ navigation }) {
               <TextInput
                 style={styles.searchInput}
                 placeholder="Search by name or email..."
-                placeholderTextColor={colors.muted}
+                placeholderTextColor={kineticColors.mutedForeground}
                 value={search}
                 onChangeText={setSearch}
               />
@@ -215,13 +206,13 @@ export default function AdminUserManagement({ navigation }) {
                       <View
                         style={[
                           styles.statusDot,
-                          { backgroundColor: u.approved ? colors.success : colors.danger },
+                          { backgroundColor: u.approved ? kineticColors.foreground : kineticColors.error },
                         ]}
                       />
                       <Text
                         style={[
                           styles.cellText,
-                          { color: u.approved ? colors.success : colors.danger },
+                          { color: u.approved ? kineticColors.foreground : kineticColors.error },
                         ]}
                       >
                         {u.approved ? "Active" : "Blocked"}
@@ -235,10 +226,10 @@ export default function AdminUserManagement({ navigation }) {
                         {
                           color:
                             u.verification?.status === "verified"
-                              ? colors.success
+                              ? kineticColors.foreground
                               : u.verification?.status === "pending"
-                              ? colors.warning
-                              : colors.muted,
+                              ? kineticColors.mutedForeground
+                              : kineticColors.mutedForeground,
                         },
                       ]}
                     >
@@ -255,8 +246,8 @@ export default function AdminUserManagement({ navigation }) {
                           styles.actionBtn,
                           {
                             backgroundColor: u.approved
-                              ? `${colors.warning}20`
-                              : `${colors.success}20`,
+                              ? `${kineticColors.mutedForeground}20`
+                              : `${kineticColors.foreground}20`,
                           },
                         ]}
                         onPress={() => handleToggleBlock(u._id, u.approved)}
@@ -264,17 +255,17 @@ export default function AdminUserManagement({ navigation }) {
                         <Text
                           style={[
                             styles.actionBtnText,
-                            { color: u.approved ? colors.warning : colors.success },
+                            { color: u.approved ? kineticColors.mutedForeground : kineticColors.foreground },
                           ]}
                         >
                           {u.approved ? "Block" : "Unblock"}
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity
-                        style={[styles.actionBtn, { backgroundColor: `${colors.danger}20` }]}
+                        style={[styles.actionBtn, { backgroundColor: `${kineticColors.error}20` }]}
                         onPress={() => handleDelete(u._id, u.name)}
                       >
-                        <Text style={[styles.actionBtnText, { color: colors.danger }]}>Delete</Text>
+                        <Text style={[styles.actionBtnText, { color: kineticColors.error }]}>Delete</Text>
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -303,31 +294,31 @@ function getRoleColor(role) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
+  container: { flex: 1, backgroundColor: kineticColors.background },
   loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center", gap: 16 },
-  loadingText: { color: colors.muted, fontSize: 16 },
+  loadingText: { color: kineticColors.mutedForeground, fontSize: 16 },
   layout: { flex: 1 },
   content: { flex: 1 },
   contentContainer: {},
-  heading: { fontSize: 28, fontWeight: "800", color: colors.text, letterSpacing: -0.5 },
-  subheading: { color: colors.muted, marginBottom: 24, marginTop: 6, fontSize: 15 },
+  heading: { fontSize: 28, fontWeight: "800", color: kineticColors.foreground, letterSpacing: -0.5 },
+  subheading: { color: kineticColors.mutedForeground, marginBottom: 24, marginTop: 6, fontSize: 15 },
 
   // Search
   searchRow: { marginBottom: 16 },
   searchInputWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
     paddingHorizontal: 16,
     gap: 10,
   },
   searchIcon: { fontSize: 16 },
   searchInput: {
     flex: 1,
-    color: colors.text,
+    color: kineticColors.foreground,
     fontSize: 15,
     paddingVertical: 14,
     outlineStyle: "none",
@@ -344,36 +335,36 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
   },
   filterTabActive: {
-    backgroundColor: `${colors.primary}20`,
-    borderColor: colors.primary,
+    backgroundColor: `${kineticColors.accent}20`,
+    borderColor: kineticColors.accent,
   },
-  filterTabText: { color: colors.muted, fontSize: 13, fontWeight: "600" },
-  filterTabTextActive: { color: colors.primary },
+  filterTabText: { color: kineticColors.mutedForeground, fontSize: 13, fontWeight: "600" },
+  filterTabTextActive: { color: kineticColors.accent },
 
   // Table
   tableCard: {
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
     overflow: "hidden",
   },
   tableHeader: {
     flexDirection: "row",
-    backgroundColor: `${colors.primary}15`,
+    backgroundColor: `${kineticColors.accent}15`,
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
   },
   tableHeaderText: {
     flex: 1,
-    color: colors.primary,
+    color: kineticColors.accent,
     fontWeight: "700",
     fontSize: 12,
     textTransform: "uppercase",
@@ -384,13 +375,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderColor: `${colors.border}60`,
+    borderColor: `${kineticColors.border}60`,
     alignItems: "center",
   },
-  tableRowAlt: { backgroundColor: `${colors.bg}40` },
+  tableRowAlt: { backgroundColor: `${kineticColors.background}40` },
   cell: { flex: 1, justifyContent: "center" },
-  cellName: { color: colors.text, fontSize: 14, fontWeight: "600" },
-  cellText: { color: colors.text, fontSize: 13 },
+  cellName: { color: kineticColors.foreground, fontSize: 14, fontWeight: "600" },
+  cellText: { color: kineticColors.foreground, fontSize: 13 },
 
   // Status
   statusCellContainer: { flexDirection: "row", alignItems: "center", gap: 6 },
@@ -408,5 +399,5 @@ const styles = StyleSheet.create({
   // Empty
   emptyState: { alignItems: "center", paddingVertical: 40, gap: 8 },
   emptyIcon: { fontSize: 36 },
-  emptyText: { color: colors.muted, fontSize: 15 },
+  emptyText: { color: kineticColors.mutedForeground, fontSize: 15 },
 });

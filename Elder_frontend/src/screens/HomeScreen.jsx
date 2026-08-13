@@ -1,40 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
   Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useResponsive from "../hooks/useResponsive";
-
-
-
-
-const colors = {
-  bg: "#0B1120",
-  card: "#141C2F",
-  cardAlt: "#182236",
-  border: "#1E2D45",
-  primary: "#4799EB",
-  primaryGlow: "#4799EB30",
-  success: "#22C55E",
-  warning: "#F59E0B",
-  accent: "#A78BFA",
-  text: "#F1F5F9",
-  muted: "#8899B0",
-  subtle: "#5A6A80",
-  dark: "#060A14",
-};
+import { kineticTypography, kineticColors } from "../theme/kineticTokens";
+import KineticButton from "../components/KineticButton";
+import KineticCard from "../components/KineticCard";
+import Marquee from "../components/Marquee";
+import { BlurView } from "expo-blur";
+import { InView } from "../components/core/InView";
+import { SpotlightCard } from "../components/core/SpotlightCard";
+import RoleSelectModal from "../components/RoleSelectModal";
 
 export default function HomeScreen({ navigation }) {
   const responsive = useResponsive();
   const isMobile = responsive.isMobile;
+  const [isRoleModalVisible, setRoleModalVisible] = useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Decorative Organic Shapes for MD3 Bold Factor */}
+      <View style={styles.shape1} />
+      <View style={styles.shape2} />
+      <BlurView intensity={80} style={StyleSheet.absoluteFill} tint="dark" />
+
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={{ paddingBottom: 0 }}
@@ -49,174 +43,235 @@ export default function HomeScreen({ navigation }) {
           {!isMobile && (
             <View style={styles.navLinks}>
               {["Home", "About Us", "Benefits", "Contact"].map((link) => (
-                <TouchableOpacity key={link}>
-                  <Text style={styles.navLink}>{link}</Text>
-                </TouchableOpacity>
+                <Text key={link} style={styles.navLink}>{link}</Text>
               ))}
             </View>
           )}
           <View style={styles.navRight}>
-            <TouchableOpacity
-              style={styles.loginBtn}
+            <KineticButton
+              title="Login"
+              variant="outlined"
               onPress={() => navigation.navigate("Login")}
-            >
-              <Text style={styles.loginBtnText}>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.registerBtn}
-              onPress={() => navigation.navigate("RoleSelect")}
-            >
-              <Text style={styles.registerBtnText}>Register</Text>
-            </TouchableOpacity>
+              style={styles.navBtn}
+            />
+            <KineticButton
+              title="Register"
+              variant="filled"
+              onPress={() => setRoleModalVisible(true)}
+              style={styles.navBtn}
+            />
           </View>
         </View>
 
         {/* ─── Hero Section ─── */}
-        <View style={styles.heroSection}>
-          <Text style={[styles.heroTitle, isMobile && { fontSize: 36 }]}>
-            Connecting Generations,{"\n"}Enriching Lives
-          </Text>
-          <Text style={styles.heroSubtitle}>
-            ElderConnect brings together seniors, volunteers, and NGOs to create a supportive community for aging with dignity.
-          </Text>
-          <View style={[styles.heroButtons, isMobile && { flexDirection: "column" }]}>
-            <TouchableOpacity
-              style={styles.heroPrimaryBtn}
-              onPress={() => navigation.navigate("RoleSelect")}
-            >
-              <Text style={styles.heroPrimaryBtnText}>Get Started →</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.heroSecondaryBtn}
-              onPress={() => navigation.navigate("Login")}
-            >
-              <Text style={styles.heroSecondaryBtnText}>Sign In</Text>
-            </TouchableOpacity>
+        <InView
+          variants={{
+            hidden: { opacity: 0, y: 30, scale: 0.95 },
+            visible: { opacity: 1, y: 0, scale: 1 },
+          }}
+          transition={{ duration: 0.5 }}
+          viewOptions={{ margin: '0px 0px -50px 0px', once: true }}
+        >
+          <View style={styles.heroSection}>
+            <Text style={[styles.heroTitle, isMobile && { fontSize: 48 }]}>
+              CONNECTING GENERATIONS,{"\n"}ENRICHING LIVES
+            </Text>
+            <Text style={styles.heroSubtitle}>
+              ElderConnect brings together seniors, volunteers, and NGOs to create a supportive community for aging with dignity.
+            </Text>
+            <View style={[styles.heroButtons, isMobile && { flexDirection: "column" }]}>
+              <KineticButton
+                title="Get Started →"
+                variant="filled"
+                onPress={() => setRoleModalVisible(true)}
+                style={styles.heroBtn}
+              />
+              <KineticButton
+                title="Sign In"
+                variant="tonal"
+                onPress={() => navigation.navigate("Login")}
+                style={styles.heroBtn}
+              />
+            </View>
           </View>
-        </View>  
+        </InView>
+
+        {/* Marquee Section */}
+        <Marquee text="10K+ ELDERS HELPED • 5K+ VOLUNTEERS • 50+ PARTNER NGOS" />
 
         {/* ─── Features Section ─── */}
-        <View style={styles.section}>
-          <Text style={styles.sectionLabel}>OUR SERVICES</Text>
-          <Text style={[styles.sectionTitle, isMobile && { fontSize: 28 }]}>
-            Tailored for Our Community
-          </Text>
-          <Text style={styles.sectionSubtitle}>
-            Whether you are looking for help, want to give back, or manage an organization, we have the tools for you.
-          </Text>
+        <InView
+          variants={{
+            hidden: { opacity: 0, y: 50 },
+            visible: { opacity: 1, y: 0 },
+          }}
+          transition={{ duration: 0.5 }}
+          viewOptions={{ margin: '0px 0px -100px 0px', once: true }}
+        >
+          <View style={styles.section}>
+            <Text style={styles.sectionLabel}>OUR SERVICES</Text>
+            <Text style={[styles.sectionTitle, isMobile && { fontSize: 28 }]}>
+              Tailored for Our Community
+            </Text>
+            <Text style={styles.sectionSubtitle}>
+              Whether you are looking for help, want to give back, or manage an organization, we have the tools for you.
+            </Text>
 
-          <View style={[styles.featuresGrid, isMobile && { flexDirection: "column" }]}>
-              <View style={[styles.featureCard]}>
-                <Text style={styles.featureIcon}>👴</Text>
-                <Text style={styles.featureTitle}>For Seniors</Text>
-                <Text style={[styles.featureSubtitle, { color: colors.primary }]}>Care & Companionship</Text>
-                <Text style={styles.featureDesc}>Find assistance with daily tasks, companionship, and engaging community events tailored for your comfort.</Text>
-              </View>
-              <View style={[styles.featureCard]}>
-                <Text style={styles.featureIcon}>🤝</Text>
-                <Text style={styles.featureTitle}>For Volunteers</Text>
-                <Text style={[styles.featureSubtitle, { color: colors.success }]}>Make a Meaningful Impact</Text>
-                <Text style={styles.featureDesc}>Share your skills and time to brighten someone's day while gaining invaluable life experience.</Text>
-              </View>
-              <View style={[styles.featureCard]}>
-                <Text style={styles.featureIcon}>🏢</Text>
-                <Text style={styles.featureTitle}>For NGOs</Text>
-                <Text style={[styles.featureSubtitle, { color: colors.accent }]}>Efficient Resource Management</Text>
-                <Text style={styles.featureDesc}>Access professional tools to manage programs and connect with dedicated volunteers effortlessly.</Text>
-              </View>
+            <View style={[styles.featuresGrid, isMobile && { flexDirection: "column" }]}>
+                <SpotlightCard style={styles.featureCardWrap} spotlightColor={kineticColors.accent}>
+                  <View style={styles.featureCardInner}>
+                    <Text style={styles.featureIcon}>👴</Text>
+                    <Text style={styles.featureTitle}>For Seniors</Text>
+                    <Text style={[styles.featureSubtitle, { color: kineticColors.accent }]}>Care & Companionship</Text>
+                    <Text style={styles.featureDesc}>Find assistance with daily tasks, companionship, and engaging community events tailored for your comfort.</Text>
+                  </View>
+                </SpotlightCard>
+                <SpotlightCard style={styles.featureCardWrap} spotlightColor={kineticColors.accent}>
+                  <View style={styles.featureCardInner}>
+                    <Text style={styles.featureIcon}>🤝</Text>
+                    <Text style={styles.featureTitle}>For Volunteers</Text>
+                    <Text style={[styles.featureSubtitle, { color: kineticColors.accent }]}>Make a Meaningful Impact</Text>
+                    <Text style={styles.featureDesc}>Share your skills and time to brighten someone's day while gaining invaluable life experience.</Text>
+                  </View>
+                </SpotlightCard>
+                <SpotlightCard style={styles.featureCardWrap} spotlightColor={kineticColors.error}>
+                  <View style={styles.featureCardInner}>
+                    <Text style={styles.featureIcon}>🏢</Text>
+                    <Text style={styles.featureTitle}>For NGOs</Text>
+                    <Text style={[styles.featureSubtitle, { color: kineticColors.error }]}>Efficient Resource Management</Text>
+                    <Text style={styles.featureDesc}>Access professional tools to manage programs and connect with dedicated volunteers effortlessly.</Text>
+                  </View>
+                </SpotlightCard>
+            </View>
           </View>
-        </View>
+        </InView>
 
 
         {/* ─── Services Grid ─── */}
-        <View style={[styles.section, { backgroundColor: colors.dark }]}>
-          <Text style={styles.sectionLabel}>FEATURES</Text>
-          <Text style={[styles.sectionTitle, isMobile && { fontSize: 28 }]}>
-            Everything You Need
-          </Text>
+        <InView
+          variants={{
+            hidden: { opacity: 0, x: -100 },
+            visible: { opacity: 1, x: 0 },
+          }}
+          transition={{ duration: 0.5 }}
+          viewOptions={{ margin: '0px 0px -100px 0px', once: true }}
+        >
+          <View style={[styles.section, { backgroundColor: kineticColors.backgroundContainerLow }]}>
+            <Text style={styles.sectionLabel}>FEATURES</Text>
+            <Text style={[styles.sectionTitle, isMobile && { fontSize: 28 }]}>
+              Everything You Need
+            </Text>
 
-          <View style={[styles.servicesGrid, isMobile && { flexDirection: "column" }]}>
-            {[
-              { icon: "💊", title: "Medicine Delivery", desc: "Timely medication delivery right to your doorstep" },
-              { icon: "🤖", title: "AI Chatbot", desc: "24/7 AI assistance for urgent queries and support" },
-              { icon: "📋", title: "Medical Records", desc: "Secure storage for your complete medical history" },
-              { icon: "🎉", title: "Social Events", desc: "Community events to keep you connected and engaged" },
-            ].map((item) => (
-              <View key={item.title} style={styles.serviceCard}>
-                <Text style={styles.serviceIcon}>{item.icon}</Text>
-                <Text style={styles.serviceTitle}>{item.title}</Text>
-                <Text style={styles.serviceDesc}>{item.desc}</Text>
-              </View>
-            ))}
+            <View style={[styles.servicesGrid, isMobile && { flexDirection: "column" }]}>
+              {[
+                { icon: "💊", title: "Medicine Delivery", desc: "Timely medication delivery right to your doorstep" },
+                { icon: "🤖", title: "AI Chatbot", desc: "24/7 AI assistance for urgent queries and support" },
+                { icon: "📋", title: "Medical Records", desc: "Secure storage for your complete medical history" },
+                { icon: "🎉", title: "Social Events", desc: "Community events to keep you connected and engaged" },
+              ].map((item) => (
+                <KineticCard key={item.title} variant="outlined" style={styles.serviceCard} hoverable={true}>
+                  <Text style={styles.serviceIcon}>{item.icon}</Text>
+                  <Text style={styles.serviceTitle}>{item.title}</Text>
+                  <Text style={styles.serviceDesc}>{item.desc}</Text>
+                </KineticCard>
+              ))}
+            </View>
           </View>
-        </View>
+        </InView>
 
         {/* ─── Innovation Section ─── */}
-        <View style={styles.section}>
-          <View style={[styles.innovationRow, isMobile && { flexDirection: "column" }]}>
-            <View style={[styles.innovationLeft, !isMobile && { flex: 1 }]}>
-              <Text style={styles.sectionLabel}>WHY CHOOSE US</Text>
-              <Text style={[styles.sectionTitle, { textAlign: "left" }, isMobile && { fontSize: 28 }]}>
-                Innovative support designed for everyday life.
-              </Text>
-              <Text style={[styles.sectionSubtitle, { textAlign: "left" }]}>
-                We combine the warmth of human connection with cutting-edge technology to ensure safety, health, and happiness.
-              </Text>
-            </View>
-              <View style={[styles.innovationRight, !isMobile && { flex: 1 }]}>
-                {[
-                  "Verified professional volunteers only",
-                  "Secure storage for medical history",
-                  "24/7 AI assistance for urgent queries",
-                  "Community-driven support network",
-                ].map((item) => (
-                  <View key={item} style={styles.checkItem}>
-                    <View style={styles.checkCircle}>
-                      <Text style={styles.checkMark}>✓</Text>
-                    </View>
-                    <Text style={styles.checkText}>{item}</Text>
-                  </View>
-                ))}
+        <InView
+          variants={{
+            hidden: { opacity: 0, x: 100 },
+            visible: { opacity: 1, x: 0 },
+          }}
+          transition={{ duration: 0.5 }}
+          viewOptions={{ margin: '0px 0px -100px 0px', once: true }}
+        >
+          <View style={styles.section}>
+            <View style={[styles.innovationRow, isMobile && { flexDirection: "column" }]}>
+              <View style={[styles.innovationLeft, !isMobile && { flex: 1 }]}>
+                <Text style={styles.sectionLabel}>WHY CHOOSE US</Text>
+                <Text style={[styles.sectionSubheading, { textAlign: "left" }, isMobile && { fontSize: 28 }]}>
+                  Innovative support designed for everyday life.
+                </Text>
+                <Text style={[styles.sectionSubtitle, { textAlign: "left" }]}>
+                  We combine the warmth of human connection with cutting-edge technology to ensure safety, health, and happiness.
+                </Text>
               </View>
+                <View style={[styles.innovationRight, !isMobile && { flex: 1 }]}>
+                  {[
+                    "Verified professional volunteers only",
+                    "Secure storage for medical history",
+                    "24/7 AI assistance for urgent queries",
+                    "Community-driven support network",
+                  ].map((item) => (
+                    <KineticCard key={item} variant="filled" style={styles.checkItem}>
+                      <View style={styles.checkCircle}>
+                        <Text style={styles.checkMark}>✓</Text>
+                      </View>
+                      <Text style={styles.checkText}>{item}</Text>
+                    </KineticCard>
+                  ))}
+                </View>
+            </View>
           </View>
-        </View>
+        </InView>
 
         {/* ─── Mission Section ─── */}
-        <View style={[styles.section, { backgroundColor: colors.dark }]}>
-          <View style={styles.missionCard}>
-            <Text style={styles.sectionLabel}>OUR MISSION</Text>
-            <Text style={[styles.sectionTitle, isMobile && { fontSize: 28 }]}>
-              Building a Safer, More Connected World
-            </Text>
-            <Text style={[styles.sectionSubtitle, { maxWidth: 700 }]}>
-              We believe every senior deserves to age with dignity, surrounded by a community that cares. Through compassionate volunteerism and technological innovation, we're bridging the gap between generations.
-            </Text>
+        <InView
+          variants={{
+            hidden: { opacity: 0, scale: 0.9 },
+            visible: { opacity: 1, scale: 1 },
+          }}
+          transition={{ duration: 0.4 }}
+          viewOptions={{ margin: '0px 0px -100px 0px', once: true }}
+        >
+          <View style={[styles.section, { backgroundColor: kineticColors.backgroundContainerLow }]}>
+            <View style={styles.missionCard}>
+              <Text style={styles.sectionLabel}>OUR MISSION</Text>
+              <Text style={[styles.sectionTitle, isMobile && { fontSize: 28 }]}>
+                Building a Safer, More Connected World
+              </Text>
+              <Text style={[styles.sectionSubtitle, { maxWidth: 700 }]}>
+                We believe every senior deserves to age with dignity, surrounded by a community that cares. Through compassionate volunteerism and technological innovation, we're bridging the gap between generations.
+              </Text>
+            </View>
           </View>
-        </View>
+        </InView>
 
         {/* ─── CTA Section ─── */}
-        <View style={styles.ctaSection}>
-          <Text style={[styles.ctaTitle, isMobile && { fontSize: 28 }]}>
-            Ready to Make a Difference?
-          </Text>
-          <Text style={styles.ctaSubtitle}>
-            Join thousands of members already making an impact in their local communities. Start your journey today.
-          </Text>
-          <View style={[styles.ctaButtons, isMobile && { flexDirection: "column" }]}>
-            <TouchableOpacity
-              style={styles.heroPrimaryBtn}
-              onPress={() => navigation.navigate("RoleSelect")}
-            >
-              <Text style={styles.heroPrimaryBtnText}>Join Now →</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.heroSecondaryBtn}
-              onPress={() => navigation.navigate("Login")}
-            >
-              <Text style={styles.heroSecondaryBtnText}>Sign In</Text>
-            </TouchableOpacity>
+        <InView
+          variants={{
+            hidden: { opacity: 0, y: 50 },
+            visible: { opacity: 1, y: 0 },
+          }}
+          transition={{ duration: 0.5 }}
+          viewOptions={{ margin: '0px 0px -50px 0px', once: true }}
+        >
+          <View style={styles.ctaSection}>
+            <Text style={[styles.ctaTitle, isMobile && { fontSize: 28 }]}>
+              Ready to Make a Difference?
+            </Text>
+            <Text style={styles.ctaSubtitle}>
+              Join thousands of members already making an impact in their local communities. Start your journey today.
+            </Text>
+            <View style={[styles.ctaButtons, isMobile && { flexDirection: "column" }]}>
+              <KineticButton
+                title="Join Now →"
+                variant="filled"
+                onPress={() => setRoleModalVisible(true)}
+                style={styles.heroBtn}
+              />
+              <KineticButton
+                title="Sign In"
+                variant="tonal"
+                onPress={() => navigation.navigate("Login")}
+                style={styles.heroBtn}
+              />
+            </View>
           </View>
-        </View>
+        </InView>
 
         {/* ─── Footer ─── */}
         <View style={styles.footer}>
@@ -245,25 +300,39 @@ export default function HomeScreen({ navigation }) {
           </View>
         </View>
       </ScrollView>
+      
+      <RoleSelectModal 
+        visible={isRoleModalVisible} 
+        onClose={() => setRoleModalVisible(false)} 
+      />
     </SafeAreaView>
   );
 }
 
-/* ── Sub Components ── */
-
-const FeatureCard = ({ icon, title, subtitle, description, color }) => (
-  <View style={[styles.featureCard, { borderTopColor: color, borderTopWidth: 3 }]}>
-    <Text style={styles.featureIcon}>{icon}</Text>
-    <Text style={styles.featureTitle}>{title}</Text>
-    <Text style={[styles.featureSubtitle, { color }]}>{subtitle}</Text>
-    <Text style={styles.featureDesc}>{description}</Text>
-  </View>
-);
-
-/* ── Styles ── */
-
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
+  container: { flex: 1, backgroundColor: kineticColors.background },
+
+  /* Shapes */
+  shape1: {
+    position: 'absolute',
+    top: -100,
+    right: -100,
+    width: 400,
+    height: 400,
+    borderRadius: 200,
+    backgroundColor: kineticColors.accentContainer,
+    opacity: 0.5,
+  },
+  shape2: {
+    position: 'absolute',
+    bottom: 200,
+    left: -150,
+    width: 350,
+    height: 350,
+    borderRadius: 175,
+    backgroundColor: kineticColors.accentContainer,
+    opacity: 0.4,
+  },
 
   /* Navbar */
   navbar: {
@@ -273,30 +342,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    backgroundColor: `${colors.bg}F0`,
+    borderBottomColor: kineticColors.borderVariant,
+    backgroundColor: kineticColors.backgroundContainerLow + 'F0',
   },
   navLeft: { flexDirection: "row", alignItems: "center", gap: 8 },
   logoIcon: { fontSize: 24 },
-  logoText: { fontSize: 20, fontWeight: "800", color: colors.primary, letterSpacing: 0.3 },
+  logoText: { ...kineticTypography.cardTitle, color: kineticColors.accent },
   navLinks: { flexDirection: "row", gap: 32 },
-  navLink: { color: colors.muted, fontSize: 14, fontWeight: "500" },
+  navLink: { color: kineticColors.mutedForeground, ...kineticTypography.body, fontWeight: "700" },
   navRight: { flexDirection: "row", gap: 12 },
-  loginBtn: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  loginBtnText: { color: colors.text, fontWeight: "600", fontSize: 14 },
-  registerBtn: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 10,
-    backgroundColor: colors.primary,
-  },
-  registerBtnText: { color: "#fff", fontWeight: "700", fontSize: 14 },
+  navBtn: { height: 40 },
 
   /* Hero */
   heroSection: {
@@ -305,29 +360,19 @@ const styles = StyleSheet.create({
     paddingTop: 80,
     paddingBottom: 60,
   },
-  heroBadge: {
-    backgroundColor: colors.primaryGlow,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    marginBottom: 24,
-  },
-  heroBadgeText: { color: colors.primary, fontSize: 13, fontWeight: "600" },
   heroTitle: {
-    fontSize: 56,
-    fontWeight: "900",
-    color: colors.text,
+    ...kineticTypography.hero,
+    color: kineticColors.foreground,
     textAlign: "center",
-    lineHeight: 66,
-    letterSpacing: -1,
     marginBottom: 20,
   },
   heroSubtitle: {
-    fontSize: 18,
-    color: colors.muted,
+    ...kineticTypography.cardTitle,
+    textTransform: "none",
+    fontWeight: "500",
+    color: kineticColors.mutedForeground,
     textAlign: "center",
-    maxWidth: 650,
-    lineHeight: 28,
+    maxWidth: 750,
     marginBottom: 40,
   },
   heroButtons: {
@@ -335,41 +380,7 @@ const styles = StyleSheet.create({
     gap: 16,
     marginBottom: 60,
   },
-  heroPrimaryBtn: {
-    backgroundColor: colors.primary,
-    paddingHorizontal: 32,
-    paddingVertical: 16,
-    borderRadius: 12,
-    minWidth: 160,
-    alignItems: "center",
-  },
-  heroPrimaryBtnText: { color: "#fff", fontWeight: "700", fontSize: 16 },
-  heroSecondaryBtn: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    paddingHorizontal: 32,
-    paddingVertical: 16,
-    borderRadius: 12,
-    minWidth: 160,
-    alignItems: "center",
-    backgroundColor: colors.card,
-  },
-  heroSecondaryBtnText: { color: colors.text, fontWeight: "600", fontSize: 16 },
-
-  /* Stats */
-  statsRow: {
-    flexDirection: "row",
-    gap: 40,
-    backgroundColor: colors.card,
-    paddingVertical: 28,
-    paddingHorizontal: 40,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  statItem: { alignItems: "center" },
-  statValue: { fontSize: 28, fontWeight: "800", color: colors.text },
-  statLabel: { color: colors.muted, fontSize: 13, marginTop: 4 },
+  heroBtn: { minWidth: 200, height: 64 },
 
   /* Section */
   section: {
@@ -377,27 +388,31 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   sectionLabel: {
-    color: colors.primary,
-    fontSize: 12,
-    fontWeight: "700",
+    color: kineticColors.accent,
+    ...kineticTypography.label,
     letterSpacing: 2,
     textAlign: "center",
     marginBottom: 12,
   },
   sectionTitle: {
-    fontSize: 36,
-    fontWeight: "800",
-    color: colors.text,
+    ...kineticTypography.heading,
+    color: kineticColors.foreground,
     textAlign: "center",
-    letterSpacing: -0.5,
+    marginBottom: 16,
+  },
+  sectionSubheading: {
+    ...kineticTypography.subheading,
+    color: kineticColors.foreground,
+    textAlign: "center",
     marginBottom: 16,
   },
   sectionSubtitle: {
-    fontSize: 16,
-    color: colors.muted,
+    ...kineticTypography.cardTitle,
+    textTransform: "none",
+    fontWeight: "500",
+    color: kineticColors.mutedForeground,
     textAlign: "center",
-    maxWidth: 600,
-    lineHeight: 26,
+    maxWidth: 700,
     marginBottom: 48,
     alignSelf: "center",
   },
@@ -410,41 +425,39 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: "100%",
   },
-  featureCard: {
+  featureCardWrap: {
     flex: 1,
-    backgroundColor: "transparent",
-    borderRadius: 16,
+  },
+  featureCardInner: {
+    flex: 1,
     padding: 28,
-    borderWidth: 1,
-    borderColor: "transparent",
   },
   featureIcon: { fontSize: 36, marginBottom: 16 },
-  featureTitle: { fontSize: 20, fontWeight: "700", color: colors.text, marginBottom: 4 },
-  featureSubtitle: { fontSize: 14, fontWeight: "600", marginBottom: 12 },
-  featureDesc: { fontSize: 14, color: colors.muted, lineHeight: 22 },
+  featureTitle: { ...kineticTypography.cardTitle, color: kineticColors.foreground, marginBottom: 4 },
+  featureSubtitle: { ...kineticTypography.label, marginBottom: 12 },
+  featureDesc: { ...kineticTypography.body, fontSize: 20, color: kineticColors.mutedForeground },
 
   /* Services Grid */
   servicesGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
+    justifyContent: "center",
     gap: 20,
     maxWidth: 900,
     alignSelf: "center",
     width: "100%",
   },
   serviceCard: {
-    flex: 1,
-    minWidth: 200,
-    backgroundColor: colors.cardAlt,
-    borderRadius: 16,
+    // Force equal widths so flex-grow doesn't warp sizes based on text content
+    flexBasis: Platform.OS === 'web' ? 'calc(50% - 15px)' : '48%', 
+    flexGrow: 1,
+    minWidth: 260,
     padding: 28,
-    borderWidth: 1,
-    borderColor: colors.border,
     alignItems: "center",
   },
   serviceIcon: { fontSize: 36, marginBottom: 12 },
-  serviceTitle: { fontSize: 16, fontWeight: "700", color: colors.text, marginBottom: 6, textAlign: "center" },
-  serviceDesc: { fontSize: 13, color: colors.muted, textAlign: "center", lineHeight: 20 },
+  serviceTitle: { ...kineticTypography.cardTitle, color: kineticColors.foreground, marginBottom: 6, textAlign: "center" },
+  serviceDesc: { ...kineticTypography.body, fontSize: 20, color: kineticColors.mutedForeground, textAlign: "center" },
 
   /* Innovation */
   innovationRow: {
@@ -460,22 +473,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 14,
-    backgroundColor: "transparent",
     padding: 16,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: "transparent",
   },
   checkCircle: {
     width: 28,
     height: 28,
-    borderRadius: 14,
-    backgroundColor: `${colors.success}20`,
+    borderRadius: 999,
+    backgroundColor: kineticColors.accentContainer,
     alignItems: "center",
     justifyContent: "center",
   },
-  checkMark: { color: colors.success, fontWeight: "700", fontSize: 14 },
-  checkText: { color: colors.text, fontSize: 15, fontWeight: "500", flex: 1 },
+  checkMark: { color: kineticColors.accent, fontWeight: "700", fontSize: 14 },
+  checkText: { color: kineticColors.foreground, ...kineticTypography.body, flex: 1 },
 
   /* Mission */
   missionCard: {
@@ -489,26 +498,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 80,
     paddingHorizontal: 24,
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.backgroundContainer,
     borderTopWidth: 1,
-    borderTopColor: colors.border,
+    borderTopColor: kineticColors.borderVariant,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: kineticColors.borderVariant,
   },
   ctaTitle: {
-    fontSize: 36,
-    fontWeight: "800",
-    color: colors.text,
+    ...kineticTypography.heading,
+    color: kineticColors.accent,
     textAlign: "center",
-    letterSpacing: -0.5,
     marginBottom: 16,
   },
   ctaSubtitle: {
-    fontSize: 16,
-    color: colors.muted,
+    ...kineticTypography.cardTitle,
+    textTransform: "none",
+    fontWeight: "500",
+    color: kineticColors.mutedForeground,
     textAlign: "center",
-    maxWidth: 550,
-    lineHeight: 26,
+    maxWidth: 650,
     marginBottom: 36,
   },
   ctaButtons: {
@@ -518,7 +526,7 @@ const styles = StyleSheet.create({
 
   /* Footer */
   footer: {
-    backgroundColor: colors.dark,
+    backgroundColor: kineticColors.backgroundContainerLow,
     paddingTop: 60,
     paddingHorizontal: 24,
   },
@@ -530,16 +538,16 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingBottom: 40,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: kineticColors.borderVariant,
   },
   footerBrand: { maxWidth: 350 },
-  footerBrandDesc: { color: colors.muted, fontSize: 14, lineHeight: 22, marginTop: 12 },
+  footerBrandDesc: { color: kineticColors.mutedForeground, ...kineticTypography.body, marginTop: 12 },
   footerCol: { gap: 10 },
-  footerColTitle: { color: colors.text, fontWeight: "700", fontSize: 14, marginBottom: 6 },
-  footerLink: { color: colors.muted, fontSize: 14 },
+  footerColTitle: { color: kineticColors.foreground, ...kineticTypography.label, marginBottom: 6 },
+  footerLink: { color: kineticColors.mutedForeground, ...kineticTypography.body, fontSize: 20 },
   footerBottom: {
     paddingVertical: 24,
     alignItems: "center",
   },
-  footerCopyright: { color: colors.subtle, fontSize: 13 },
+  footerCopyright: { color: kineticColors.mutedForeground, ...kineticTypography.body },
 });

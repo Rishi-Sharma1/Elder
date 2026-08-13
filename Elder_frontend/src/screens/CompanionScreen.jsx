@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import React, { useState, useRef, useContext, useCallback } from "react";
 import {
   View,
@@ -15,16 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../api";
 import { AuthContext } from "../context/AuthContext";
 
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  primary: "#4799EB",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-  userBubble: "#2563EB",
-  aiBubble: "#334155",
-  danger: "#EF4444",
-};
+
 
 // Web Speech API helpers
 const getSpeechRecognition = () => {
@@ -295,7 +287,7 @@ export default function CompanionScreen({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder={isListening ? "Listening..." : "Type or tap 🎤 to speak..."}
-            placeholderTextColor={isListening ? colors.primary : colors.muted}
+            placeholderTextColor={isListening ? kineticColors.accent : kineticColors.mutedForeground}
             value={inputText}
             onChangeText={setInputText}
             editable={!loading}
@@ -320,7 +312,7 @@ export default function CompanionScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
+  container: { flex: 1, backgroundColor: kineticColors.background },
   listContainer: { padding: 16, gap: 12 },
 
   // Voice bar
@@ -329,9 +321,9 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     borderBottomWidth: 1,
-    borderColor: colors.bg,
+    borderColor: kineticColors.background,
   },
   voiceToggle: {
     flexDirection: "row",
@@ -340,14 +332,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
   },
   voiceToggleActive: {
-    backgroundColor: colors.primary + "25",
+    backgroundColor: kineticColors.accent + "25",
   },
   voiceToggleIcon: { fontSize: 14 },
-  voiceToggleText: { color: colors.muted, fontSize: 12, fontWeight: "600" },
-  voiceToggleTextActive: { color: colors.primary },
+  voiceToggleText: { color: kineticColors.mutedForeground, fontSize: 12, fontWeight: "600" },
+  voiceToggleTextActive: { color: kineticColors.accent },
 
   // Messages
   messageBubble: {
@@ -357,16 +349,16 @@ const styles = StyleSheet.create({
   },
   userBubble: {
     alignSelf: "flex-end",
-    backgroundColor: colors.userBubble,
+    backgroundColor: kineticColors.border,
     borderBottomRightRadius: 4,
   },
   aiBubble: {
     alignSelf: "flex-start",
-    backgroundColor: colors.aiBubble,
+    backgroundColor: kineticColors.background,
     borderBottomLeftRadius: 4,
   },
   messageText: {
-    color: colors.text,
+    color: kineticColors.foreground,
     fontSize: 16,
     lineHeight: 22,
   },
@@ -381,15 +373,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 12,
     paddingHorizontal: 16,
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     borderTopWidth: 1,
-    borderColor: colors.bg,
+    borderColor: kineticColors.background,
     alignItems: "flex-end",
   },
   input: {
     flex: 1,
-    backgroundColor: colors.bg,
-    color: colors.text,
+    backgroundColor: kineticColors.background,
+    color: kineticColors.foreground,
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingTop: 12,
@@ -399,7 +391,7 @@ const styles = StyleSheet.create({
   },
   sendButton: {
     marginLeft: 10,
-    backgroundColor: colors.primary,
+    backgroundColor: kineticColors.accent,
     width: 44,
     height: 44,
     borderRadius: 22,
@@ -411,18 +403,18 @@ const styles = StyleSheet.create({
   },
   micButton: {
     marginRight: 10,
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
     width: 44,
     height: 44,
     borderRadius: 22,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: colors.muted + "40",
+    borderColor: kineticColors.mutedForeground + "40",
   },
   micButtonActive: {
-    backgroundColor: colors.danger + "20",
-    borderColor: colors.danger,
+    backgroundColor: kineticColors.error + "20",
+    borderColor: kineticColors.error,
   },
   micIcon: {
     fontSize: 20,

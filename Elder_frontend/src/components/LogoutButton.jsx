@@ -1,13 +1,15 @@
 import { Text, TouchableOpacity, Platform, Alert } from "react-native";
-import { signOut } from "firebase/auth";
-import { auth } from "../config/firebase";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 export default function LogoutButton() {
+  const { logout } = useContext(AuthContext);
+
   const handleLogout = async () => {
     if (Platform.OS === "web") {
       const confirmed = window.confirm("Do you want to sign out?");
       if (!confirmed) return;
-      await signOut(auth);
+      await logout();
     } else {
       Alert.alert(
         "Sign out",
@@ -18,7 +20,7 @@ export default function LogoutButton() {
             text: "Sign out",
             style: "destructive",
             onPress: async () => {
-              await signOut(auth);
+              await logout();
             },
           },
         ]

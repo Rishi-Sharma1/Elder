@@ -1,26 +1,25 @@
 import User from "../models/User.js";
 
 export const requireRole = (...allowedRoles) => {
-  return async (req,res,next)=>{
-    try{
-      const user = await User.findOne({ firebaseId:req.userId });
+  return async (req, res, next) => {
+    try {
+      const user = req.user || (req.userId ? await User.findById(req.userId) : null);
 
-      if(!user){
-        return res.status(404).json({ message:"User not found" });
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
       }
 
-      if(!allowedRoles.includes(user.role)){
+      if (!allowedRoles.includes(user.role)) {
         return res.status(403).json({
-          message:"Access Denied: Insufficient Permissions"
+          message: "Access Denied: Insufficient Permissions",
         });
       }
 
       req.role = user.role;
       next();
-
-    }catch(e){
+    } catch (e) {
       console.log(e);
-      res.status(500).json({ message:"Server Error" });
+      res.status(500).json({ message: "Server Error" });
     }
-  }
+  };
 };

@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import { useEffect, useState, useCallback } from "react";
 import {
   View, Text, ScrollView, StyleSheet, TouchableOpacity, Platform,
@@ -9,10 +10,7 @@ import AdminSidebar, { MobileBottomBar } from "../components/AdminSidebar";
 import useResponsive from "../hooks/useResponsive";
 import api from "../api";
 
-const colors = {
-  bg: "#0F172A", card: "#1E293B", border: "#334155", primary: "#4799EB",
-  success: "#22C55E", warning: "#F59E0B", danger: "#EF4444", text: "#F1F5F9", muted: "#94A3B8",
-};
+
 
 export default function AdminFlaggedReports({ navigation }) {
   const responsive = useResponsive();
@@ -50,7 +48,7 @@ export default function AdminFlaggedReports({ navigation }) {
     return (
       <SafeAreaView style={s.container}>
         <View style={s.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <ActivityIndicator size="large" color={kineticColors.accent} />
           <Text style={s.loadingText}>Loading Reports...</Text>
         </View>
       </SafeAreaView>
@@ -62,18 +60,18 @@ export default function AdminFlaggedReports({ navigation }) {
       <View style={[s.layout, { flexDirection: responsive.showSidebar ? "row" : "column" }]}>
         <AdminSidebar navigation={navigation} activeKey="AdminFlaggedReports" />
         <ScrollView style={s.content} contentContainerStyle={[s.cc, { padding: responsive.contentPadding }]}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}>
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={kineticColors.accent} />}>
 
           <Text style={s.heading}>Pending Verifications</Text>
           <Text style={s.sub}>Review pending identity verifications from platform users</Text>
 
           {/* Stats */}
           <View style={[s.statsRow, { flexDirection: responsive.isMobile ? "column" : "row" }]}>
-            <View style={[s.statCard, { borderTopColor: colors.warning, borderTopWidth: 3 }]}>
+            <View style={[s.statCard, { borderTopColor: kineticColors.mutedForeground, borderTopWidth: 3 }]}>
               <Text style={s.statLabel}>Pending Reviews</Text>
               <Text style={s.statBig}>{reports.length}</Text>
             </View>
-            <View style={[s.statCard, { borderTopColor: colors.danger, borderTopWidth: 3 }]}>
+            <View style={[s.statCard, { borderTopColor: kineticColors.error, borderTopWidth: 3 }]}>
               <Text style={s.statLabel}>Needs Attention</Text>
               <Text style={s.statBig}>{reports.length > 0 ? "Yes" : "No"}</Text>
             </View>
@@ -113,8 +111,8 @@ export default function AdminFlaggedReports({ navigation }) {
                   <View style={s.detailItem}>
                     <Text style={s.detailLabel}>Status</Text>
                     <View style={s.statusBadge}>
-                      <View style={[s.statusDot, { backgroundColor: colors.warning }]} />
-                      <Text style={[s.detailValue, { color: colors.warning }]}>Pending</Text>
+                      <View style={[s.statusDot, { backgroundColor: kineticColors.mutedForeground }]} />
+                      <Text style={[s.detailValue, { color: kineticColors.mutedForeground }]}>Pending</Text>
                     </View>
                   </View>
                   <View style={s.detailItem}>
@@ -153,7 +151,7 @@ export default function AdminFlaggedReports({ navigation }) {
                     <Text style={s.actionBtnText}>✓ Verify User</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={[s.actionBtn, s.rejectBtn]} onPress={() => handleVerify(report._id, "rejected")}>
-                    <Text style={[s.actionBtnText, { color: colors.danger }]}>✗ Reject</Text>
+                    <Text style={[s.actionBtnText, { color: kineticColors.error }]}>✗ Reject</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -223,39 +221,39 @@ function getRoleColor(role) {
 }
 
 const s = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
+  container: { flex: 1, backgroundColor: kineticColors.background },
   loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center", gap: 16 },
-  loadingText: { color: colors.muted, fontSize: 16 },
+  loadingText: { color: kineticColors.mutedForeground, fontSize: 16 },
   layout: { flex: 1 },
   content: { flex: 1 }, cc: {},
-  heading: { fontSize: 28, fontWeight: "800", color: colors.text, letterSpacing: -0.5 },
-  sub: { color: colors.muted, marginBottom: 24, marginTop: 6, fontSize: 15 },
+  heading: { fontSize: 28, fontWeight: "800", color: kineticColors.foreground, letterSpacing: -0.5 },
+  sub: { color: kineticColors.mutedForeground, marginBottom: 24, marginTop: 6, fontSize: 15 },
 
   statsRow: { gap: 16, marginBottom: 28 },
-  statCard: { flex: 1, backgroundColor: colors.card, padding: 20, borderRadius: 14, borderWidth: 1, borderColor: colors.border },
-  statLabel: { color: colors.muted, fontSize: 13, fontWeight: "500", marginBottom: 8 },
-  statBig: { fontSize: 32, fontWeight: "800", color: colors.text },
+  statCard: { flex: 1, backgroundColor: kineticColors.background, padding: 20, borderRadius: 14, borderWidth: 1, borderColor: kineticColors.border },
+  statLabel: { color: kineticColors.mutedForeground, fontSize: 13, fontWeight: "500", marginBottom: 8 },
+  statBig: { fontSize: 32, fontWeight: "800", color: kineticColors.foreground },
 
   sectionH: { flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 16 },
   sectionI: { fontSize: 22 },
-  sectionT: { fontSize: 20, fontWeight: "700", color: colors.text },
+  sectionT: { fontSize: 20, fontWeight: "700", color: kineticColors.foreground },
 
   reportCard: {
-    backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.border,
+    backgroundColor: kineticColors.background, borderRadius: 14, borderWidth: 1, borderColor: kineticColors.border,
     padding: 24, marginBottom: 16,
   },
   reportHeader: {
     flexDirection: "row", alignItems: "center", gap: 14, marginBottom: 20,
-    paddingBottom: 16, borderBottomWidth: 1, borderColor: `${colors.border}60`,
+    paddingBottom: 16, borderBottomWidth: 1, borderColor: `${kineticColors.border}60`,
   },
   avatar: {
-    width: 48, height: 48, borderRadius: 24, backgroundColor: `${colors.primary}25`,
+    width: 48, height: 48, borderRadius: 24, backgroundColor: `${kineticColors.accent}25`,
     justifyContent: "center", alignItems: "center",
   },
-  avatarText: { color: colors.primary, fontSize: 20, fontWeight: "700" },
+  avatarText: { color: kineticColors.accent, fontSize: 20, fontWeight: "700" },
   reportInfo: { flex: 1, gap: 2 },
-  reportName: { color: colors.text, fontWeight: "700", fontSize: 17 },
-  reportEmail: { color: colors.muted, fontSize: 13 },
+  reportName: { color: kineticColors.foreground, fontWeight: "700", fontSize: 17 },
+  reportEmail: { color: kineticColors.mutedForeground, fontSize: 13 },
 
   roleBadge: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8 },
   roleBadgeText: { fontSize: 12, fontWeight: "700" },
@@ -264,42 +262,42 @@ const s = StyleSheet.create({
     flexDirection: "row", flexWrap: "wrap", gap: 16, marginBottom: 16,
   },
   detailItem: { flex: 1, gap: 4 },
-  detailLabel: { color: colors.muted, fontSize: 12, fontWeight: "600", textTransform: "uppercase", letterSpacing: 0.5 },
-  detailValue: { color: colors.text, fontSize: 14, fontWeight: "500" },
+  detailLabel: { color: kineticColors.mutedForeground, fontSize: 12, fontWeight: "600", textTransform: "uppercase", letterSpacing: 0.5 },
+  detailValue: { color: kineticColors.foreground, fontSize: 14, fontWeight: "500" },
   statusBadge: { flexDirection: "row", alignItems: "center", gap: 6 },
   statusDot: { width: 8, height: 8, borderRadius: 4 },
 
   documentsRow: { marginBottom: 20, gap: 8 },
-  documentsLabel: { color: colors.muted, fontSize: 13 },
+  documentsLabel: { color: kineticColors.mutedForeground, fontSize: 13 },
   docBadges: { flexDirection: "row", gap: 8, flexWrap: "wrap" },
-  docBadge: { backgroundColor: `${colors.primary}15`, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 6, borderWidth: 1, borderColor: `${colors.primary}30` },
-  docBadgeText: { color: colors.primary, fontSize: 12, fontWeight: "600" },
+  docBadge: { backgroundColor: `${kineticColors.accent}15`, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 6, borderWidth: 1, borderColor: `${kineticColors.accent}30` },
+  docBadgeText: { color: kineticColors.accent, fontSize: 12, fontWeight: "600" },
 
   actionsRow: { flexDirection: "row", gap: 10, flexWrap: "wrap", marginTop: 10 },
   actionBtn: { paddingHorizontal: 20, paddingVertical: 12, borderRadius: 10 },
-  viewBtn: { backgroundColor: colors.warning },
-  verifyBtn: { backgroundColor: colors.success },
-  rejectBtn: { backgroundColor: `${colors.danger}15`, borderWidth: 1, borderColor: `${colors.danger}40` },
+  viewBtn: { backgroundColor: kineticColors.mutedForeground },
+  verifyBtn: { backgroundColor: kineticColors.foreground },
+  rejectBtn: { backgroundColor: `${kineticColors.error}15`, borderWidth: 1, borderColor: `${kineticColors.error}40` },
   actionBtnText: { color: "#fff", fontWeight: "700", fontSize: 14 },
 
   emptyCard: {
-    backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.border,
+    backgroundColor: kineticColors.background, borderRadius: 14, borderWidth: 1, borderColor: kineticColors.border,
     padding: 48, alignItems: "center", gap: 12,
   },
   emptyIcon: { fontSize: 48 },
-  emptyTitle: { color: colors.text, fontSize: 20, fontWeight: "700" },
-  emptyText: { color: colors.muted, fontSize: 15 },
+  emptyTitle: { color: kineticColors.foreground, fontSize: 20, fontWeight: "700" },
+  emptyText: { color: kineticColors.mutedForeground, fontSize: 15 },
   
   // Modal styles
   modalOverlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.7)", justifyContent: "center", alignItems: "center", padding: 20 },
-  modalContent: { backgroundColor: colors.card, borderRadius: 16, width: "100%", maxWidth: 600, maxHeight: "85%", overflow: "hidden" },
-  modalHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 20, borderBottomWidth: 1, borderColor: colors.border, backgroundColor: colors.sidebar },
-  modalTitle: { color: colors.text, fontSize: 18, fontWeight: "700" },
-  modalCloseBtn: { width: 32, height: 32, borderRadius: 16, backgroundColor: colors.border, justifyContent: "center", alignItems: "center" },
-  modalCloseText: { color: colors.text, fontSize: 16, fontWeight: "bold" },
+  modalContent: { backgroundColor: kineticColors.background, borderRadius: 16, width: "100%", maxWidth: 600, maxHeight: "85%", overflow: "hidden" },
+  modalHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 20, borderBottomWidth: 1, borderColor: kineticColors.border, backgroundColor: kineticColors.background },
+  modalTitle: { color: kineticColors.foreground, fontSize: 18, fontWeight: "700" },
+  modalCloseBtn: { width: 32, height: 32, borderRadius: 16, backgroundColor: kineticColors.border, justifyContent: "center", alignItems: "center" },
+  modalCloseText: { color: kineticColors.foreground, fontSize: 16, fontWeight: "bold" },
   modalScroll: { padding: 20 },
   docImageContainer: { marginBottom: 24 },
-  docLabel: { color: colors.muted, fontSize: 14, fontWeight: "600", marginBottom: 12 },
-  docImage: { width: "100%", height: 250, backgroundColor: colors.sidebar, borderRadius: 12, borderWidth: 1, borderColor: colors.border },
-  noDocsText: { color: colors.muted, textAlign: "center", marginVertical: 40 },
+  docLabel: { color: kineticColors.mutedForeground, fontSize: 14, fontWeight: "600", marginBottom: 12 },
+  docImage: { width: "100%", height: 250, backgroundColor: kineticColors.background, borderRadius: 12, borderWidth: 1, borderColor: kineticColors.border },
+  noDocsText: { color: kineticColors.mutedForeground, textAlign: "center", marginVertical: 40 },
 });

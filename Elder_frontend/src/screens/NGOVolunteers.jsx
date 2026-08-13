@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import { useEffect, useState } from "react";
 import {
   View,
@@ -10,19 +11,8 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../api";
-import { auth } from "../config/firebase";
 
-const colors = {
-  bg: "#0F172A",
-  sidebar: "#0B1220",
-  card: "#1E293B",
-  border: "#334155",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-  success: "#22C55E",
-  danger: "#EF4444",
-  warning: "#F59E0B",
-};
+
 
 export default function NGOVolunteers({ navigation }) {
   const [volunteers, setVolunteers] = useState([]);
@@ -31,8 +21,6 @@ export default function NGOVolunteers({ navigation }) {
   useEffect(() => {
     const fetchVolunteers = async () => {
       try {
-        const token = await auth.currentUser.getIdToken();
-
         const res = await api.get(
           "/ngo/volunteers"
         );
@@ -75,12 +63,12 @@ export default function NGOVolunteers({ navigation }) {
 
           const statusColor =
             status === "approved"
-              ? colors.success
+              ? kineticColors.foreground
               : status === "rejected"
-                ? colors.danger
+                ? kineticColors.error
                 : status === "not_verified"
                   ? "#64748B"
-                  : colors.warning;
+                  : kineticColors.mutedForeground;
 
           return (
             <View style={styles.card}>
@@ -111,15 +99,15 @@ export default function NGOVolunteers({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
   },
 
   card: {
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     padding: 18,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
     marginBottom: 14,
   },
 
@@ -132,13 +120,13 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: "bold",
-    color: colors.text,
+    color: kineticColors.foreground,
     marginBottom: 4,
   },
 
   email: {
     fontSize: 14,
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
   },
 
   statusBadge: {
@@ -157,11 +145,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
   },
 
   emptyText: {
     fontSize: 18,
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
   },
 });

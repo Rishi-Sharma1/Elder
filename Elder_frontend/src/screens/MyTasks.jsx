@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import { useState, useCallback } from "react";
 import {
   View,
@@ -8,21 +9,10 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../api";
-import { auth } from "../config/firebase";
 import { useFocusEffect } from "@react-navigation/native";
 
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#3B82F6",
-  success: "#16A34A",
-  warning: "#F59E0B",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-};
+
 
 export default function MyTasks() {
   const [tasks, setTasks] = useState([]);
@@ -32,7 +22,6 @@ export default function MyTasks() {
   const fetchTasks = async () => {
     try {
       setLoading(true);
-      const token = await auth.currentUser.getIdToken();
 
       const [tasksRes, historyRes] = await Promise.all([
         api.get("/volunteer/tasks"),
@@ -69,7 +58,6 @@ export default function MyTasks() {
   const completeTask = async (id) => {
     try {
       setProcessingId(id);
-      const token = await auth.currentUser.getIdToken();
 
       await api.post(
         `/volunteer/complete/${id}`,
@@ -93,7 +81,7 @@ export default function MyTasks() {
   if (loading) {
     return (
       <SafeAreaView style={styles.center}>
-        <ActivityIndicator size="large" color={colors.primary} />
+        <ActivityIndicator size="large" color={kineticColors.accent} />
       </SafeAreaView>
     );
   }
@@ -159,11 +147,11 @@ export default function MyTasks() {
 const StatusBadge = ({ status }) => {
   const lower = status?.toLowerCase();
 
-  let backgroundColor = colors.card;
+  let backgroundColor = kineticColors.background;
 
-  if (lower === "completed" || lower === "delivered") backgroundColor = colors.success;
-  else if (lower === "assigned" || lower === "accepted" || lower === "picked_up" || lower === "out_for_delivery") backgroundColor = colors.primary;
-  else backgroundColor = colors.warning;
+  if (lower === "completed" || lower === "delivered") backgroundColor = kineticColors.foreground;
+  else if (lower === "assigned" || lower === "accepted" || lower === "picked_up" || lower === "out_for_delivery") backgroundColor = kineticColors.accent;
+  else backgroundColor = kineticColors.mutedForeground;
 
   return (
     <View style={[styles.statusBadge, { backgroundColor }]}>
@@ -177,15 +165,15 @@ const StatusBadge = ({ status }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
   },
 
   card: {
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     padding: 20,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
     marginBottom: 16,
   },
 
@@ -193,19 +181,19 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 6,
-    color: colors.text,
+    color: kineticColors.foreground,
   },
 
   description: {
     fontSize: 15,
     marginBottom: 10,
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
   },
 
   info: {
     fontSize: 14,
     marginBottom: 6,
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
   },
 
   statusBadge: {
@@ -223,7 +211,7 @@ const styles = StyleSheet.create({
   },
 
   completeButton: {
-    backgroundColor: colors.success,
+    backgroundColor: kineticColors.foreground,
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: "center",
@@ -240,11 +228,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.bg,
+    backgroundColor: kineticColors.background,
   },
 
   emptyText: {
     fontSize: 18,
-    color: colors.muted,
+    color: kineticColors.mutedForeground,
   },
 });

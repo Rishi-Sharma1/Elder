@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
@@ -15,27 +16,15 @@ import api from "../api";
 import ElderSidebar, { ElderMobileBottomBar } from "../components/ElderSidebar";
 import useResponsive from "../hooks/useResponsive";
 
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#4799EB",
-  success: "#22C55E",
-  warning: "#F59E0B",
-  danger: "#EF4444",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-  medicine: "#8B5CF6",
-  grocery: "#10B981",
-};
+
 
 const statusColors = {
-  pending: colors.warning,
-  accepted: colors.primary,
-  picked_up: colors.primary,
-  out_for_delivery: colors.warning,
-  delivered: colors.success,
-  cancelled: colors.danger,
+  pending: kineticColors.mutedForeground,
+  accepted: kineticColors.accent,
+  picked_up: kineticColors.accent,
+  out_for_delivery: kineticColors.mutedForeground,
+  delivered: kineticColors.foreground,
+  cancelled: kineticColors.error,
 };
 
 const statusLabels = {
@@ -124,7 +113,7 @@ export default function DeliveryHistoryScreen({ navigation }) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <ActivityIndicator size="large" color={kineticColors.accent} />
           <Text style={styles.loadingText}>Loading deliveries...</Text>
         </View>
       </SafeAreaView>
@@ -145,7 +134,7 @@ export default function DeliveryHistoryScreen({ navigation }) {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              tintColor={colors.primary}
+              tintColor={kineticColors.accent}
             />
           }
         >
@@ -177,9 +166,9 @@ export default function DeliveryHistoryScreen({ navigation }) {
 
           {/* Stats */}
           <View style={[styles.statsRow, { flexDirection: responsive.isMobile ? "column" : "row" }]}>
-            <StatCard title="Total Orders" value={filtered.length} color={colors.primary} />
-            <StatCard title="Active" value={activeOrders.length} color={colors.warning} />
-            <StatCard title="Delivered" value={pastOrders.filter((o) => o.status === "delivered").length} color={colors.success} />
+            <StatCard title="Total Orders" value={filtered.length} color={kineticColors.accent} />
+            <StatCard title="Active" value={activeOrders.length} color={kineticColors.mutedForeground} />
+            <StatCard title="Delivered" value={pastOrders.filter((o) => o.status === "delivered").length} color={kineticColors.foreground} />
           </View>
 
           {/* Active Orders */}
@@ -258,7 +247,7 @@ const StatCard = ({ title, value, color }) => (
 );
 
 const OrderCard = ({ order, onPress, onDelete, isActive }) => {
-  const statusColor = statusColors[order.status] || colors.muted;
+  const statusColor = statusColors[order.status] || kineticColors.mutedForeground;
   const itemCount = order.items?.length || 0;
   const urgentCount = order.items?.filter((i) => i.urgent).length || 0;
 
@@ -331,15 +320,15 @@ const OrderCard = ({ order, onPress, onDelete, isActive }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
+  container: { flex: 1, backgroundColor: kineticColors.background },
   layout: { flex: 1 },
   content: { flex: 1 },
   contentInner: {},
   loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center", gap: 16 },
-  loadingText: { color: colors.muted, fontSize: 16 },
+  loadingText: { color: kineticColors.mutedForeground, fontSize: 16 },
 
-  heading: { fontSize: 28, fontWeight: "800", color: colors.text, letterSpacing: -0.5 },
-  subheading: { color: colors.muted, marginBottom: 24, marginTop: 6, fontSize: 15 },
+  heading: { fontSize: 28, fontWeight: "800", color: kineticColors.foreground, letterSpacing: -0.5 },
+  subheading: { color: kineticColors.mutedForeground, marginBottom: 24, marginTop: 6, fontSize: 15 },
 
   // Filters
   filterRow: { flexDirection: "row", gap: 10, marginBottom: 24 },
@@ -350,31 +339,31 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 10,
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
   },
   filterTabActive: {
-    backgroundColor: colors.primary + "20",
-    borderColor: colors.primary,
+    backgroundColor: kineticColors.accent + "20",
+    borderColor: kineticColors.accent,
   },
   filterIcon: { fontSize: 14 },
-  filterText: { fontSize: 13, fontWeight: "600", color: colors.muted },
-  filterTextActive: { color: colors.primary },
+  filterText: { fontSize: 13, fontWeight: "600", color: kineticColors.mutedForeground },
+  filterTextActive: { color: kineticColors.accent },
 
   // Stats
   statsRow: { gap: 14, marginBottom: 28 },
   statCard: {
     flex: 1,
     minWidth: 100,
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     padding: 18,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
   },
-  statTitle: { color: colors.muted, fontSize: 12, fontWeight: "500", marginBottom: 8 },
-  statValue: { fontSize: 28, fontWeight: "800", color: colors.text },
+  statTitle: { color: kineticColors.mutedForeground, fontSize: 12, fontWeight: "500", marginBottom: 8 },
+  statValue: { fontSize: 28, fontWeight: "800", color: kineticColors.foreground },
 
   // Section
   sectionHeader: {
@@ -385,25 +374,25 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   sectionIcon: { fontSize: 20 },
-  sectionTitle: { fontSize: 18, fontWeight: "700", color: colors.text, flex: 1 },
+  sectionTitle: { fontSize: 18, fontWeight: "700", color: kineticColors.foreground, flex: 1 },
   countBadge: {
-    backgroundColor: colors.primary + "20",
+    backgroundColor: kineticColors.accent + "20",
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
   },
-  countText: { color: colors.primary, fontSize: 13, fontWeight: "700" },
+  countText: { color: kineticColors.accent, fontSize: 13, fontWeight: "700" },
 
   // Order card
   orderCard: {
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
     marginBottom: 12,
     position: "relative", // Ensure relative for absolute child
   },
-  orderCardActive: { borderColor: colors.primary + "50" },
+  orderCardActive: { borderColor: kineticColors.accent + "50" },
   orderCardClickable: {
     padding: 18,
   },
@@ -416,7 +405,7 @@ const styles = StyleSheet.create({
   },
   orderCategoryBadge: { flexDirection: "row", alignItems: "center", gap: 6 },
   orderCategoryIcon: { fontSize: 16 },
-  orderCategoryText: { fontSize: 14, fontWeight: "600", color: colors.text },
+  orderCategoryText: { fontSize: 14, fontWeight: "600", color: kineticColors.foreground },
   statusPill: {
     flexDirection: "row",
     alignItems: "center",
@@ -434,41 +423,41 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: colors.danger + "20",
+    backgroundColor: kineticColors.error + "20",
     alignItems: "center",
     justifyContent: "center",
     zIndex: 10, // Ensure it's on top
   },
   smallDeleteBtnText: {
-    color: colors.danger,
+    color: kineticColors.error,
     fontSize: 12,
     fontWeight: "800",
   },
-  orderAddress: { fontSize: 13, color: colors.muted, marginBottom: 10 },
+  orderAddress: { fontSize: 13, color: kineticColors.mutedForeground, marginBottom: 10 },
   orderMeta: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-  orderMetaText: { fontSize: 12, color: colors.muted },
-  orderDate: { fontSize: 12, color: colors.muted },
-  orderVolunteer: { marginTop: 10, paddingTop: 10, borderTopWidth: 1, borderTopColor: colors.border + "50" },
-  orderVolunteerText: { fontSize: 13, color: colors.primary, fontWeight: "500" },
+  orderMetaText: { fontSize: 12, color: kineticColors.mutedForeground },
+  orderDate: { fontSize: 12, color: kineticColors.mutedForeground },
+  orderVolunteer: { marginTop: 10, paddingTop: 10, borderTopWidth: 1, borderTopColor: kineticColors.border + "50" },
+  orderVolunteerText: { fontSize: 13, color: kineticColors.accent, fontWeight: "500" },
   trackBtn: {
     marginTop: 12,
     paddingVertical: 10,
-    backgroundColor: colors.primary + "15",
+    backgroundColor: kineticColors.accent + "15",
     borderRadius: 8,
     alignItems: "center",
   },
-  trackBtnText: { color: colors.primary, fontWeight: "600", fontSize: 13 },
+  trackBtnText: { color: kineticColors.accent, fontWeight: "600", fontSize: 13 },
 
   // Empty
   emptyState: { alignItems: "center", paddingVertical: 48, gap: 12 },
   emptyIcon: { fontSize: 48 },
-  emptyText: { color: colors.muted, fontSize: 16 },
+  emptyText: { color: kineticColors.mutedForeground, fontSize: 16 },
   orderBtn: {
-    backgroundColor: colors.primary,
+    backgroundColor: kineticColors.accent,
     paddingHorizontal: 24,
     paddingVertical: 14,
     borderRadius: 12,

@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   Image,
+  Dimensions,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -15,19 +16,12 @@ import { AuthContext } from "../context/AuthContext";
 import api from "../api";
 import ElderSidebar, { ElderMobileBottomBar } from "../components/ElderSidebar";
 import useResponsive from "../hooks/useResponsive";
+import { md3Colors, md3Typography, md3Radii } from "../theme/md3Tokens";
+import KineticCard from "../components/KineticCard";
+import { kineticColors, kineticTypography } from "../theme/kineticTokens";
+import { BlurView } from "expo-blur";
 
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#4799EB",
-  primaryDark: "#2563EB",
-  success: "#22C55E",
-  warning: "#F59E0B",
-  danger: "#EF4444",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-};
+const { width, height } = Dimensions.get('window');
 
 export default function ElderDashboard({ navigation }) {
   const { user } = useContext(AuthContext);
@@ -41,8 +35,6 @@ export default function ElderDashboard({ navigation }) {
   const fetchRequests = useCallback(async () => {
     try {
       setLoading(true);
-      
-      // Isolated calls for better debugging on Android Emulator
       const reqsRes = await api.get("/elder/requests");
       setRequests(reqsRes.data);
 
@@ -51,10 +43,8 @@ export default function ElderDashboard({ navigation }) {
         setNearestNGOs(ngosRes.data);
       } catch (ngoErr) {
         console.warn("NEAREST NGOS ERROR:", ngoErr.message);
-        // Fallback to empty if nearest NGOs fails
         setNearestNGOs([]);
       }
-
     } catch (err) {
       console.error("ELDER DASHBOARD ERROR (Requests):", err.message || err);
     } finally {
@@ -78,7 +68,7 @@ export default function ElderDashboard({ navigation }) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <ActivityIndicator size="large" color={kineticColors.accent} />
           <Text style={styles.loadingText}>Loading Dashboard...</Text>
         </View>
       </SafeAreaView>
@@ -95,6 +85,11 @@ export default function ElderDashboard({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Decorative Organic Shapes for MD3 Bold Factor */}
+      <View style={styles.shape1} />
+      <View style={styles.shape2} />
+      <BlurView intensity={80} style={StyleSheet.absoluteFill} tint="dark" />
+
       <View style={[styles.layout, { flexDirection: responsive.showSidebar ? "row" : "column" }]}>
         <ElderSidebar navigation={navigation} activeKey="ElderDashboard" />
 
@@ -102,7 +97,7 @@ export default function ElderDashboard({ navigation }) {
           style={styles.content}
           contentContainerStyle={[styles.contentContainer, { padding: responsive.contentPadding }]}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={kineticColors.accent} />
           }
         >
           {/* Header */}
@@ -115,26 +110,10 @@ export default function ElderDashboard({ navigation }) {
 
           {/* Stat Cards */}
           <View style={[styles.statsRow, { flexDirection: responsive.isMobile ? "column" : "row", flexWrap: responsive.isTablet ? "wrap" : "nowrap" }]}>
-            <StatCard
-              title="Total Requests"
-              value={requests.length}
-              color={colors.primary}
-            />
-            <StatCard
-              title="Pending"
-              value={pendingCount}
-              color={colors.warning}
-            />
-            <StatCard
-              title="Assigned"
-              value={assignedCount}
-              color={colors.primary}
-            />
-            <StatCard
-              title="Completed"
-              value={completedCount}
-              color={colors.success}
-            />
+            <StatCard title="Total Requests" value={requests.length} color={kineticColors.accent} />
+            <StatCard title="Pending" value={pendingCount} color={kineticColors.accent} />
+            <StatCard title="Assigned" value={assignedCount} color={kineticColors.accent} />
+            <StatCard title="Completed" value={completedCount} color={kineticColors.accentContainer} textColor={kineticColors.accentForegroundContainer} />
           </View>
 
           {/* Quick Actions */}
@@ -148,50 +127,34 @@ export default function ElderDashboard({ navigation }) {
               gap: 12 
             }
           ]}>
-            <TouchableOpacity
-              style={[styles.actionCard, { width: responsive.isMobile ? "100%" : "48%", minWidth: 150 }]}
+            <ActionCard
+              icon="💊"
+              title="Medicine"
+              desc="Request drop-off"
               onPress={() => navigation.navigate("CreateRequest", { type: "medicine" })}
-            >
-              <Text style={styles.actionIcon}>💊</Text>
-              <Text style={styles.actionTitle}>Medicine Request</Text>
-              <Text style={styles.actionDesc}>Request medicine drop-off</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.actionCard, { width: responsive.isMobile ? "100%" : "48%", minWidth: 150 }]}
+              width={responsive.isMobile ? "100%" : "48%"}
+            />
+            <ActionCard
+              icon="🚚"
+              title="Delivery"
+              desc="Medicine & grocery"
               onPress={() => navigation.navigate("DeliveryOrderScreen")}
-            >
-              <Text style={styles.actionIcon}>🚚</Text>
-              <Text style={styles.actionTitle}>Order Delivery</Text>
-              <Text style={styles.actionDesc}>Medicine & grocery delivery</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.actionCard, { width: responsive.isMobile ? "100%" : "48%", minWidth: 150 }]}
+              width={responsive.isMobile ? "100%" : "48%"}
+            />
+            <ActionCard
+              icon="🤖"
+              title="AI Companion"
+              desc="Friendly chat"
               onPress={() => navigation.navigate("CompanionScreen")}
-            >
-              <Text style={styles.actionIcon}>🤖</Text>
-              <Text style={styles.actionTitle}>AI Companion</Text>
-              <Text style={styles.actionDesc}>Friendly chat & help</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.actionCard, { width: responsive.isMobile ? "100%" : "48%", minWidth: 150 }]}
+              width={responsive.isMobile ? "100%" : "48%"}
+            />
+            <ActionCard
+              icon="📍"
+              title="Track Deliveries"
+              desc="Active orders"
               onPress={() => navigation.navigate("DeliveryHistoryScreen")}
-            >
-              <Text style={styles.actionIcon}>📍</Text>
-              <Text style={styles.actionTitle}>Track Deliveries</Text>
-              <Text style={styles.actionDesc}>Track your active orders</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.actionCard, { width: responsive.isMobile ? "100%" : "100%", minWidth: 150 }]}
-              onPress={() => navigation.navigate("MyRequests")}
-            >
-              <Text style={styles.actionIcon}>📋</Text>
-              <Text style={styles.actionTitle}>My Requests</Text>
-              <Text style={styles.actionDesc}>View all your requests</Text>
-            </TouchableOpacity>
+              width={responsive.isMobile ? "100%" : "48%"}
+            />
           </View>
 
           {/* Nearest Old Age Homes */}
@@ -199,7 +162,7 @@ export default function ElderDashboard({ navigation }) {
           <View style={styles.ngoList}>
             {nearestNGOs.length > 0 ? (
               nearestNGOs.map((ngo) => (
-                <View key={ngo._id} style={styles.ngoCard}>
+                <KineticCard key={ngo._id} style={styles.ngoCard} onPress={() => {}}>
                   <View style={styles.ngoAvatar}>
                     {ngo.profilePhoto ? (
                       <Image source={{ uri: ngo.profilePhoto }} style={styles.ngoImage} />
@@ -212,7 +175,7 @@ export default function ElderDashboard({ navigation }) {
                     <Text style={styles.ngoAddress}>📍 {ngo.address || "Address not provided"}</Text>
                     {ngo.phone && <Text style={styles.ngoPhone}>📞 {ngo.phone}</Text>}
                   </View>
-                </View>
+                </KineticCard>
               ))
             ) : (
               <View style={styles.emptyStateContainer}>
@@ -220,41 +183,6 @@ export default function ElderDashboard({ navigation }) {
                 <Text style={styles.emptyText}>No nearby homes found yet.</Text>
               </View>
             )}
-          </View>
-
-          {/* Recent Activity */}
-          <SectionHeader title="Recent Activity" icon="🕐" />
-          <View style={styles.sectionCard}>
-            {recent.length > 0 ? (
-              <Table
-                headers={["Type", "Description", "Status", "Date"]}
-                rows={recent.map((r) => ({
-                  cells: [
-                    r.type?.charAt(0).toUpperCase() + r.type?.slice(1) || "—",
-                    r.description?.substring(0, 40) + (r.description?.length > 40 ? "…" : "") || "—",
-                    r.status?.charAt(0).toUpperCase() + r.status?.slice(1) || "—",
-                    new Date(r.updatedAt).toLocaleDateString(),
-                  ],
-                  statusColor:
-                    r.status?.toLowerCase() === "completed"
-                      ? colors.success
-                      : r.status?.toLowerCase() === "assigned"
-                      ? colors.primary
-                      : colors.warning,
-                }))}
-              />
-            ) : (
-              <View style={styles.emptyState}>
-                <Text style={styles.emptyIcon}>📭</Text>
-                <Text style={styles.emptyText}>No requests yet. Create one to get started!</Text>
-              </View>
-            )}
-            <TouchableOpacity
-              style={styles.viewAllButton}
-              onPress={() => navigation.navigate("MyRequests")}
-            >
-              <Text style={styles.viewAllText}>View All Requests →</Text>
-            </TouchableOpacity>
           </View>
 
           {/* Bottom padding */}
@@ -275,88 +203,83 @@ const SectionHeader = ({ title, icon }) => (
   </View>
 );
 
-const StatCard = ({ title, value, color }) => (
-  <View style={[styles.statCard, { borderTopColor: color, borderTopWidth: 3 }]}>
-    <Text style={styles.statTitle}>{title}</Text>
-    <Text style={styles.statValue}>{typeof value === "number" ? value.toLocaleString() : value}</Text>
+const StatCard = ({ title, value, color, textColor }) => (
+  <View style={[styles.statCardWrapper, { flex: 1, minWidth: 140 }]}>
+    <KineticCard variant="filled" style={[styles.statCard, { borderTopColor: color, borderTopWidth: 4 }]}>
+      <Text style={styles.statTitle}>{title}</Text>
+      <Text style={[styles.statValue, { color: textColor || kineticColors.foreground }]}>{typeof value === "number" ? value.toLocaleString() : value}</Text>
+    </KineticCard>
   </View>
 );
 
-const Table = ({ headers, rows }) => (
-  <View style={styles.table}>
-    <View style={styles.tableHeader}>
-      {headers.map((h, i) => (
-        <Text key={i} style={styles.tableHeaderText}>
-          {h}
-        </Text>
-      ))}
-    </View>
-    {rows.map((row, i) => (
-      <View key={i} style={[styles.tableRow, i % 2 === 0 && styles.tableRowAlt]}>
-        {row.cells.map((cell, j) => (
-          <View key={j} style={styles.cell}>
-            {j === 2 && row.statusColor ? (
-              <View style={styles.statusCellContainer}>
-                <View style={[styles.statusIndicator, { backgroundColor: row.statusColor }]} />
-                <Text style={[styles.cellText, { color: row.statusColor }]}>{cell}</Text>
-              </View>
-            ) : (
-              <Text style={styles.cellText}>{cell}</Text>
-            )}
+const ActionCard = ({ icon, title, desc, onPress, width }) => (
+  <View style={{ width, minWidth: 150 }}>
+    <KineticCard style={styles.actionCard} onPress={onPress}>
+      {({ isHovered }) => (
+        <>
+          <View style={styles.actionIconContainer}>
+            <Text style={styles.actionIcon}>{icon}</Text>
           </View>
-        ))}
-      </View>
-    ))}
+          <Text style={[styles.actionTitle, isHovered && { color: kineticColors.accentForeground }]}>{title}</Text>
+          <Text style={[styles.actionDesc, isHovered && { color: kineticColors.accentForeground }]}>{desc}</Text>
+        </>
+      )}
+    </KineticCard>
   </View>
 );
 
 /* ── Styles ── */
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
+  container: { flex: 1, backgroundColor: kineticColors.background, position: 'relative' },
+  shape1: {
+    position: 'absolute',
+    top: -height * 0.1,
+    right: -width * 0.2,
+    width: width * 0.8,
+    height: width * 0.8,
+    borderRadius: width * 0.4,
+    backgroundColor: kineticColors.accentContainer,
+    opacity: 0.6,
+  },
+  shape2: {
+    position: 'absolute',
+    bottom: -height * 0.05,
+    left: -width * 0.3,
+    width: width,
+    height: width,
+    borderRadius: width * 0.5,
+    backgroundColor: kineticColors.accentContainer,
+    opacity: 0.4,
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     gap: 16,
   },
-  loadingText: { color: colors.muted, fontSize: 16 },
+  loadingText: { ...kineticTypography.body, color: kineticColors.mutedForeground },
 
   layout: { flex: 1 },
 
-  // Content
   content: { flex: 1 },
   contentContainer: {},
   heading: {
-    fontSize: 28,
-    fontWeight: "800",
-    color: colors.text,
-    letterSpacing: -0.5,
+    ...kineticTypography.subheading,
+    color: kineticColors.foreground,
+    marginBottom: 4,
   },
-  subheading: { color: colors.muted, marginBottom: 28, marginTop: 6, fontSize: 15 },
+  subheading: { ...kineticTypography.body, color: kineticColors.mutedForeground, marginBottom: 28 },
 
-  // Stat cards
-  statsRow: {
-    gap: 16,
-    marginBottom: 32,
-  },
+  statsRow: { gap: 16, marginBottom: 32 },
+  statCardWrapper: {},
   statCard: {
-    flex: 1,
-    minWidth: 140,
-    backgroundColor: colors.card,
-    padding: 22,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
+    padding: 20,
+    height: '100%',
   },
-  statTitle: { color: colors.muted, fontSize: 13, fontWeight: "500", marginBottom: 10 },
-  statValue: {
-    fontSize: 32,
-    fontWeight: "800",
-    color: colors.text,
-  },
+  statTitle: { ...kineticTypography.label, color: kineticColors.mutedForeground, marginBottom: 8 },
+  statValue: { ...kineticTypography.cardTitle, color: kineticColors.foreground },
 
-  // Section header
   sectionHeader: {
     flexDirection: "row",
     alignItems: "center",
@@ -364,130 +287,49 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     marginTop: 12,
   },
-  sectionIcon: { fontSize: 22 },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: colors.text,
-  },
+  sectionIcon: { fontSize: 32 },
+  sectionTitle: { ...kineticTypography.cardTitle, color: kineticColors.foreground },
 
-  // Action cards
-  actionsRow: {
-    gap: 16,
-    marginBottom: 32,
-  },
+  actionsRow: { gap: 16, marginBottom: 32 },
   actionCard: {
-    flex: 1,
-    backgroundColor: colors.card,
-    padding: 24,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
     alignItems: "center",
-    gap: 8,
-  },
-  actionIcon: { fontSize: 32 },
-  actionTitle: {
-    color: colors.text,
-    fontSize: 16,
-    fontWeight: "700",
-  },
-  actionDesc: {
-    color: colors.muted,
-    fontSize: 13,
-    textAlign: "center",
-  },
-
-  // Section card
-  sectionCard: {
-    backgroundColor: colors.card,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
     padding: 20,
-    marginBottom: 24,
-    overflow: "hidden",
-  },
-
-  // Table
-  table: {
-    borderRadius: 10,
-    overflow: "hidden",
-  },
-  tableHeader: {
-    flexDirection: "row",
-    backgroundColor: `${colors.primary}15`,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderColor: colors.border,
-  },
-  tableHeaderText: {
-    flex: 1,
-    color: colors.primary,
-    fontWeight: "700",
-    fontSize: 13,
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
-  },
-  tableRow: {
-    flexDirection: "row",
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderColor: `${colors.border}60`,
-  },
-  tableRowAlt: { backgroundColor: `${colors.bg}40` },
-  cell: { flex: 1, justifyContent: "center" },
-  cellText: { color: colors.text, fontSize: 14 },
-  statusCellContainer: { flexDirection: "row", alignItems: "center", gap: 6 },
-  statusIndicator: { width: 8, height: 8, borderRadius: 4 },
-
-  // View all button
-  viewAllButton: {
-    marginTop: 16,
-    alignItems: "center",
-    paddingVertical: 12,
-    backgroundColor: `${colors.primary}12`,
-    borderRadius: 8,
-  },
-  viewAllText: { color: colors.primary, fontWeight: "600", fontSize: 14 },
-
-  // Empty state
-  emptyState: {
-    alignItems: "center",
-    paddingVertical: 32,
     gap: 8,
   },
-  emptyIcon: { fontSize: 36 },
-  emptyText: { color: colors.muted, fontSize: 15 },
-  emptyStateContainer: { alignItems: "center", paddingVertical: 20 },
+  actionIconContainer: {
+    backgroundColor: kineticColors.accentContainer,
+    padding: 16,
+    borderRadius: 999,
+    marginBottom: 8,
+  },
+  actionIcon: { fontSize: 36 },
+  actionTitle: { ...kineticTypography.cardTitle, color: kineticColors.foreground, textAlign: 'center' },
+  actionDesc: { ...kineticTypography.body, color: kineticColors.mutedForeground, textAlign: "center" },
 
-  // NGO Card Styles
-  ngoList: { gap: 14, marginBottom: 32 },
+  ngoList: { gap: 16, marginBottom: 32 },
   ngoCard: {
     flexDirection: "row",
-    backgroundColor: colors.card,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
     padding: 16,
     alignItems: "center",
   },
   ngoAvatar: {
     width: 56,
     height: 56,
-    borderRadius: 28,
-    backgroundColor: `${colors.primary}25`,
+    borderRadius: 999,
+    backgroundColor: kineticColors.accentContainer,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 16,
     overflow: "hidden",
   },
   ngoImage: { width: "100%", height: "100%" },
-  ngoAvatarText: { color: colors.primary, fontSize: 24, fontWeight: "bold" },
+  ngoAvatarText: { color: kineticColors.accent, ...kineticTypography.cardTitle },
   ngoInfo: { flex: 1, gap: 4 },
-  ngoName: { color: colors.text, fontSize: 16, fontWeight: "700" },
-  ngoAddress: { color: colors.muted, fontSize: 13 },
-  ngoPhone: { color: colors.success, fontSize: 13, fontWeight: "600", marginTop: 2 },
+  ngoName: { ...kineticTypography.cardTitle, color: kineticColors.foreground },
+  ngoAddress: { ...kineticTypography.body, color: kineticColors.mutedForeground },
+  ngoPhone: { ...kineticTypography.label, color: kineticColors.accent, marginTop: 2 },
+
+  emptyStateContainer: { alignItems: "center", paddingVertical: 20 },
+  emptyIcon: { fontSize: 36, marginBottom: 8 },
+  emptyText: { ...kineticTypography.body, color: kineticColors.mutedForeground },
 });

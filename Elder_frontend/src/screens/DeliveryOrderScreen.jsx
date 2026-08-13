@@ -1,3 +1,4 @@
+import { kineticColors, kineticTypography } from '../theme/kineticTokens';
 import React, { useState } from "react";
 import {
   View,
@@ -17,22 +18,7 @@ import { AuthContext } from "../context/AuthContext";
 import ElderSidebar, { ElderMobileBottomBar } from "../components/ElderSidebar";
 import useResponsive from "../hooks/useResponsive";
 
-const colors = {
-  bg: "#0F172A",
-  card: "#1E293B",
-  border: "#334155",
-  primary: "#4799EB",
-  primaryDark: "#2563EB",
-  success: "#22C55E",
-  warning: "#F59E0B",
-  danger: "#EF4444",
-  text: "#F1F5F9",
-  muted: "#94A3B8",
-  medicine: "#8B5CF6",
-  grocery: "#10B981",
-  urgentBg: "#EF444420",
-  urgentBorder: "#EF4444",
-};
+
 export default function DeliveryOrderScreen({ navigation }) {
   const responsive = useResponsive();
   const { user } = React.useContext(AuthContext);
@@ -181,7 +167,7 @@ export default function DeliveryOrderScreen({ navigation }) {
 
           <TextInput
             placeholder={category === "medicine" ? "Medicine name..." : "Item name..."}
-            placeholderTextColor={colors.muted}
+            placeholderTextColor={kineticColors.mutedForeground}
             value={item.name}
             onChangeText={(v) => updateItem(index, "name", v)}
             style={styles.input}
@@ -214,15 +200,15 @@ export default function DeliveryOrderScreen({ navigation }) {
               <Switch
                 value={item.urgent}
                 onValueChange={(v) => updateItem(index, "urgent", v)}
-                trackColor={{ false: colors.border, true: colors.danger + "80" }}
-                thumbColor={item.urgent ? colors.danger : colors.muted}
+                trackColor={{ false: kineticColors.border, true: kineticColors.error + "80" }}
+                thumbColor={item.urgent ? kineticColors.error : kineticColors.mutedForeground}
               />
             </View>
           </View>
 
           <TextInput
             placeholder="Notes (optional)..."
-            placeholderTextColor={colors.muted}
+            placeholderTextColor={kineticColors.mutedForeground}
             value={item.notes}
             onChangeText={(v) => updateItem(index, "notes", v)}
             style={[styles.input, { minHeight: 44 }]}
@@ -242,14 +228,14 @@ export default function DeliveryOrderScreen({ navigation }) {
           <Switch
             value={useProfileAddress}
             onValueChange={toggleProfileAddress}
-            trackColor={{ false: colors.border, true: colors.primary + "80" }}
-            thumbColor={useProfileAddress ? colors.primary : colors.muted}
+            trackColor={{ false: kineticColors.border, true: kineticColors.accent + "80" }}
+            thumbColor={useProfileAddress ? kineticColors.accent : kineticColors.mutedForeground}
           />
         </View>
       </View>
       <TextInput
         placeholder="Enter your delivery address..."
-        placeholderTextColor={colors.muted}
+        placeholderTextColor={kineticColors.mutedForeground}
         value={deliveryAddress}
         onChangeText={(v) => {
           setDeliveryAddress(v);
@@ -263,7 +249,7 @@ export default function DeliveryOrderScreen({ navigation }) {
       <Text style={styles.sectionLabel}>SPECIAL INSTRUCTIONS</Text>
       <TextInput
         placeholder="e.g., Ring bell twice, leave at door..."
-        placeholderTextColor={colors.muted}
+        placeholderTextColor={kineticColors.mutedForeground}
         value={specialInstructions}
         onChangeText={setSpecialInstructions}
         style={[styles.input, { minHeight: 80 }]}
@@ -407,7 +393,7 @@ export default function DeliveryOrderScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg },
+  container: { flex: 1, backgroundColor: kineticColors.background },
   layout: { flex: 1 },
   content: { flex: 1 },
   contentInner: {},
@@ -419,17 +405,13 @@ const styles = StyleSheet.create({
     marginBottom: 28,
   },
   tagline: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: colors.primary,
-    letterSpacing: 1.5,
+    ...kineticTypography.label,
+    color: kineticColors.accent,
     marginBottom: 6,
   },
   heading: {
-    fontSize: 26,
-    fontWeight: "800",
-    color: colors.text,
-    letterSpacing: -0.5,
+    ...kineticTypography.subheading,
+    color: kineticColors.foreground,
   },
   stepIndicator: {
     flexDirection: "row",
@@ -440,17 +422,17 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: colors.border,
+    backgroundColor: kineticColors.border,
   },
-  stepDotActive: { backgroundColor: colors.primary },
-  stepLine: { width: 32, height: 2, backgroundColor: colors.border },
-  stepLineActive: { backgroundColor: colors.primary },
+  stepDotActive: { backgroundColor: kineticColors.accent },
+  stepLine: { width: 32, height: 2, backgroundColor: kineticColors.border },
+  stepLineActive: { backgroundColor: kineticColors.accent },
 
   sectionLabel: {
-    fontSize: 11,
-    fontWeight: "700",
-    color: colors.muted,
-    letterSpacing: 1.2,
+    ...kineticTypography.body,
+    fontWeight: "800",
+    letterSpacing: 1.5,
+    color: kineticColors.mutedForeground,
     marginBottom: 10,
     marginTop: 20,
     flex: 1,
@@ -463,7 +445,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   toggleRow: { flexDirection: "row", alignItems: "center", gap: 8 },
-  toggleLabel: { fontSize: 13, color: colors.muted },
+  toggleLabel: { fontSize: 13, color: kineticColors.mutedForeground },
 
   // Category
   categoryRow: { flexDirection: "row", gap: 12 },
@@ -472,37 +454,35 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    padding: 18,
-    borderRadius: 14,
-    borderWidth: 1.5,
-    borderColor: colors.border,
-    backgroundColor: colors.card,
+    padding: 24,
+    borderWidth: 2,
+    borderColor: kineticColors.border,
+    backgroundColor: kineticColors.background,
     gap: 10,
   },
   categoryBtnActiveMed: {
-    borderColor: colors.medicine,
-    backgroundColor: colors.medicine + "15",
+    borderColor: kineticColors.accent,
+    backgroundColor: kineticColors.accent + "15",
   },
   categoryBtnActiveGro: {
-    borderColor: colors.grocery,
-    backgroundColor: colors.grocery + "15",
+    borderColor: kineticColors.foreground,
+    backgroundColor: kineticColors.foreground + "15",
   },
   categoryIcon: { fontSize: 24 },
-  categoryText: { fontSize: 16, fontWeight: "600", color: colors.muted },
-  categoryTextActive: { color: colors.text },
+  categoryText: { ...kineticTypography.body, fontWeight: "700", color: kineticColors.mutedForeground },
+  categoryTextActive: { color: kineticColors.foreground },
 
   // Items
   itemCard: {
-    backgroundColor: colors.card,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: 16,
-    marginBottom: 12,
+    backgroundColor: kineticColors.background,
+    borderWidth: 2,
+    borderColor: kineticColors.border,
+    padding: 24,
+    marginBottom: 16,
   },
   itemCardUrgent: {
-    borderColor: colors.urgentBorder,
-    backgroundColor: colors.urgentBg,
+    borderColor: kineticColors.error,
+    backgroundColor: kineticColors.background,
   },
   itemHeader: {
     flexDirection: "row",
@@ -510,22 +490,19 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   itemNumber: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: colors.primary,
-    letterSpacing: 0.5,
+    ...kineticTypography.label,
+    color: kineticColors.accent,
   },
-  removeBtn: { fontSize: 16, color: colors.danger, fontWeight: "700" },
+  removeBtn: { fontSize: 16, color: kineticColors.error, fontWeight: "700" },
 
   input: {
-    backgroundColor: colors.bg,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: 14,
-    fontSize: 15,
-    color: colors.text,
-    marginBottom: 10,
+    backgroundColor: kineticColors.background,
+    borderWidth: 2,
+    borderColor: kineticColors.border,
+    padding: 18,
+    ...kineticTypography.body,
+    color: kineticColors.foreground,
+    marginBottom: 16,
   },
   addressInput: { minHeight: 60 },
 
@@ -537,9 +514,8 @@ const styles = StyleSheet.create({
   },
   qtyContainer: { flex: 1 },
   inputLabel: {
-    fontSize: 11,
-    fontWeight: "600",
-    color: colors.muted,
+    ...kineticTypography.label,
+    color: kineticColors.mutedForeground,
     marginBottom: 6,
   },
   qtyControl: {
@@ -548,44 +524,43 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   qtyBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 8,
-    backgroundColor: colors.border,
+    width: 44,
+    height: 44,
+    backgroundColor: kineticColors.border,
     justifyContent: "center",
     alignItems: "center",
   },
-  qtyBtnText: { fontSize: 18, color: colors.text, fontWeight: "700" },
-  qtyValue: { fontSize: 18, color: colors.text, fontWeight: "700", minWidth: 24, textAlign: "center" },
+  qtyBtnText: { ...kineticTypography.body, color: kineticColors.foreground },
+  qtyValue: { ...kineticTypography.body, color: kineticColors.foreground, minWidth: 30, textAlign: "center" },
   urgentContainer: { alignItems: "center" },
 
   addItemBtn: {
-    padding: 14,
-    borderRadius: 10,
-    borderWidth: 1.5,
-    borderColor: colors.primary + "40",
+    padding: 18,
+    borderWidth: 2,
+    borderColor: kineticColors.accent,
     borderStyle: "dashed",
     alignItems: "center",
-    marginBottom: 8,
+    marginBottom: 16,
   },
-  addItemText: { color: colors.primary, fontWeight: "600", fontSize: 14 },
+  addItemText: { color: kineticColors.accent, ...kineticTypography.body },
 
   // Buttons
   primaryBtn: {
-    backgroundColor: colors.primary,
-    paddingVertical: 18,
-    borderRadius: 14,
+    backgroundColor: kineticColors.accent,
+    paddingVertical: 20,
+    borderWidth: 2,
+    borderColor: kineticColors.foreground,
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 30,
   },
-  primaryBtnText: { color: "#FFF", fontSize: 17, fontWeight: "700" },
+  primaryBtnText: { color: kineticColors.accentForeground, ...kineticTypography.cardTitle },
 
   // Review
   reviewCard: {
-    backgroundColor: colors.card,
+    backgroundColor: kineticColors.background,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: kineticColors.border,
     padding: 24,
   },
   reviewHeader: {
@@ -594,17 +569,15 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   reviewIcon: { fontSize: 28 },
-  reviewTitle: { fontSize: 20, fontWeight: "700", color: colors.text },
+  reviewTitle: { ...kineticTypography.subheading, color: kineticColors.foreground },
   divider: {
-    height: 1,
-    backgroundColor: colors.border,
-    marginVertical: 18,
+    height: 2,
+    backgroundColor: kineticColors.border,
+    marginVertical: 24,
   },
   reviewLabel: {
-    fontSize: 11,
-    fontWeight: "700",
-    color: colors.muted,
-    letterSpacing: 1,
+    ...kineticTypography.label,
+    color: kineticColors.mutedForeground,
     marginBottom: 10,
   },
   reviewItem: {
@@ -613,34 +586,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border + "40",
+    borderBottomColor: kineticColors.border + "40",
   },
   reviewItemLeft: { flex: 1 },
-  reviewItemName: { fontSize: 15, color: colors.text, fontWeight: "600" },
-  reviewItemNote: { fontSize: 12, color: colors.muted, marginTop: 2 },
+  reviewItemName: { ...kineticTypography.body, color: kineticColors.foreground },
+  reviewItemNote: { ...kineticTypography.label, color: kineticColors.mutedForeground, marginTop: 4 },
   reviewItemRight: { flexDirection: "row", alignItems: "center", gap: 10 },
-  reviewItemQty: { fontSize: 15, color: colors.muted, fontWeight: "600" },
+  reviewItemQty: { ...kineticTypography.body, color: kineticColors.mutedForeground },
   urgentBadge: {
-    backgroundColor: colors.danger + "20",
+    backgroundColor: kineticColors.error + "20",
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: colors.danger,
+    borderColor: kineticColors.error,
   },
-  urgentBadgeText: { fontSize: 10, fontWeight: "800", color: colors.danger },
-  reviewValue: { fontSize: 14, color: colors.text, lineHeight: 20 },
+  urgentBadgeText: { fontSize: 10, fontWeight: "800", color: kineticColors.error },
+  reviewValue: { ...kineticTypography.body, color: kineticColors.foreground },
   instructionBox: {
     flexDirection: "row",
     alignItems: "flex-start",
-    gap: 10,
-    backgroundColor: colors.primary + "10",
-    padding: 14,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: colors.primary + "30",
+    gap: 12,
+    backgroundColor: kineticColors.accent + "10",
+    padding: 18,
+    borderWidth: 2,
+    borderColor: kineticColors.border,
   },
-  instructionIcon: { fontSize: 16 },
+  instructionIcon: { fontSize: 24 },
 
   reviewActions: {
     flexDirection: "row",
@@ -650,10 +622,9 @@ const styles = StyleSheet.create({
   backBtn: {
     paddingVertical: 18,
     paddingHorizontal: 20,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.card,
+    borderWidth: 2,
+    borderColor: kineticColors.border,
+    backgroundColor: kineticColors.background,
   },
-  backBtnText: { color: colors.muted, fontSize: 15, fontWeight: "600" },
+  backBtnText: { color: kineticColors.mutedForeground, ...kineticTypography.cardTitle },
 });
