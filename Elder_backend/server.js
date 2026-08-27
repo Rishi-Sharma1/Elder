@@ -1,6 +1,11 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import { createServer } from "http";
 import { Server as SocketIO } from "socket.io";
 import connectDB from "./src/config/db.js";
@@ -82,13 +87,14 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/", (req, res) => {
+app.get("/api/health", (req, res) => {
   res.status(200).json({
     success: true,
     message: "ElderConnect Backend is Running 🚀",
     version: "1.0.0"
   });
 });
+
 app.use("/auth", authRoutes);
 app.use("/elder", elderRoutes);
 app.use("/volunteer", volunteerRoutes);
@@ -97,6 +103,33 @@ app.use("/admin", adminRoutes);
 app.use("/profile", profileRoutes);
 app.use("/delivery", deliveryRoutes);
 app.use("/events", eventRoutes);
+
+// Serve Expo web build static files
+const frontendDistPath = path.join(__dirname, "../Elder_frontend/dist");
+app.use(express.static(frontendDistPath));
+
+// SPA fallback for frontend client-side routing
+app.use((req, res) => {
+  if (
+    req.path.startsWith("/auth") ||
+    req.path.startsWith("/elder") ||
+    req.path.startsWith("/volunteer") ||
+    req.path.startsWith("/ngo") ||
+    req.path.startsWith("/admin") ||
+    req.path.startsWith("/profile") ||
+    req.path.startsWith("/delivery") ||
+    req.path.startsWith("/events") ||
+    req.path.startsWith("/api")
+  ) {
+    return res.status(404).json({ success: false, message: "API Route not found" });
+  }
+
+  res.sendFile(path.join(frontendDistPath, "index.html"), (err) => {
+    if (err) {
+      res.status(200).send("ElderConnect API active. Build frontend using `npm run build` to see the Web UI.");
+    }
+  });
+});
 
 const PORT = process.env.PORT || 5000;
 httpServer.listen(PORT, "0.0.0.0", () => console.log(`Server running on port ${PORT}`));

@@ -1,0 +1,10 @@
+{
+  "name": "elder-connect",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix Elder_backend && npm install --prefix Elder_frontend",
+    "build": "npm install --prefix Elder_backend && npm install --prefix Elder_frontend && npm run build --prefix Elder_frontend",
+    "start": "npm start --prefix Elder_backend"
+  }
+}
