@@ -20,54 +20,54 @@ export const kineticColors = {
 };
 
 export const kineticTypography = {
-  // Hero/Display: text-[clamp(3rem,12vw,14rem)] -> e.g. 48px to 224px
+  // Hero/Display: clamp(36px to 72px)
   hero: {
-    fontSize: clamp(64, width * 0.15, 200),
-    fontWeight: '900',
-    textTransform: 'uppercase',
-    letterSpacing: -4,
-    lineHeight: clamp(64, width * 0.15, 200) * 0.85,
-  },
-  // Section Headings: text-5xl md:text-7xl lg:text-8xl -> roughly 48px to 96px
-  heading: {
-    fontSize: clamp(48, width * 0.1, 150),
+    fontSize: clamp(36, width * 0.05, 72),
     fontWeight: '900',
     textTransform: 'uppercase',
     letterSpacing: -2,
-    lineHeight: clamp(48, width * 0.1, 150) * 0.9,
+    lineHeight: clamp(36, width * 0.05, 72) * 0.95,
+  },
+  // Section Headings: clamp(28px to 52px)
+  heading: {
+    fontSize: clamp(28, width * 0.04, 52),
+    fontWeight: '900',
+    textTransform: 'uppercase',
+    letterSpacing: -1.5,
+    lineHeight: clamp(28, width * 0.04, 52) * 1.0,
   },
   // Subheadings for constrained columns
   subheading: {
-    fontSize: clamp(32, width * 0.06, 72),
-    fontWeight: '900',
+    fontSize: clamp(22, width * 0.03, 36),
+    fontWeight: '800',
     textTransform: 'uppercase',
     letterSpacing: -1,
-    lineHeight: clamp(32, width * 0.06, 72) * 1.0,
+    lineHeight: clamp(22, width * 0.03, 36) * 1.05,
   },
-  // Card Titles: text-2xl md:text-3xl -> roughly 24px to 36px
+  // Card Titles: clamp(16px to 22px)
   cardTitle: {
-    fontSize: clamp(24, width * 0.06, 48),
+    fontSize: clamp(16, width * 0.02, 22),
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: -0.5,
   },
-  // Body/Descriptions: text-lg -> roughly 18px to 24px
+  // Body/Descriptions: clamp(14px to 17px)
   body: {
-    fontSize: clamp(18, width * 0.04, 24),
+    fontSize: clamp(14, width * 0.015, 17),
     fontWeight: '500',
     color: kineticColors.mutedForeground,
-    lineHeight: clamp(18, width * 0.04, 24) * 1.4,
+    lineHeight: clamp(14, width * 0.015, 17) * 1.4,
   },
-  // Small Labels: 12-18px
+  // Small Labels: 11-13px
   label: {
-    fontSize: clamp(12, width * 0.03, 18),
+    fontSize: clamp(11, width * 0.012, 13),
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
   // Numbers
   massiveNumber: {
-    fontSize: clamp(96, width * 0.2, 192),
+    fontSize: clamp(48, width * 0.08, 96),
     fontWeight: '700',
     color: kineticColors.muted,
   }

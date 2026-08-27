@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   container: {
     overflow: 'hidden',
     width: '100%',
-    paddingVertical: 32,
+    paddingVertical: 16,
     borderTopWidth: kineticBorders.width,
     borderBottomWidth: kineticBorders.width,
     borderColor: kineticColors.border,
@@ -85,6 +85,6 @@ const styles = StyleSheet.create({
     width: 99999, // Ensure it doesn't wrap
   },
   text: {
-    ...kineticTypography.heading,
+    ...kineticTypography.subheading,
   }
 });

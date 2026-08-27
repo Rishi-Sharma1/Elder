@@ -73,7 +73,7 @@ export default function HomeScreen({ navigation }) {
           viewOptions={{ margin: '0px 0px -50px 0px', once: true }}
         >
           <View style={styles.heroSection}>
-            <Text style={[styles.heroTitle, isMobile && { fontSize: 48 }]}>
+            <Text style={[styles.heroTitle, isMobile && { fontSize: 32 }]}>
               CONNECTING GENERATIONS,{"\n"}ENRICHING LIVES
             </Text>
             <Text style={styles.heroSubtitle}>
@@ -110,7 +110,7 @@ export default function HomeScreen({ navigation }) {
         >
           <View style={styles.section}>
             <Text style={styles.sectionLabel}>OUR SERVICES</Text>
-            <Text style={[styles.sectionTitle, isMobile && { fontSize: 28 }]}>
+            <Text style={[styles.sectionTitle, isMobile && { fontSize: 24 }]}>
               Tailored for Our Community
             </Text>
             <Text style={styles.sectionSubtitle}>
@@ -158,7 +158,7 @@ export default function HomeScreen({ navigation }) {
         >
           <View style={[styles.section, { backgroundColor: kineticColors.backgroundContainerLow }]}>
             <Text style={styles.sectionLabel}>FEATURES</Text>
-            <Text style={[styles.sectionTitle, isMobile && { fontSize: 28 }]}>
+            <Text style={[styles.sectionTitle, isMobile && { fontSize: 24 }]}>
               Everything You Need
             </Text>
 
@@ -192,7 +192,7 @@ export default function HomeScreen({ navigation }) {
             <View style={[styles.innovationRow, isMobile && { flexDirection: "column" }]}>
               <View style={[styles.innovationLeft, !isMobile && { flex: 1 }]}>
                 <Text style={styles.sectionLabel}>WHY CHOOSE US</Text>
-                <Text style={[styles.sectionSubheading, { textAlign: "left" }, isMobile && { fontSize: 28 }]}>
+                <Text style={[styles.sectionSubheading, { textAlign: "left" }, isMobile && { fontSize: 24 }]}>
                   Innovative support designed for everyday life.
                 </Text>
                 <Text style={[styles.sectionSubtitle, { textAlign: "left" }]}>
@@ -230,7 +230,7 @@ export default function HomeScreen({ navigation }) {
           <View style={[styles.section, { backgroundColor: kineticColors.backgroundContainerLow }]}>
             <View style={styles.missionCard}>
               <Text style={styles.sectionLabel}>OUR MISSION</Text>
-              <Text style={[styles.sectionTitle, isMobile && { fontSize: 28 }]}>
+              <Text style={[styles.sectionTitle, isMobile && { fontSize: 24 }]}>
                 Building a Safer, More Connected World
               </Text>
               <Text style={[styles.sectionSubtitle, { maxWidth: 700 }]}>
@@ -250,7 +250,7 @@ export default function HomeScreen({ navigation }) {
           viewOptions={{ margin: '0px 0px -50px 0px', once: true }}
         >
           <View style={styles.ctaSection}>
-            <Text style={[styles.ctaTitle, isMobile && { fontSize: 28 }]}>
+            <Text style={[styles.ctaTitle, isMobile && { fontSize: 24 }]}>
               Ready to Make a Difference?
             </Text>
             <Text style={styles.ctaSubtitle}>
@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
     gap: 16,
     marginBottom: 60,
   },
-  heroBtn: { minWidth: 200, height: 64 },
+  heroBtn: { minWidth: 160, height: 48 },
 
   /* Section */
   section: {
@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
   featureIcon: { fontSize: 36, marginBottom: 16 },
   featureTitle: { ...kineticTypography.cardTitle, color: kineticColors.foreground, marginBottom: 4 },
   featureSubtitle: { ...kineticTypography.label, marginBottom: 12 },
-  featureDesc: { ...kineticTypography.body, fontSize: 20, color: kineticColors.mutedForeground },
+  featureDesc: { ...kineticTypography.body, color: kineticColors.mutedForeground },
 
   /* Services Grid */
   servicesGrid: {
@@ -457,7 +457,7 @@ const styles = StyleSheet.create({
   },
   serviceIcon: { fontSize: 36, marginBottom: 12 },
   serviceTitle: { ...kineticTypography.cardTitle, color: kineticColors.foreground, marginBottom: 6, textAlign: "center" },
-  serviceDesc: { ...kineticTypography.body, fontSize: 20, color: kineticColors.mutedForeground, textAlign: "center" },
+  serviceDesc: { ...kineticTypography.body, color: kineticColors.mutedForeground, textAlign: "center" },
 
   /* Innovation */
   innovationRow: {
@@ -544,7 +544,7 @@ const styles = StyleSheet.create({
   footerBrandDesc: { color: kineticColors.mutedForeground, ...kineticTypography.body, marginTop: 12 },
   footerCol: { gap: 10 },
   footerColTitle: { color: kineticColors.foreground, ...kineticTypography.label, marginBottom: 6 },
-  footerLink: { color: kineticColors.mutedForeground, ...kineticTypography.body, fontSize: 20 },
+  footerLink: { color: kineticColors.mutedForeground, ...kineticTypography.body },
   footerBottom: {
     paddingVertical: 24,
     alignItems: "center",
