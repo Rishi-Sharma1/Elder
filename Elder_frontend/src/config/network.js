@@ -1,9 +1,9 @@
 // Local Backend Configuration
 export const LOCAL_URL = "http://localhost:5000";
-export const REMOTE_URL = "https://elderconnect-zfi4.onrender.com";
+export const REMOTE_URL = "https://elder-connect-kkme.onrender.com";
 
 // Toggle between local and remote
-const USE_LOCAL = true; // Set to false for Production Deployment
+const USE_LOCAL = false;
 
 export const PORT = "5000";
 export const BASE_URL = USE_LOCAL ? LOCAL_URL : REMOTE_URL;
